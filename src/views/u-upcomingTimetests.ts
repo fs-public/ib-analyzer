@@ -1,0 +1,73 @@
+import { TAX_BRACKET } from "../config/config"
+import { env } from "../env"
+import { Order } from "../types"
+import { makeObjectFixedDashed, getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
+
+type View = {
+    symbol:string,
+
+    since: string, // open order date
+    finished: string, // open order + 3y
+    remains: string, // open order + 3y - today
+
+    quantity: number,
+    
+    basisPrice: number,
+    basis: number,
+
+    mtmPrice: number,
+    mtmValue: number,
+    
+    unrlzd: number,
+    tax: number,
+}
+
+const getTimetest = (o: Order): View => {
+    const mtmPrice = getPriceBySymbol(o.symbol)
+
+    const q = o.quantity - o.filled
+    const m = q / o.quantity
+
+    const mtmValue = mtmPrice * q
+    const unrlzd = mtmPrice*q - o.basis*m
+    const tax = unrlzd * TAX_BRACKET
+
+    return makeObjectFixedDashed<View>({
+        symbol: o.symbol,
+
+        since: o.datetime.toLocaleDateString(),
+        finished: getDatePlus3y(o.datetime).toLocaleDateString(),
+        remains: getDateDiffDisplay(new Date(), getDatePlus3y(o.datetime)),
+
+        quantity: q,
+        
+        basisPrice: o.tprice,
+        basis: o.basis * m,
+
+        mtmPrice: mtmPrice,
+        mtmValue: mtmValue,
+        
+        unrlzd: unrlzd,
+        tax: tax,
+    })
+}
+
+export const upcomingTimetestsView = async () => {
+    env.log("\nUpcoming Timetests view launched. " + ">>>".repeat(40))
+
+    env.log("\nOpen positions (total)")
+    env.log("\nRow = unfilled orders, sorted by date.")
+    env.log("Notes: values proportional to the unfilled part.")
+
+    const orderSlice = env.data.orders.filter(o => o.quantity !== o.filled)
+    orderSlice.sort((a, b) => getDateDiff(b.datetime, a.datetime))
+
+    const timetests: View[] = []
+    for(let o of orderSlice) {
+        timetests.push(getTimetest(o))
+    }
+    
+    env.table(timetests)
+}
+
+export default upcomingTimetestsView
