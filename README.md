@@ -1,17 +1,10 @@
-
 # TODO
+
 Set `if(row[6] === "IEP" && row[7] === "2021-09-30, 09:30:02")` in config
 validate symbols
 throw new Error("Bad numerical key " + numericalKey)
 implement Issues instead of throwing errors
 refactor fills as primary and secondary order, instead of close and open
-
-
-
-
-
-
-
 
 # TSDX User Guide
 
@@ -78,8 +71,8 @@ TSDX uses [Rollup](https://rollupjs.org) as a bundler and generates multiple rol
 
 Two actions are added by default:
 
-- `main` which installs deps w/ cache, lints, tests, and builds on all pushes against a Node and OS matrix
-- `size` which comments cost comparison of your library on every pull request using [`size-limit`](https://github.com/ai/size-limit)
+-   `main` which installs deps w/ cache, lints, tests, and builds on all pushes against a Node and OS matrix
+-   `size` which comments cost comparison of your library on every pull request using [`size-limit`](https://github.com/ai/size-limit)
 
 ## Optimizations
 
@@ -87,11 +80,11 @@ Please see the main `tsdx` [optimizations docs](https://github.com/palmerhq/tsdx
 
 ```js
 // ./types/index.d.ts
-declare var __DEV__: boolean;
+declare var __DEV__: boolean
 
 // inside your code...
 if (__DEV__) {
-  env.log('foo');
+    env.log("foo")
 }
 ```
 

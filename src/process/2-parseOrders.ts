@@ -3,12 +3,11 @@ import { parseNumerical, recordKeyReplaceRule, shouldDropRecord } from "../confi
 import { Order, SchemedRecord } from "../types"
 import { env } from "../env"
 
-const getMultiplier = (assetcategory:string, symbol:string): number => {
-    if(assetcategory === "Stocks")
-        return 1
-    
-    for(let pair of DERIVATIVES_MULTIPLIERS) {
-        if(symbol.includes(pair.matcher)) {
+const getMultiplier = (assetcategory: string, symbol: string): number => {
+    if (assetcategory === "Stocks") return 1
+
+    for (const pair of DERIVATIVES_MULTIPLIERS) {
+        if (symbol.includes(pair.matcher)) {
             return pair.multiplier
         }
     }
@@ -17,7 +16,7 @@ const getMultiplier = (assetcategory:string, symbol:string): number => {
     return 1
 }
 
-const schemeOrder = (o:any, id:number): Order => {
+const schemeOrder = (o: any, id: number): Order => {
     // delete o["trades"] // always 'Trades'
     // delete o["header"] // always 'Data'
     // delete o["datadiscriminator"] // always 'Order'
@@ -44,19 +43,18 @@ const schemeOrder = (o:any, id:number): Order => {
     }
 }
 
-const parseOrders = (records:SchemedRecord[]): Order[] => {
-    const unschemedOrders:any[] = []
+const parseOrders = (records: SchemedRecord[]): Order[] => {
+    const unschemedOrders: any[] = []
 
-    for(let i = 0; i < records.length; i++) {
-        if(shouldDropRecord(records[i]))
-            continue
+    for (let i = 0; i < records.length; i++) {
+        if (shouldDropRecord(records[i])) continue
 
-        const keyedRecord = records[i].map(
-            (value:any, index:number) =>
-                index === 0 ? ['trades','Trades'] // misbehaves in the first index, not sure why
+        const keyedRecord = records[i].map((value: any, index: number) =>
+            index === 0
+                ? ["trades", "Trades"] // misbehaves in the first index, not sure why
                 : [recordKeyReplaceRule(records[0][index]), value]
         )
-        
+
         unschemedOrders.push(Object.fromEntries(keyedRecord))
     }
 

@@ -1,6 +1,3 @@
-
-
-
 import { getUserInput } from "./utils"
 
 import { SchemedRecord } from "./types"
@@ -23,35 +20,39 @@ const reload = async () => {
     env.flushErrors()
 
     // Import CSV and fix old imports
-    const records:SchemedRecord[] = await loader()
+    const records: SchemedRecord[] = await loader()
 
     // Validate records
     validatorRecords(records)
 
     // Setup orders
-    const orders = parseOrders(records)    
+    const orders = parseOrders(records)
 
     // Fill out sets
-    const categories = new Set(orders.map(o => o.assetcategory))
-    const currencies = new Set(orders.map(o => o.currency))
-    const symbols = new Set(orders.map(o => o.symbol))
-    const years = new Set(orders.map(o => o.datetime.getFullYear()))
-    
+    const categories = new Set(orders.map((o) => o.assetcategory))
+    const currencies = new Set(orders.map((o) => o.currency))
+    const symbols = new Set(orders.map((o) => o.symbol))
+    const years = new Set(orders.map((o) => o.datetime.getFullYear()))
+
     // Print out stats
-    
+
     // Validate orders
     validatorOrders(orders)
-    
+
     // Compute and validate fills
     const fills = matchFills(orders, symbols)
-    
+
     // Validate filss
     validatorFills(orders)
-    
-    // Finish sets and print stats
-    const activeSymbols = new Set(orders.filter(o => o.quantity !== o.filled).map(o => o.symbol))
 
-    env.log(`Loaded ${CSV_SOURCES.length} CSVs with total`, orders.length, `trades (filtered from ${records.length} records).\n`)
+    // Finish sets and print stats
+    const activeSymbols = new Set(orders.filter((o) => o.quantity !== o.filled).map((o) => o.symbol))
+
+    env.log(
+        `Loaded ${CSV_SOURCES.length} CSVs with total`,
+        orders.length,
+        `trades (filtered from ${records.length} records).\n`
+    )
 
     env.log("Categories", categories.size, "\b:", Array.from(categories))
     env.log("Currencies", currencies.size, "\b:", Array.from(currencies))
@@ -69,11 +70,10 @@ const reload = async () => {
             currencies,
             symbols,
             activeSymbols,
-            years
-        }
+            years,
+        },
     }
 }
-
 
 const main = async () => {
     env.log("IB analyzer running...")
@@ -87,43 +87,43 @@ const main = async () => {
     //////////////////////////// MAIN LOOP
 
     let quit = false
-    while(!quit) {
+    while (!quit) {
         const command = await getUserInput(">> ")
-        
-        switch(command) {
+
+        switch (command) {
             // Admin
-            case 'reload':
+            case "reload":
                 await reload()
                 break
-            case 'i':
-            case 'issues':
+            case "i":
+            case "issues":
                 env.log(env.errors)
                 break
-            case 'example':
+            case "example":
                 env.log("\nTypical order:")
                 env.log(env.data.orders[0])
                 break
-            case 'help':
+            case "help":
                 env.log(HELP_STRING)
                 break
-            case 'q':
-            case 'quit':
+            case "q":
+            case "quit":
                 quit = true
-                break;
+                break
             // Views
-            case 'h':
+            case "h":
                 await historicalView()
                 break
-            case 'l':
+            case "l":
                 await lossHarvestView()
                 break
-            case 'o':
+            case "o":
                 await openView()
                 break
-            case 'r':
+            case "r":
                 await realizedTax()
                 break
-            case 'u':
+            case "u":
                 await upcomingTimetestsView()
                 break
             // Default

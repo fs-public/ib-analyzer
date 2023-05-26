@@ -4,28 +4,28 @@ import { Order } from "../types"
 import { getDateDiffDisplay, getPriceBySymbol, getUserENTERInput, makeObjectFixedDashed } from "../utils"
 
 type View = {
-    since: string,
-    quantity: number,
-    
-    basisPrice: number,
-    basis: number,
+    since: string
+    quantity: number
 
-    mtmValue: number,
-    
-    unrlzd: number,
-    timetest: string,
-    tax: number,
+    basisPrice: number
+    basis: number
 
-    cumUnrlzd: number,
-    cumValue: number,
-    cumTax: number,
-    slipLoss: number,
+    mtmValue: number
+
+    unrlzd: number
+    timetest: string
+    tax: number
+
+    cumUnrlzd: number
+    cumValue: number
+    cumTax: number
+    slipLoss: number
 }
 
 type RunningCumulative = {
-    cumQuantity: number,
-    cumUnrlzd: number,
-    cumValue: number,
+    cumQuantity: number
+    cumUnrlzd: number
+    cumValue: number
     cumTax: number
 }
 
@@ -39,12 +39,12 @@ const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
         cumTax: 0,
     }
 
-    for(let o of orders) {
+    for (const o of orders) {
         const q = o.quantity - o.filled
         const m = q / o.quantity
 
         const mtmValue = mtmPrice * q
-        const unrlzd = mtmPrice*q - o.basis*m
+        const unrlzd = mtmPrice * q - o.basis * m
         const tax = unrlzd * TAX_BRACKET
 
         cum.cumQuantity += q
@@ -69,7 +69,7 @@ const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
                 cumUnrlzd: cum.cumUnrlzd,
                 cumValue: cum.cumValue,
                 cumTax: cum.cumTax,
-                slipLoss: -getHarvestLoss(cum.cumQuantity, cum.cumValue)
+                slipLoss: -getHarvestLoss(cum.cumQuantity, cum.cumValue),
             })
         )
     }
@@ -84,22 +84,17 @@ export const lossHarvestView = async () => {
     env.log("Row = unfilled orders, sorted by date.")
     env.log("Notes: partially filled orders are displayed proportionately to unfilled part.")
 
-    // @ts-ignore
-    for(let sym of env.data.sets.symbols) {
+    for (const sym of env.data.sets.symbols) {
         const mtmPrice = getPriceBySymbol(sym)
-        
-        const orderSlice = env.data.orders.filter(
-            o => o.symbol === sym &&
-            o.quantity !== o.filled
-        )
-        
-        if(orderSlice.length > 0) {
+
+        const orderSlice = env.data.orders.filter((o) => o.symbol === sym && o.quantity !== o.filled)
+
+        if (orderSlice.length > 0) {
             env.log(`\n[Loss Harvest] ${sym} at current price`, mtmPrice)
 
             lossHarvestOneSymbol(orderSlice, mtmPrice)
 
-            if(!(await getUserENTERInput("for next symbol")))
-                break
+            if (!(await getUserENTERInput("for next symbol"))) break
         }
     }
 
