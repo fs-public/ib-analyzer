@@ -11,6 +11,7 @@
         "build": "tsc -p .",
         "lint": "eslint .",
         "format": "prettier . --write",
+        "format:check": "prettier . --check",
         "start": "node --es-module-specifier-resolution=node --require=./suppress-experimental.cjs ."
     },
     "dependencies": {
