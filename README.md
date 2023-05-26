@@ -37,7 +37,7 @@ Analysis launches with npm script `npm start`. The configuration TODO
 
 ### Technology
 
-The project runs with `npm` and `node` and is written in Typescript. Community library `csv-parse` is used for parsing the CSV exports from Interactive Brokers. Code quality assured by `prettier` and `eslint`.
+The project runs with `npm` and `node` and is written in Typescript. Community library `csv-parse` is used for parsing the CSV exports from Interactive Brokers. Code quality assured by `prettier` and `eslint` and enforced by `Github Actions`.
 
 ### Usage
 
