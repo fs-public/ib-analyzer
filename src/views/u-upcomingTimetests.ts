@@ -4,22 +4,22 @@ import { Order } from "../types"
 import { makeObjectFixedDashed, getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
 
 type View = {
-    symbol:string,
+    symbol: string
 
-    since: string, // open order date
-    finished: string, // open order + 3y
-    remains: string, // open order + 3y - today
+    since: string // open order date
+    finished: string // open order + 3y
+    remains: string // open order + 3y - today
 
-    quantity: number,
-    
-    basisPrice: number,
-    basis: number,
+    quantity: number
 
-    mtmPrice: number,
-    mtmValue: number,
-    
-    unrlzd: number,
-    tax: number,
+    basisPrice: number
+    basis: number
+
+    mtmPrice: number
+    mtmValue: number
+
+    unrlzd: number
+    tax: number
 }
 
 const getTimetest = (o: Order): View => {
@@ -29,7 +29,7 @@ const getTimetest = (o: Order): View => {
     const m = q / o.quantity
 
     const mtmValue = mtmPrice * q
-    const unrlzd = mtmPrice*q - o.basis*m
+    const unrlzd = mtmPrice * q - o.basis * m
     const tax = unrlzd * TAX_BRACKET
 
     return makeObjectFixedDashed<View>({
@@ -40,13 +40,13 @@ const getTimetest = (o: Order): View => {
         remains: getDateDiffDisplay(new Date(), getDatePlus3y(o.datetime)),
 
         quantity: q,
-        
+
         basisPrice: o.tprice,
         basis: o.basis * m,
 
         mtmPrice: mtmPrice,
         mtmValue: mtmValue,
-        
+
         unrlzd: unrlzd,
         tax: tax,
     })
@@ -59,14 +59,14 @@ export const upcomingTimetestsView = async () => {
     env.log("\nRow = unfilled orders, sorted by date.")
     env.log("Notes: values proportional to the unfilled part.")
 
-    const orderSlice = env.data.orders.filter(o => o.quantity !== o.filled)
+    const orderSlice = env.data.orders.filter((o) => o.quantity !== o.filled)
     orderSlice.sort((a, b) => getDateDiff(b.datetime, a.datetime))
 
     const timetests: View[] = []
-    for(let o of orderSlice) {
+    for (let o of orderSlice) {
         timetests.push(getTimetest(o))
     }
-    
+
     env.table(timetests)
 }
 
