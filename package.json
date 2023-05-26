@@ -1,23 +1,17 @@
 {
+  "name": "ib-analyzer",
   "version": "0.1.0",
+  "author": "fs-public",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "engines": {
-    "node": ">=10"
-  },
+  "type": "module",
   "scripts": {
-    "start": "tsdx watch",
-    "watch": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
-    "lint": "tsdx lint",
-    "launch": "tsdx build && node .",
-    "run": "node ."
+    "watch": "tsc -p . --watch",
+    "build": "tsc -p .",
+    "lint": "eslint .",
+    "prepare": "npm run build",
+    "start": "node --es-module-specifier-resolution=node --require=./suppress-experimental.cjs ."
   },
   "prettier": {
     "printWidth": 80,
@@ -25,14 +19,18 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "ib-analyzer",
-  "module": "dist/ib-analyzer.esm.js",
-  "devDependencies": {
-    "tsdx": "^0.14.1",
-    "tslib": "^2.4.1",
-    "typescript": "^4.9.4"
-  },
   "dependencies": {
     "csv-parse": "^5.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.4",
+    "@typescript-eslint/eslint-plugin": "^5.59.7",
+    "@typescript-eslint/parser": "^5.59.7",
+    "eslint": "^8.41.0",
+    "tslib": "^2.5.2",
+    "typescript": "^5.0.4"
+  },
+  "engines": {
+    "node": ">=10"
   }
 }
