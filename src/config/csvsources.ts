@@ -24,7 +24,7 @@ export const TARGET_SCHEMA = ["Trades","Header","DataDiscriminator","Asset Categ
 
 export const CSV_SOURCES:CsvSource[] = [
     {
-        filename: '2020-test.csv',
+        filename: 'IBCE-2020-pruned.csv',
         reschemeRequired: true,
         transformation: [true,true,      true,               true,        true,     true,      true,      true,       true,      true,      true,      true,    true,       true,       "drop",      true, true],
         schema: ["Trades","Header","DataDiscriminator","Asset Category","Currency","Symbol","Date/Time","Quantity","T. Price","C. Price","Proceeds","Comm/Fee","Basis","Realized P/L","Realized P/L %","MTM P/L","Code"]
