@@ -39,7 +39,7 @@ const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
         cumTax: 0,
     }
 
-    for (let o of orders) {
+    for (const o of orders) {
         const q = o.quantity - o.filled
         const m = q / o.quantity
 
@@ -84,8 +84,7 @@ export const lossHarvestView = async () => {
     env.log("Row = unfilled orders, sorted by date.")
     env.log("Notes: partially filled orders are displayed proportionately to unfilled part.")
 
-    // @ts-ignore
-    for (let sym of env.data.sets.symbols) {
+    for (const sym of env.data.sets.symbols) {
         const mtmPrice = getPriceBySymbol(sym)
 
         const orderSlice = env.data.orders.filter((o) => o.symbol === sym && o.quantity !== o.filled)

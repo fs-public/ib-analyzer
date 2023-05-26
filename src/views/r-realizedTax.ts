@@ -33,14 +33,14 @@ const getOrderView = (order: Order): View => {
 }
 
 const realizedTaxOneYear = (orders: Order[]) => {
-    let fullTable: View[] = []
+    const fullTable: View[] = []
 
     const totalPnl: { [key: string]: number } = {}
-    for (let cur of Array.from(env.data.sets.currencies)) totalPnl[cur] = 0
+    for (const cur of Array.from(env.data.sets.currencies)) totalPnl[cur] = 0
 
     let totalTax = 0
 
-    for (let o of orders) {
+    for (const o of orders) {
         if (o.action.includes("close") || o.tax !== 0) {
             fullTable.push(getOrderView(o))
 
@@ -58,15 +58,13 @@ const realizedTaxOneYear = (orders: Order[]) => {
     env.log("Total tax:", totalTax)
 }
 
-// @ts-ignore
 const realizedTax = async () => {
     env.log("\nRealized Tax view launched. " + ">>>".repeat(40))
 
     env.log("\nTable = one year.")
     env.log("Row = filled orders, sorted by date.")
 
-    // @ts-ignore
-    for (let y of env.data.sets.years) {
+    for (const y of env.data.sets.years) {
         env.log(`\n[Realized Tax] ${y} `)
 
         const orderSlice = env.data.orders.filter((o) => o.datetime.getFullYear() === y)

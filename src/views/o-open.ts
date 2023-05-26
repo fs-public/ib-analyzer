@@ -23,7 +23,7 @@ const openViewTotals = () => {
 
     // Setup data
     const unfilledOrders = env.data.orders.filter((o) => o.quantity !== o.filled)
-    for (let o of unfilledOrders) {
+    for (const o of unfilledOrders) {
         let index = totals.findIndex((t) => t.symbol === o.symbol)
 
         if (index === -1) {
@@ -89,7 +89,7 @@ const openViewOrders = () => {
     const opens: ViewOrder[] = []
 
     const unfilledOrders = env.data.orders.filter((o) => o.quantity !== o.filled)
-    for (let o of unfilledOrders) {
+    for (const o of unfilledOrders) {
         const q = o.quantity - o.filled
         const m = q / o.quantity
         const mtmPrice = getPriceBySymbol(o.symbol)

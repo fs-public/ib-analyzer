@@ -18,7 +18,7 @@ const validateRecords = (records: SchemedRecord[]) => {
         }
 
         if (records[i][1] === "Data" && records[i][3] !== "Forex") {
-            for (let k of [7, 8, 10, 11]) {
+            for (const k of [7, 8, 10, 11]) {
                 // validate numerical non-zero columns
                 if ([8, 10, 11].includes(k) && records[i][3] === "Equity and Index Options") continue // Options can expire worthless (zero T. Price, proceeds, and fee)
 
@@ -34,7 +34,7 @@ const validateRecords = (records: SchemedRecord[]) => {
 /////////////////////////////  Orders
 
 const validateOrdersMath = (orders: Order[]) => {
-    for (let o of orders) {
+    for (const o of orders) {
         assert(
             Math.abs(o.quantity * o.tprice - -o.proceeds) <= 0.1,
             `Incorrect o.proceeds validation in order ${o.datetime}`
@@ -68,6 +68,7 @@ const validateOrdersSort = (orders: Order[]) => {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 const validateSymbols = () => {}
 
 ///////////////////////////// Fills (or known after fills)

@@ -6,7 +6,7 @@ import { env } from "../env"
 const getMultiplier = (assetcategory: string, symbol: string): number => {
     if (assetcategory === "Stocks") return 1
 
-    for (let pair of DERIVATIVES_MULTIPLIERS) {
+    for (const pair of DERIVATIVES_MULTIPLIERS) {
         if (symbol.includes(pair.matcher)) {
             return pair.multiplier
         }

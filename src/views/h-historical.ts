@@ -60,7 +60,6 @@ const getOneOrder = (order: Order, fills: Fill[]): View[] => {
     return [orderTable, ...fillsTable]
 }
 
-// @ts-ignore
 const historicalView = async () => {
     env.log("\nHistorical analysis launched. " + ">>>".repeat(40))
 
@@ -68,15 +67,14 @@ const historicalView = async () => {
     env.log("Row = orders and fills (consolidated), sorted by date.")
     env.log("Notes: Fills (present for close orders) sum to the order just above it.")
 
-    // @ts-ignore
-    for (let sym of env.data.sets.symbols) {
+    for (const sym of env.data.sets.symbols) {
         env.log("\n[Historical Analysis]", sym)
 
         const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
 
         let symbolTable: View[] = []
 
-        for (let o of orderSlice) {
+        for (const o of orderSlice) {
             const relatingFills = env.data.fills.filter((f) => f.symbol === sym && f.closeId === o.id)
 
             symbolTable = [...symbolTable, ...getOneOrder(o, relatingFills)]

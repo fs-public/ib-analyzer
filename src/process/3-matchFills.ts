@@ -128,8 +128,7 @@ const matchFillsPerSymbol = (orders: Order[]) => {
 const matchFills = (orders: Order[], symbols: Set<string>): Fill[] => {
     let fills: Fill[] = []
 
-    // @ts-ignore
-    for (let sym of symbols) {
+    for (const sym of symbols) {
         const orderSlice = orders.filter((o) => o.symbol === sym)
         fills = [...fills, ...matchFillsPerSymbol(orderSlice)]
     }

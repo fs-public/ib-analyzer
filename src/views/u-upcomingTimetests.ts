@@ -63,7 +63,7 @@ export const upcomingTimetestsView = async () => {
     orderSlice.sort((a, b) => getDateDiff(b.datetime, a.datetime))
 
     const timetests: View[] = []
-    for (let o of orderSlice) {
+    for (const o of orderSlice) {
         timetests.push(getTimetest(o))
     }
 

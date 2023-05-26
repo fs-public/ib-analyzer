@@ -10,7 +10,7 @@ export const recordKeyReplaceRule = (recordKey: string): string => {
 }
 
 export const parseNumerical = (value: string | number): number => {
-    let res =
+    const res =
         typeof value === "string"
             ? Number(value.replaceAll(",", "")) // remove separator of thousands
             : Number(value)

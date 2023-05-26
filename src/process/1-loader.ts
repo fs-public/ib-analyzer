@@ -49,9 +49,9 @@ const reschemeRow = (row: UnschemedRecord, source: any): SchemedRecord => {
 }
 
 const loader = async (): Promise<SchemedRecord[]> => {
-    let records: SchemedRecord[] = []
+    const records: SchemedRecord[] = []
 
-    for (let source of CSV_SOURCES) {
+    for (const source of CSV_SOURCES) {
         env.log("Importing", source.filename)
 
         const loadedRecords = await filenameToRecords(DATA_BASE_DIR + source.filename)

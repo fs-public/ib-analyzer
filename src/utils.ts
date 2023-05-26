@@ -47,7 +47,7 @@ export const getDateDiffDisplay = (from: Date, to: Date): string => {
 
 // Display utils
 
-export const fixed = (number: number, decimals: number = 2) => {
+export const fixed = (number: number, decimals = 2) => {
     return Math.round(number * 10 ** decimals) / 10 ** decimals
 }
 
@@ -63,7 +63,7 @@ export const makeObjectFixedDashed = <T extends { [key: string]: any }>(obj: T, 
 
 // User input
 
-export const getUserInput = async (prompt: string = "Press ENTER to continue... "): Promise<string> => {
+export const getUserInput = async (prompt = "Press ENTER to continue... "): Promise<string> => {
     const interf = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
@@ -77,7 +77,7 @@ export const getUserInput = async (prompt: string = "Press ENTER to continue... 
     })
 }
 
-export const getUserENTERInput = async (prompt: string = "for next page"): Promise<boolean> => {
+export const getUserENTERInput = async (prompt = "for next page"): Promise<boolean> => {
     const command = await getUserInput(`Press ENTER ${prompt} or 's' to stop... `)
     return command !== "s"
 }
