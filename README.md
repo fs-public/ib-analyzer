@@ -64,4 +64,4 @@ Data preparation is the only required step. The application has an interactive w
 ### Changelog
 
 -   **v0.1.0** (mid-2020): initial version
--   **v0.2.0** (): TODO
+-   **v0.2.0** (26th May 2023): update dependencies, add linter and formatter, Github Actions, first Readme version
