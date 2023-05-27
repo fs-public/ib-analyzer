@@ -10,9 +10,10 @@
         "watch": "tsc -p . --watch",
         "build": "tsc -p .",
         "lint": "eslint .",
-        "format": "prettier . --write",
+        "format:write": "prettier . --write",
         "format:check": "prettier . --check",
-        "copy_example": "cp example/config/ src -r",
+        "copy_example:linux": "cp example/config/ src -r",
+        "copy_example:windows": "XCOPY example\\config src\\config /I /Y",
         "start": "node --es-module-specifier-resolution=node --require=./suppress-experimental.cjs ."
     },
     "dependencies": {
