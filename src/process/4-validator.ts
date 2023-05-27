@@ -8,27 +8,22 @@ const validateRecord = (record: SchemedRecord) => {
     // Helper to identify record in asserts, `symbol on date`
     const errText = (type: string) => `ValidateRecord error: ${type} for ${record[5]} on ${record[6]}`
 
-    // Checks record length
+    // Check record length
     assert(record.length === 16, errText("bad CSV - not 16 fields"))
 
-    // Checks recognized record TYPES
-    const ALLOWED_RECORD_TYPES = ["Header", "Data", "SubTotal", "Total"]
-    assert(ALLOWED_RECORD_TYPES.includes(record[1]), errText("unrecognized record type"))
+    // Check recognized record type
+    assert(record[1] === "Data"), errText("unrecognized record type")
 
-    //if (record[1] === "Data") {
-    // Checks DataDiscriminator for records of type Data
+    // Check recognized DataDiscriminator
     assert(record[2] === "Order", errText("unrecognized DataDiscriminator"))
-    //}
 
     // Check non-zero values of quantity, price, proceeds and fee
-    //if (record[1] === "Data" && record[3] !== "Forex") {
     for (const k of [7, 8, 10, 11]) {
         // validate numerical non-zero columns
         if ([8, 10, 11].includes(k) && record[3] === "Equity and Index Options") continue // Options can expire worthless (zero T. Price, proceeds, and fee)
 
         assert(Number(record[k]) !== 0, `unexpected zero in column ${k}`)
     }
-    //}
 }
 
 /////////////////////////////  Orders
