@@ -5,5 +5,3 @@ dist
 
 # Data
 data
-src/config/sources.ts
-src/config/prices.ts
