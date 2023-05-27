@@ -1,9 +1,10 @@
 import fs from "fs"
 import { parse } from "csv-parse"
-import { DATA_BASE_DIR, CSV_SOURCES } from "../config/sources"
+import { CSV_SOURCES } from "../config/sources"
 import { assert } from "../utils"
 import { env } from "../env"
 import { SchemedRecord, UnschemedRecord } from "../types/records"
+import { DATA_BASE_DIR } from "../config/config"
 
 const filenameToRecords = async (file: string) => {
     const records = []
@@ -36,7 +37,7 @@ const reschemeRow = (row: UnschemedRecord, source: any): SchemedRecord => {
                 break
             case "drop":
                 break
-            case "insertZero":
+            case "insert-zero":
                 schemedRow.push("0")
                 break
             default:

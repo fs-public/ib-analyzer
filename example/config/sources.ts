@@ -2,26 +2,6 @@ import { CSVSource } from "../types/global"
 import { SchemedRecord } from "../types/records"
 import { assert } from "../utils"
 
-export const shouldDropRecord = (record: SchemedRecord): boolean => {
-    return record[1] !== "Data" || record[3] === "Forex"
-}
-
-export const recordKeyReplaceRule = (recordKey: string): string => {
-    return recordKey.replaceAll(" ", "").replaceAll("/", "").replaceAll(".", "").toLowerCase()
-}
-
-export const parseNumerical = (value: string | number): number => {
-    const res =
-        typeof value === "string"
-            ? Number(value.replaceAll(",", "")) // remove separator of thousands
-            : Number(value)
-    assert(!isNaN(res), "NaN in numerical key")
-
-    return res
-}
-
-export const DATA_BASE_DIR = "data/"
-
 // prettier-ignore
 export const TARGET_SCHEMA = ["Trades","Header","DataDiscriminator","Asset Category","Currency","Symbol","Date/Time","Quantity","T. Price","C. Price","Proceeds","Comm/Fee","Basis","Realized P/L","MTM P/L","Code"]
 

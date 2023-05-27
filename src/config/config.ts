@@ -1,3 +1,5 @@
+export const DATA_BASE_DIR = "data/"
+
 export const TAX_BRACKET = 0.15
 
 const HARVEST_COMM = 10 // 10 USD or EUR
