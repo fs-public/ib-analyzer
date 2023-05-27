@@ -18,6 +18,8 @@ In Czech Republic, capital gains are:
 -   Matched in a first-in-first-out (FIFO) fashion,
 -   Losses offset gains in full within one tax year (and cannot be carried over), and
 -   Capital gains or losses realized after 3 years or more are fully exempt (neither tax obligation required nor offset possible).
+-   All securities (stocks, bonds, derivatives, ...) are taxed together for as long as they have an ISIN.
+-   Currency exchanges are not taxed (when exchanged for personal consumption or primarily for security purchases, only Forex trading with the goal of profit solely off the Forex trading would be taxed).
 
 The application matches your trades based on these rules, computes tax obligation to cross-check your tax accountant, and suggests possible tax loss harvests and coming-up 3-year exemptions. Short sells and derivatives are supported as well.
 
