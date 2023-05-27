@@ -47,7 +47,7 @@ const reschemeRow = (row: UnschemedRecord, source: any): SchemedRecord => {
     return schemedRow
 }
 
-const loader = async (): Promise<SchemedRecord[]> => {
+const loadData = async (): Promise<SchemedRecord[]> => {
     const records: SchemedRecord[] = []
 
     for (const source of CSV_SOURCES) {
@@ -72,4 +72,4 @@ const loader = async (): Promise<SchemedRecord[]> => {
     return records
 }
 
-export default loader
+export default loadData

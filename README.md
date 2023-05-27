@@ -10,7 +10,7 @@ refactor fills as primary and secondary order, instead of close and open
 
 # Interactive Brokers Analyzer
 
-NodeJS utility to parse and analyze [Interactive Brokers](https://www.interactivebrokers.com/) (IB) trade reports from the POV of the local (Czech Republic) tax authority.
+NodeJS utility to parse and analyze [Interactive Brokers](https://www.interactivebrokers.com/) (stock trading platform, IB) trade reports from the POV of the local (Czech Republic) tax authority.
 
 In Czech Republic, capital gains are:
 

@@ -9,7 +9,8 @@ export const getHarvestLoss = (quantity: number, value: number) => {
 }
 
 export const HELP_STRING = `
-IB Analyzer, 2023.
+Interactive Brokers Analyzer
+fs-public, 2023
 
 Admin Commands:
   - reload: reload
@@ -17,6 +18,7 @@ Admin Commands:
   - example: example order print
   - help: help print
   - q, quit: quit
+
 Views:
   - h: historical analysis (verbose)
   - l: loss harvest
