@@ -31,7 +31,7 @@ const filenameToRecords = async (file: string) => {
 const validateSourceSchema = (source: CSVSource, realHeader: UnschemedRecord) => {
     // Validate real header
     assert(
-        realHeader.map((col) => col.trim()).join("") === source.schema.join(""),
+        realHeader.map((col) => (col as string).trim()).join("") === source.schema.join(""),
         `Source schema mismatch for ${source.filename}.`
     )
 

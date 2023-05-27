@@ -26,9 +26,7 @@ const getMultiplier = (assetcategory: string, symbol: string): number => {
  * @returns `[..., 'AAPL', 15, ...]` -> `{ ..., 'Symbol': 'AAPL', 'T. Price': 150, ...}`
  */
 const schemedRecordToUnschemedOrder = (record: SchemedRecord): UnschemedOrder => {
-    return Object.fromEntries(
-        record.map((value: any, index: number) => [TARGET_SCHEMA[index], value])
-    ) as UnschemedOrder
+    return Object.fromEntries(record.map((value, index) => [TARGET_SCHEMA[index], value])) as UnschemedOrder
 }
 
 /**
