@@ -4,32 +4,31 @@ import { assert } from "../utils"
 
 ///////////////////////////// Records
 
-const validateRecords = (records: SchemedRecord[]) => {
-    for (let i = 0; i < records.length; i++) {
-        // Checks record length
-        assert(records[i].length === 16, `Bad CSV! There are not 16 fields on line ${i}`)
+const validateRecord = (record: SchemedRecord) => {
+    // Helper to identify record in asserts, `symbol on date`
+    const errText = (type: string) => `ValidateRecord error: ${type} for ${record[5]} on ${record[6]}`
 
-        // Checks recognized record TYPES
-        const ALLOWED_RECORD_TYPES = ["Header", "Data", "SubTotal", "Total"]
-        assert(ALLOWED_RECORD_TYPES.includes(records[i][1]), `Unrecognized record type on line ${i}`)
+    // Checks record length
+    assert(record.length === 16, errText("bad CSV - not 16 fields"))
 
-        if (records[i][1] === "Data") {
-            // Checks DataDiscriminator for records of type Data
-            assert(records[i][2] === "Order", `Unrecognized DataDiscriminator on line ${i}`)
-        }
+    // Checks recognized record TYPES
+    const ALLOWED_RECORD_TYPES = ["Header", "Data", "SubTotal", "Total"]
+    assert(ALLOWED_RECORD_TYPES.includes(record[1]), errText("unrecognized record type"))
 
-        if (records[i][1] === "Data" && records[i][3] !== "Forex") {
-            for (const k of [7, 8, 10, 11]) {
-                // validate numerical non-zero columns
-                if ([8, 10, 11].includes(k) && records[i][3] === "Equity and Index Options") continue // Options can expire worthless (zero T. Price, proceeds, and fee)
+    //if (record[1] === "Data") {
+    // Checks DataDiscriminator for records of type Data
+    assert(record[2] === "Order", errText("unrecognized DataDiscriminator"))
+    //}
 
-                assert(
-                    Number(records[i][k]) !== 0,
-                    `Number zero in column ${k} for entry ${i} on date ${records[i][6]}`
-                )
-            }
-        }
+    // Check non-zero values of quantity, price, proceeds and fee
+    //if (record[1] === "Data" && record[3] !== "Forex") {
+    for (const k of [7, 8, 10, 11]) {
+        // validate numerical non-zero columns
+        if ([8, 10, 11].includes(k) && record[3] === "Equity and Index Options") continue // Options can expire worthless (zero T. Price, proceeds, and fee)
+
+        assert(Number(record[k]) !== 0, `unexpected zero in column ${k}`)
     }
+    //}
 }
 
 /////////////////////////////  Orders
@@ -93,7 +92,7 @@ const validateMatches = (orders: Order[]) => {
 ///////////////////////////// Exports
 
 export const validatorRecords = (records: SchemedRecord[]) => {
-    validateRecords(records)
+    records.forEach((record) => validateRecord(record))
 }
 
 export const validatorOrders = (orders: Order[]) => {

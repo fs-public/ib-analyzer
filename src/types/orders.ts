@@ -1,3 +1,7 @@
+import { TARGET_SCHEMA } from "../config/sources"
+
+export type UnschemedOrder = { [column in (typeof TARGET_SCHEMA)[number]]: string | number }
+
 export type Order = {
     // Now data are prepared in 'orders' in SORTED format, as an array of 13-key trade objects:
     // Description of fields: https://ibkrguides.com/reportingreference/reportguide/trades_modelstatements.htm

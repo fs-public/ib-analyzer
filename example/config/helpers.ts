@@ -19,13 +19,6 @@ export const shouldDropRecord = (record: SchemedRecord): boolean => {
 }
 
 /**
- * Standardizes column names by replacing special characters.
- */
-export const recordKeyReplaceRule = (recordKey: string): string => {
-    return recordKey.replaceAll(" ", "").replaceAll("/", "").replaceAll(".", "").toLowerCase()
-}
-
-/**
  * Standardizes numerical values that are saved as strings.
  */
 export const parseNumerical = (value: string | number): number => {

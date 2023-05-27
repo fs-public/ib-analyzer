@@ -6,8 +6,8 @@ export type Transformation = true | "drop" | "insert-zero"
 
 export type CSVSource = {
     filename: string
-    transformation: Transformation[]
-    schema: string[]
+    transformation: readonly Transformation[]
+    schema: readonly string[]
 }
 
 export type DataObject = {
