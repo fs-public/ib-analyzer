@@ -18,7 +18,7 @@ export const getHarvestLoss = (quantity: number, value: number) => {
 }
 
 export const HELP_STRING = `
-Interactive Brokers Analyzer
+Interactive Brokers Analyzer - Interactive Wizard
 fs-public, 2023
 
 Admin Commands:

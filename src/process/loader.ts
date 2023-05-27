@@ -9,14 +9,13 @@ import { validatorRecords, validatorOrders, validatorFills } from "./4-validator
 export const performFullReload = async (firstLoad = false) => {
     if (!firstLoad) env.flushErrors()
 
-    // Import CSV and fix old imports
+    // Load CSV data as records and validate
     const records: SchemedRecord[] = await loadData()
-
-    // Validate records
     validatorRecords(records)
 
-    // Setup orders
+    // Parse and validate orders
     const orders = parseOrders(records)
+    validatorOrders(orders)
 
     // Fill out sets
     const categories = new Set(orders.map((o) => o.assetcategory))
@@ -24,25 +23,15 @@ export const performFullReload = async (firstLoad = false) => {
     const symbols = new Set(orders.map((o) => o.symbol))
     const years = new Set(orders.map((o) => o.datetime.getFullYear()))
 
-    // Print out stats
-
-    // Validate orders
-    validatorOrders(orders)
-
     // Compute and validate fills
     const fills = matchFills(orders, symbols)
-
-    // Validate fills
     validatorFills(orders)
 
-    // Finish sets and print stats
+    // Finish sets
     const activeSymbols = new Set(orders.filter((o) => o.quantity !== o.filled).map((o) => o.symbol))
 
-    env.log(
-        `Loaded ${CSV_SOURCES.length} CSVs with total`,
-        orders.length,
-        `trades (filtered from ${records.length} records).\n`
-    )
+    // Print out stats
+    env.log("Loaded", CSV_SOURCES.length, "CSVs with total of", orders.length, "trades.\n")
 
     env.log("Categories", categories.size, "\b:", Array.from(categories))
     env.log("Currencies", currencies.size, "\b:", Array.from(currencies))
