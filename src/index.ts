@@ -14,7 +14,7 @@ import openView from "./views/o-open"
 import lossHarvestView from "./views/l-lossHarvest"
 import { HELP_STRING } from "./config/config"
 import upcomingTimetestsView from "./views/u-upcomingTimetests"
-import { CSV_SOURCES } from "./config/csvsources"
+import { CSV_SOURCES } from "./config/sources"
 
 const reload = async () => {
     env.flushErrors()

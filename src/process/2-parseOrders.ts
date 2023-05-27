@@ -1,5 +1,5 @@
 import { DERIVATIVES_MULTIPLIERS } from "../config/prices"
-import { parseNumerical, recordKeyReplaceRule, shouldDropRecord } from "../config/csvsources"
+import { parseNumerical, recordKeyReplaceRule, shouldDropRecord } from "../config/sources"
 import { Order, SchemedRecord } from "../types"
 import { env } from "../env"
 
