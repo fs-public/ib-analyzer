@@ -1,3 +1,4 @@
+import { ASSET_CATEGORIES } from "../config/config"
 import { Order } from "../types/orders"
 import { SchemedRecord } from "../types/records"
 import { assert } from "../utils"
@@ -17,10 +18,16 @@ const validateRecord = (record: SchemedRecord) => {
     // Check recognized DataDiscriminator
     assert(record[2] === "Order", errText("unrecognized DataDiscriminator"))
 
+    // Check recognized Asset Categories
+    assert(
+        (Object.values(ASSET_CATEGORIES) as string[]).includes(record[3] as string),
+        errText(`unrecognized asset category ${record[3]}`)
+    )
+
     // Check non-zero values of quantity, price, proceeds and fee
     for (const k of [7, 8, 10, 11]) {
         // validate numerical non-zero columns
-        if ([8, 10, 11].includes(k) && record[3] === "Equity and Index Options") continue // Options can expire worthless (zero T. Price, proceeds, and fee)
+        if ([8, 10, 11].includes(k) && record[3] === ASSET_CATEGORIES.DERIVATIVE_OPTIONS) continue // Options can expire worthless (zero T. Price, proceeds, and fee)
 
         assert(Number(record[k]) !== 0, `unexpected zero in column ${k}`)
     }
