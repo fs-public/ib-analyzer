@@ -13,9 +13,17 @@ It also allows for custom matchers to drop orders and so on.
  * Drops specific orders (use with caution).
  */
 export const shouldDropRecord = (record: SchemedRecord): boolean => {
-    if (record[6] === "IEP" && record[7] === "2021-09-30, 09:30:02") return true
+    // Specific orders drop
+    if (record[5] === "IEP" && record[6] === "2021-09-30, 09:30:02") return true
 
-    return record[1] !== "Data" || record[3] === "Forex"
+    // Drop irrelevant record types
+    if (["Header", "SubTotal", "Total"].includes(record[1])) return true
+
+    // Drop forex
+    if (record[3] === "Forex") return true
+
+    // All good otherwise
+    return false
 }
 
 /**
