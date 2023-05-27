@@ -1,4 +1,6 @@
-export const DERIVATIVES_MULTIPLIERS: { matcher: string; multiplier: number }[] = [
+import { ConfigMultiplier } from "../types/global"
+
+export const DERIVATIVES_MULTIPLIERS: ConfigMultiplier[] = [
     // parsed as 'symbol contains this'
     { matcher: "DAX", multiplier: 5 },
     { matcher: "XSP", multiplier: 100 },
@@ -12,4 +14,5 @@ export const MTM_PRICES = {
     "DAX 15MAR24 12800 P-EUR": 435.8 * 5,
     "XSP 15DEC23 380 P-USD": 19.72 * 100,
 }
+
 //const MTM_CURRENCIES = {}

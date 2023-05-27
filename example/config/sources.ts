@@ -2,7 +2,7 @@ import { CSVSource } from "../types/global"
 
 export const NO_TRANSFORM = [...Array(16)].fill(true)
 // prettier-ignore
-export const TARGET_SCHEMA = ["Trades","Header","DataDiscriminator","Asset Category","Currency","Symbol","Date/Time","Quantity","T. Price","C. Price","Proceeds","Comm/Fee","Basis","Realized P/L","MTM P/L","Code"]
+export const TARGET_SCHEMA = ["Trades","Header","DataDiscriminator","Asset Category","Currency","Symbol","Date/Time","Quantity","T. Price","C. Price","Proceeds","Comm/Fee","Basis","Realized P/L","MTM P/L","Code"] as const
 
 export const CSV_SOURCES: CSVSource[] = [
     {
@@ -26,6 +26,11 @@ export const CSV_SOURCES: CSVSource[] = [
     },
     {
         filename: "IBIE-2022-pruned.csv",
+        transformation: NO_TRANSFORM,
+        schema: TARGET_SCHEMA,
+    },
+    {
+        filename: "IBIE-2023-YTD-pruned.csv",
         transformation: NO_TRANSFORM,
         schema: TARGET_SCHEMA,
     },

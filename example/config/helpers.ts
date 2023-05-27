@@ -17,7 +17,7 @@ export const shouldDropRecord = (record: SchemedRecord): boolean => {
     if (record[5] === "IEP" && record[6] === "2021-09-30, 09:30:02") return true
 
     // Drop irrelevant record types
-    if (["Header", "SubTotal", "Total"].includes(record[1])) return true
+    if (["Header", "SubTotal", "Total"].includes(record[1] as string)) return true
 
     // Drop forex
     if (record[3] === "Forex") return true
