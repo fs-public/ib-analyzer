@@ -1,23 +1,21 @@
-import { DERIVATIVES_MULTIPLIERS } from "../config/prices"
-import { parseNumerical, recordKeyReplaceRule, shouldDropRecord } from "../config/helpers"
-import { env } from "../env"
-import { Order } from "../types/orders"
+import { parseNumerical } from "../config/helpers"
+import { Order, UnschemedOrder } from "../types/orders"
 import { SchemedRecord } from "../types/records"
+import { TARGET_SCHEMA } from "../config/sources"
+import { getMultiplier } from "../utils"
 
-const getMultiplier = (assetcategory: string, symbol: string): number => {
-    if (assetcategory === "Stocks") return 1
-
-    for (const pair of DERIVATIVES_MULTIPLIERS) {
-        if (symbol.includes(pair.matcher)) {
-            return pair.multiplier
-        }
-    }
-
-    env.error("A derivative without recognized multiplier: " + symbol)
-    return 1
+/**
+ * Remaps `SchemedRecord` (array without any column names) into object with keys based on IB reported `TARGET_SCHEMA`.
+ * @returns `[..., 'AAPL', 15, ...]` -> `{ ..., 'Symbol': 'AAPL', 'T. Price': 150, ...}`
+ */
+const schemedRecordToUnschemedOrder = (record: SchemedRecord): UnschemedOrder => {
+    return Object.fromEntries(record.map((value, index) => [TARGET_SCHEMA[index], value])) as UnschemedOrder
 }
 
-const schemeOrder = (o: any, id: number): Order => {
+/**
+ * Remaps IB reported columns (`UnschemedOrder` derived from `TARGET_SCHEMA`) into our own type of `Order`.
+ */
+const schemeOrder = (o: UnschemedOrder, id: number): Order => {
     // delete o["trades"] // always 'Trades'
     // delete o["header"] // always 'Data'
     // delete o["datadiscriminator"] // always 'Order'
@@ -26,18 +24,19 @@ const schemeOrder = (o: any, id: number): Order => {
 
     return {
         id,
-        assetcategory: o.assetcategory,
-        currency: o.currency,
-        symbol: o.symbol + "-" + o.currency,
-        datetime: new Date(o["datetime"]),
-        quantity: parseNumerical(o.quantity),
-        tprice: parseNumerical(o.tprice) * getMultiplier(o.assetcategory, o.symbol),
-        proceeds: parseNumerical(o.proceeds),
-        commfee: parseNumerical(o.commfee),
-        basis: parseNumerical(o.basis),
-        realizedpl: parseNumerical(o.realizedpl),
-        code: o.code,
-        // fields to-be-determined in 3-matchFills.tsx
+        assetcategory: o["Asset Category"] as string,
+        currency: o["Currency"] as string,
+        symbol: o["Symbol"] + "-" + o["Currency"],
+        datetime: new Date(o["Date/Time"]),
+        quantity: parseNumerical(o["Quantity"]),
+        tprice: parseNumerical(o["T. Price"]) * getMultiplier(o["Asset Category"] as string, o["Symbol"] as string),
+        proceeds: parseNumerical(o["Proceeds"]),
+        commfee: parseNumerical(o["Comm/Fee"]),
+        basis: parseNumerical(o["Basis"]),
+        realizedpl: parseNumerical(o["Realized P/L"]),
+        code: o["Code"] as string,
+
+        // fields to-be-determined later in 3-matchFills.ts
         action: "",
         filled: 0,
         tax: 0,
@@ -45,22 +44,10 @@ const schemeOrder = (o: any, id: number): Order => {
 }
 
 const parseOrders = (records: SchemedRecord[]): Order[] => {
-    const unschemedOrders: any[] = []
-
-    for (let i = 0; i < records.length; i++) {
-        if (shouldDropRecord(records[i])) continue
-
-        const keyedRecord = records[i].map((value: any, index: number) =>
-            index === 0
-                ? ["trades", "Trades"] // misbehaves in the first index, not sure why
-                : [recordKeyReplaceRule(records[0][index]), value]
-        )
-
-        unschemedOrders.push(Object.fromEntries(keyedRecord))
-    }
-
-    // Apply scheming to every order
-    return unschemedOrders.map((unschemed, index) => schemeOrder(unschemed, index))
+    // Apply scheming pipeline to every record
+    return records
+        .map((record) => schemedRecordToUnschemedOrder(record))
+        .map((unschemed, index) => schemeOrder(unschemed, index))
 }
 
 export default parseOrders

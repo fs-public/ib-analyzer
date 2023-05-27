@@ -6,6 +6,7 @@ import { env } from "../env"
 import { SchemedRecord, UnschemedRecord } from "../types/records"
 import { DATA_BASE_DIR } from "../config/config"
 import { CSVSource } from "../types/global"
+import { shouldDropRecord } from "../config/helpers"
 
 /**
  * Loads data CSV as an array.
@@ -30,7 +31,7 @@ const filenameToRecords = async (file: string) => {
 const validateSourceSchema = (source: CSVSource, realHeader: UnschemedRecord) => {
     // Validate real header
     assert(
-        realHeader.map((col) => col.trim()).join("") === source.schema.join(""),
+        realHeader.map((col) => (col as string).trim()).join("") === source.schema.join(""),
         `Source schema mismatch for ${source.filename}.`
     )
 
@@ -72,7 +73,8 @@ const reschemeRow = (row: UnschemedRecord, source: CSVSource): SchemedRecord => 
 }
 
 /**
- * Iterates over all sources, loads them with `filenameToRecords`, performs basic validation, and reschemes if necessary.
+ * Iterates over all sources, loads them with `filenameToRecords`, performs basic validation,
+ * reschemes if necessary, and drops records as per config.
  */
 const loadData = async (): Promise<SchemedRecord[]> => {
     let records: SchemedRecord[] = []
@@ -90,7 +92,8 @@ const loadData = async (): Promise<SchemedRecord[]> => {
         records = [...records, ...loadedRecords.map((row) => reschemeRow(row, source))]
     }
 
-    return records
+    // Filter and return
+    return records.filter((record) => !shouldDropRecord(record))
 }
 
 export default loadData

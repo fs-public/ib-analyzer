@@ -6,8 +6,8 @@ export type Transformation = true | "drop" | "insert-zero"
 
 export type CSVSource = {
     filename: string
-    transformation: Transformation[]
-    schema: string[]
+    transformation: readonly Transformation[]
+    schema: readonly string[]
 }
 
 export type DataObject = {
@@ -26,10 +26,10 @@ export type ConfigMultiplier = { matcher: string; multiplier: number }
 
 export type Env = {
     data: DataObject
-    logging: boolean
     errors: string[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     log: (...args: any) => void
-    table: (...args: any) => void
+    table: (...args: object[]) => void
     error: (description: string, critical?: boolean) => void
     flushErrors: () => void
 }

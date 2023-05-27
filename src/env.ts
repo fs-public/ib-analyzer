@@ -1,5 +1,15 @@
 import { Env } from "./types/global"
 
+const slowIfNeeded = () => {
+    if (!process.env["SLOW_LOGGING"]) return
+
+    let count = 0
+    for (let i = 0; i < 100_000_000; i++) {
+        count += i * i
+    }
+    return count
+}
+
 export const env: Env = {
     data: {
         orders: [],
@@ -13,15 +23,20 @@ export const env: Env = {
         },
     },
 
-    logging: true,
     errors: [],
 
     log: (...args) => {
-        if (env.logging) console.log(...args)
+        if (process.env["LOGGING"]) {
+            console.log(...args)
+            slowIfNeeded()
+        }
     },
 
     table: (...args) => {
-        if (env.logging) console.table(...args)
+        if (process.env["LOGGING"]) {
+            console.table(...args)
+            slowIfNeeded()
+        }
     },
 
     error: (description, critical = false) => {

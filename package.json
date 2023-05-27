@@ -18,7 +18,8 @@
         "start": "node --es-module-specifier-resolution=node --require=./suppress-experimental.cjs ."
     },
     "dependencies": {
-        "csv-parse": "^5.4.0"
+        "csv-parse": "^5.4.0",
+        "dotenv": "^16.0.3"
     },
     "devDependencies": {
         "@types/node": "^20.2.4",

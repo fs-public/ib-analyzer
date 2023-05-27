@@ -1,5 +1,5 @@
 import readline from "readline"
-import { MTM_PRICES } from "./config/prices"
+import { DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/prices"
 import { env } from "./env"
 import { DisplayRetyped } from "./types/utilities"
 
@@ -109,4 +109,20 @@ export const getUserENTERInput = async (prompt = "for next page"): Promise<boole
  */
 export const getPriceBySymbol = (symbol: string): number => {
     return symbol in MTM_PRICES ? MTM_PRICES[symbol as keyof typeof MTM_PRICES] : 0
+}
+
+/**
+ * Helper used in order parsing to find derivative multiplier. All prices are multiplied by it and it is no longer kept afterwards.
+ */
+export const getMultiplier = (assetcategory: string, symbol: string): number => {
+    if (assetcategory === "Stocks") return 1
+
+    for (const pair of DERIVATIVES_MULTIPLIERS) {
+        if (symbol.includes(pair.matcher)) {
+            return pair.multiplier
+        }
+    }
+
+    env.error("A derivative without recognized multiplier: " + symbol)
+    return 1
 }
