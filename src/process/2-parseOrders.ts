@@ -1,10 +1,13 @@
 import { DERIVATIVES_MULTIPLIERS } from "../config/prices"
-import { parseNumerical, shouldDropRecord } from "../config/helpers"
+import { parseNumerical } from "../config/helpers"
 import { env } from "../env"
 import { Order, UnschemedOrder } from "../types/orders"
 import { SchemedRecord } from "../types/records"
 import { TARGET_SCHEMA } from "../config/sources"
 
+/**
+ * Helper used in `schemeOrder` to find derivative multiplier.
+ */
 const getMultiplier = (assetcategory: string, symbol: string): number => {
     if (assetcategory === "Stocks") return 1
 
@@ -18,6 +21,19 @@ const getMultiplier = (assetcategory: string, symbol: string): number => {
     return 1
 }
 
+/**
+ * Remaps `SchemedRecord` (array without any column names) into object with keys based on IB reported `TARGET_SCHEMA`.
+ * @returns `[..., 'AAPL', 15, ...]` -> `{ ..., 'Symbol': 'AAPL', 'T. Price': 150, ...}`
+ */
+const schemedRecordToUnschemedOrder = (record: SchemedRecord): UnschemedOrder => {
+    return Object.fromEntries(
+        record.map((value: any, index: number) => [TARGET_SCHEMA[index], value])
+    ) as UnschemedOrder
+}
+
+/**
+ * Remaps IB reported columns (`UnschemedOrder` derived from `TARGET_SCHEMA`) into our own type of `Order`.
+ */
 const schemeOrder = (o: UnschemedOrder, id: number): Order => {
     // delete o["trades"] // always 'Trades'
     // delete o["header"] // always 'Data'
@@ -38,7 +54,8 @@ const schemeOrder = (o: UnschemedOrder, id: number): Order => {
         basis: parseNumerical(o["Basis"]),
         realizedpl: parseNumerical(o["Realized P/L"]),
         code: o["Code"] as string,
-        // fields to-be-determined in 3-matchFills.tsx
+
+        // fields to-be-determined later in 3-matchFills.ts
         action: "",
         filled: 0,
         tax: 0,
@@ -46,18 +63,10 @@ const schemeOrder = (o: UnschemedOrder, id: number): Order => {
 }
 
 const parseOrders = (records: SchemedRecord[]): Order[] => {
-    const unschemedOrders: any[] = []
-
-    for (let i = 0; i < records.length; i++) {
-        if (shouldDropRecord(records[i])) continue
-
-        const arrayTupleRecord = records[i].map((value: any, index: number) => [TARGET_SCHEMA[index], value])
-
-        unschemedOrders.push(Object.fromEntries(arrayTupleRecord))
-    }
-
-    // Apply scheming to every order
-    return unschemedOrders.map((unschemed, index) => schemeOrder(unschemed, index))
+    // Apply scheming pipeline to every record
+    return records
+        .map((record) => schemedRecordToUnschemedOrder(record))
+        .map((unschemed, index) => schemeOrder(unschemed, index))
 }
 
 export default parseOrders
