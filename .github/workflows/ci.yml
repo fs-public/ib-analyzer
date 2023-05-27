@@ -9,7 +9,7 @@ jobs:
               with:
                   node-version: 16.x
             - run: npm install
-            - run: npm run copy_example
+            - run: npm run copy_example:linux
             - run: npm run format:check
     lint:
         runs-on: ubuntu-latest
@@ -19,7 +19,7 @@ jobs:
               with:
                   node-version: 16.x
             - run: npm install
-            - run: npm run copy_example
+            - run: npm run copy_example:linux
             - run: npm run lint
     build:
         runs-on: ubuntu-latest
@@ -29,5 +29,5 @@ jobs:
               with:
                   node-version: 16.x
             - run: npm install
-            - run: npm run copy_example
+            - run: npm run copy_example:linux
             - run: npm run build
