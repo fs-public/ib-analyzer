@@ -10,7 +10,7 @@ refactor fills as primary and secondary order, instead of close and open
 
 # Interactive Brokers Analyzer
 
-NodeJS utility to parse and analyze Interactive Brokers trade reports from the POV of the local (Czech Republic) tax authority.
+NodeJS utility to parse and analyze [Interactive Brokers](https://www.interactivebrokers.com/) (IB) trade reports from the POV of the local (Czech Republic) tax authority.
 
 In Czech Republic, capital gains are:
 
@@ -41,6 +41,14 @@ Analysis launches with npm script `npm start`. For configuration, see the [Usage
 
 The project runs with `npm` and `node` and is written in Typescript. Community library `csv-parse` is used for parsing the CSV exports from Interactive Brokers. Code quality assured by `prettier` and `eslint` and enforced by `Github Actions`.
 
+The application sequentially executes the following steps:
+
+1. (`./src/process/1-loader.ts`) Data CSVs are loaded into memory and reschemed based on the configuration file. CSV validity under the scheme is validated.
+2. (`./src/process/2-parseOrders.ts`) Relevant rows are parsed into orders, matched with multipliers, and saved in typed objects. Multipliers are validated.
+3. (`./src/process/3-matchFills`) Orders are matched against themselves to find full and partial fills, as well as unfilled orders (_by fills we understand decreasing outstanding holdings, i.e. fills against oneself; not partial fulfillment of the orders on the market_). IB reports profits/losses (P&L) for closing orders, which is validated against self-computed P&L.
+4. (`./src/process/4-validator.ts`) Throughout 1-3, more validations are executed by the separated validator functions, including unrecognized or unsupported values, incorrect/unexpected computations on IB side, sorting, and unmatched orders.
+5. Application loop is ran, allowing to reload data, display issues, and show various views (see [Running the Analysis](#3-running-the-analysis) section) through an interactive wizard.
+
 ### Usage
 
 #### 1. Data
@@ -65,7 +73,13 @@ We have decided to keep data-parsing presets and prices in Typescript files (for
 
 #### 3. Running the analysis
 
-The application has an interactive wizard for all commands and can be accessed after build with `npm start`.
+The application has an interactive wizard for all commands and can be accessed after build with `npm start`. All views display basic information about what is displayed upon launching.
+
+1. **Historical Analysis (verbose) view**: displays full trading history ticker by ticker, sorted by date.
+2. **Loss Harvest view**: displays all orders that have not been fully filled (i.e. active balances) ticker by ticker, including expected tax and time elapsed since order origination.
+3. **Open Positions view**: displays all outstanding balances together, summarized by ticker and then by open (unfilled) orders.
+4. **Realized Tax view**: displays realized P&L and tax obligations year by year to cross-check your tax accountant and estimate current year tax liability.
+5. **Upcoming Timetests view**: displays all open orders similarly to the detailed part of Open Positions view, but sorted by elapsed time since order origination.
 
 ### Limitations
 

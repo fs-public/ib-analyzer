@@ -42,7 +42,7 @@ const reload = async () => {
     // Compute and validate fills
     const fills = matchFills(orders, symbols)
 
-    // Validate filss
+    // Validate fills
     validatorFills(orders)
 
     // Finish sets and print stats
