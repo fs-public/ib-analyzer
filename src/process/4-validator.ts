@@ -39,7 +39,6 @@ const validateOrderMath = (o: Order) => {
 
     if (o.code.includes("O")) {
         assert(Math.abs(o.proceeds + o.commfee - -o.basis) <= 0.1, `Incorrect o.basis validation in Open order ${o}`)
-
         assert(Math.abs(o.realizedpl) <= 0.1, `Incorrect o.realizedpl validation in Open order ${o}`)
     }
 
@@ -64,9 +63,6 @@ const validateOrdersSort = (orders: Order[]) => {
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const validateSymbols = () => {}
-
 ///////////////////////////// Fills (or known after fills)
 
 const validateMatches = (orders: Order[]) => {
@@ -83,6 +79,8 @@ const validateMatches = (orders: Order[]) => {
             }
         }
     }
+
+    // TODO validate that all unfilled orders have MTM_PRICES defined as well as their currencies
 }
 
 ///////////////////////////// Exports
@@ -94,10 +92,12 @@ export const validatorRecords = (records: SchemedRecord[]) => {
     records.forEach((record) => validateRecord(record))
 }
 
+/**
+ * Validates IB reported order math (proceeds, realized P&L, ...) and their sort.
+ */
 export const validatorOrders = (orders: Order[]) => {
     orders.forEach((order) => validateOrderMath(order))
     validateOrdersSort(orders)
-    validateSymbols()
 }
 
 export const validatorFills = (orders: Order[]) => {

@@ -1,25 +1,8 @@
-import { DERIVATIVES_MULTIPLIERS } from "../config/prices"
 import { parseNumerical } from "../config/helpers"
-import { env } from "../env"
 import { Order, UnschemedOrder } from "../types/orders"
 import { SchemedRecord } from "../types/records"
 import { TARGET_SCHEMA } from "../config/sources"
-
-/**
- * Helper used in `schemeOrder` to find derivative multiplier.
- */
-const getMultiplier = (assetcategory: string, symbol: string): number => {
-    if (assetcategory === "Stocks") return 1
-
-    for (const pair of DERIVATIVES_MULTIPLIERS) {
-        if (symbol.includes(pair.matcher)) {
-            return pair.multiplier
-        }
-    }
-
-    env.error("A derivative without recognized multiplier: " + symbol)
-    return 1
-}
+import { getMultiplier } from "../utils"
 
 /**
  * Remaps `SchemedRecord` (array without any column names) into object with keys based on IB reported `TARGET_SCHEMA`.
