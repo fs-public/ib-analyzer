@@ -1,6 +1,7 @@
 import { TAX_BRACKET } from "../config/config"
 import { env } from "../env"
-import { Fill, Order } from "../types"
+import { Fill } from "../types/fills"
+import { Order } from "../types/orders"
 import { assert, did3yPass, getDateDiff } from "../utils"
 
 const spawnClosingFill = (open: Order, close: Order, quantity: number, id: number): Fill => {

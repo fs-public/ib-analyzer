@@ -1,6 +1,7 @@
 import readline from "readline"
 import { MTM_PRICES } from "./config/prices"
 import { env } from "./env"
+import { DisplayRetyped } from "./types/utilities"
 
 // Env
 
@@ -47,22 +48,38 @@ export const getDateDiffDisplay = (from: Date, to: Date): string => {
 
 // Display utils
 
+/**
+ * Rounds a number to specified number of decimals (keeping it as a number)
+ */
 export const fixed = (number: number, decimals = 2) => {
     return Math.round(number * 10 ** decimals) / 10 ** decimals
 }
 
-export const makeObjectFixedDashed = <T extends { [key: string]: any }>(obj: T, skipKeys: (keyof T)[] = []): T => {
+/**
+ * Transforms numerical entries of an object into pretty strings by replacing zeroes with '-'
+ * and rounding to two decimal places.
+ * @param obj Object to be transformed
+ * @param skipKeys Keys to exempt from transformation
+ * @returns Correctly typed pretty-printable object
+ */
+export const makeObjectFixedDashed = <T extends { [key: string]: string | number | boolean }>(
+    obj: T,
+    skipKeys: (keyof T)[] = []
+): DisplayRetyped<T> => {
+    const transformedProperties: Partial<DisplayRetyped<T>> = {}
     for (const key in obj) {
         if (typeof obj[key] === "number" && !skipKeys.includes(key)) {
-            // @ts-ignore
-            obj[key] = obj[key] === 0 ? "-" : fixed(obj[key])
+            transformedProperties[key] = obj[key] === 0 ? "-" : fixed(obj[key] as number)
         }
     }
-    return obj
+    return { ...obj, ...transformedProperties }
 }
 
 // User input
 
+/**
+ * Promps user for an input and returns it as a string.
+ */
 export const getUserInput = async (prompt = "Press ENTER to continue... "): Promise<string> => {
     const interf = readline.createInterface({
         input: process.stdin,
@@ -77,12 +94,19 @@ export const getUserInput = async (prompt = "Press ENTER to continue... "): Prom
     })
 }
 
+/**
+ * Prompts user for next page of display including an abort command
+ */
 export const getUserENTERInput = async (prompt = "for next page"): Promise<boolean> => {
     const command = await getUserInput(`Press ENTER ${prompt} or 's' to stop... `)
     return command !== "s"
 }
 
 // Config access
+
+/**
+ * Type-safe return of symbol price from config or zero if not found.
+ */
 export const getPriceBySymbol = (symbol: string): number => {
     return symbol in MTM_PRICES ? MTM_PRICES[symbol as keyof typeof MTM_PRICES] : 0
 }

@@ -1,5 +1,7 @@
 import { env } from "../env"
-import { Order, Fill } from "../types"
+import { Fill } from "../types/fills"
+import { Order } from "../types/orders"
+import { DisplayRetyped } from "../types/utilities"
 import { getUserENTERInput, makeObjectFixedDashed, millisecondsToString } from "../utils"
 
 type View = {
@@ -17,8 +19,8 @@ type View = {
     codes: string
 }
 
-const getOneOrder = (order: Order, fills: Fill[]): View[] => {
-    const orderTable: View = makeObjectFixedDashed<View>(
+const getOneOrder = (order: Order, fills: Fill[]) => {
+    const orderTable = makeObjectFixedDashed<View>(
         {
             id: order.id,
             date: order.datetime.toLocaleDateString(),
@@ -36,7 +38,7 @@ const getOneOrder = (order: Order, fills: Fill[]): View[] => {
         ["id"]
     )
 
-    const fillsTable: View[] = fills.map((f) => {
+    const fillsTable = fills.map((f) => {
         return makeObjectFixedDashed<View>(
             {
                 //"[op,cl,this]": [f.openId, f.closeId, f.thisFillIdPerClose],
@@ -72,7 +74,7 @@ const historicalView = async () => {
 
         const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
 
-        let symbolTable: View[] = []
+        let symbolTable: DisplayRetyped<View>[] = []
 
         for (const o of orderSlice) {
             const relatingFills = env.data.fills.filter((f) => f.symbol === sym && f.closeId === o.id)

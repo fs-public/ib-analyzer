@@ -18,6 +18,8 @@ In Czech Republic, capital gains are:
 -   Matched in a first-in-first-out (FIFO) fashion,
 -   Losses offset gains in full within one tax year (and cannot be carried over), and
 -   Capital gains or losses realized after 3 years or more are fully exempt (neither tax obligation required nor offset possible).
+-   All securities (stocks, bonds, derivatives, ...) are taxed together for as long as they have an ISIN.
+-   Currency exchanges are not taxed (when exchanged for personal consumption or primarily for security purchases, only Forex trading with the goal of profit solely off the Forex trading would be taxed).
 
 The application matches your trades based on these rules, computes tax obligation to cross-check your tax accountant, and suggests possible tax loss harvests and coming-up 3-year exemptions. Short sells and derivatives are supported as well.
 
@@ -33,13 +35,15 @@ npm install
 
 After dependencies are installed, simply run `npm run build` for a one-time build or `npm run watch` for real-time compilation.
 
-Analysis launches with npm script `npm start`. The configuration TODO
+Analysis launches with npm script `npm start`. For configuration, see the [Usage section](#Usage).
 
 ### Technology
 
 The project runs with `npm` and `node` and is written in Typescript. Community library `csv-parse` is used for parsing the CSV exports from Interactive Brokers. Code quality assured by `prettier` and `eslint` and enforced by `Github Actions`.
 
 ### Usage
+
+#### 1. Data
 
 Within Interactive Brokers, navigate to reports and export arbitrary time-ranges with the _Activity_ preset to CSV and PDF (_the PDF variants are suggested for manual cross-checking of the data sources, as the size grows fast with many trades and years of trading history_).
 
@@ -55,7 +59,13 @@ The suggested file naming convention is `[ENTITY]-[ACCOUNT]-[YEAR or DATE-RANGE]
 ./data/IBIE-U********-2022-pruned.csv
 ```
 
-Data preparation is the only required step. The application has an interactive wizard for all commands and can be accessed after build with `npm start`.
+#### 2. Configuration
+
+We have decided to keep data-parsing presets and prices in Typescript files (for easy employment of type-checking validation as opposed to plain JSON files. These should be configured in files `sources.ts` and `prices.ts` to be located in `./src/config/sources.ts` (not commited to repository to preserve personal data confidentiality), with example setup shown in `./example/config`.
+
+#### 3. Running the analysis
+
+The application has an interactive wizard for all commands and can be accessed after build with `npm start`.
 
 ### Limitations
 
@@ -64,4 +74,4 @@ Data preparation is the only required step. The application has an interactive w
 ### Changelog
 
 -   **v0.1.0** (mid-2020): initial version
--   **v0.2.0** (): TODO
+-   **v0.2.0** (26th May 2023): update dependencies, add linter and formatter, Github Actions, first Readme version

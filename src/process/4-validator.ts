@@ -1,4 +1,5 @@
-import { Order, SchemedRecord } from "../types"
+import { Order } from "../types/orders"
+import { SchemedRecord } from "../types/records"
 import { assert } from "../utils"
 
 ///////////////////////////// Records

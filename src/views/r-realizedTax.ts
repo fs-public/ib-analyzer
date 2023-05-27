@@ -1,5 +1,6 @@
 import { env } from "../env"
-import { Order } from "../types"
+import { Order } from "../types/orders"
+import { DisplayRetyped } from "../types/utilities"
 import { fixed, getUserENTERInput, makeObjectFixedDashed } from "../utils"
 
 type View = {
@@ -16,7 +17,7 @@ type View = {
     codes: string
 }
 
-const getOrderView = (order: Order): View => {
+const getOrderView = (order: Order) => {
     return makeObjectFixedDashed<View>({
         date: order.datetime.toLocaleDateString(),
         symbol: order.symbol,
@@ -33,7 +34,7 @@ const getOrderView = (order: Order): View => {
 }
 
 const realizedTaxOneYear = (orders: Order[]) => {
-    const fullTable: View[] = []
+    const fullTable: DisplayRetyped<View>[] = []
 
     const totalPnl: { [key: string]: number } = {}
     for (const cur of Array.from(env.data.sets.currencies)) totalPnl[cur] = 0

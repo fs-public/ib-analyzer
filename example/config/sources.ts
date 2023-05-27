@@ -1,4 +1,5 @@
-import { SchemedRecord, CsvSource } from "../types"
+import { CsvSource } from "../types/global"
+import { SchemedRecord } from "../types/records"
 import { assert } from "../utils"
 
 export const shouldDropRecord = (record: SchemedRecord): boolean => {

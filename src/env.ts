@@ -1,4 +1,4 @@
-import { Env } from "./types"
+import { Env } from "./types/global"
 
 export const env: Env = {
     data: {

@@ -1,10 +1,9 @@
 import fs from "fs"
 import { parse } from "csv-parse"
-
-import { DATA_BASE_DIR, CSV_SOURCES } from "../config/csvsources"
+import { DATA_BASE_DIR, CSV_SOURCES } from "../config/sources"
 import { assert } from "../utils"
-import { SchemedRecord, UnschemedRecord } from "../types"
 import { env } from "../env"
+import { SchemedRecord, UnschemedRecord } from "../types/records"
 
 const filenameToRecords = async (file: string) => {
     const records = []
