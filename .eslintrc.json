@@ -11,5 +11,6 @@
         "sourceType": "module"
     },
     "plugins": ["@typescript-eslint"],
-    "ignorePatterns": ["suppress-experimental.cjs", "dist/"]
+    "ignorePatterns": ["suppress-experimental.cjs", "dist/"],
+    "files": ["src/**"]
 }
