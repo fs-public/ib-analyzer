@@ -20,6 +20,8 @@ export type DataObject = {
     }
 }
 
+export type ConfigMultiplier = { matcher: string; multiplier: number }
+
 export type Env = {
     data: DataObject
     logging: boolean

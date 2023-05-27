@@ -59,11 +59,10 @@ const openViewTotals = () => {
 
         t.unrlzd = t.mtmValue - t.basis
         t.unrlzdpp = fixed((t.unrlzd / Math.abs(t.basis)) * 100) + " %"
-
-        makeObjectFixedDashed<ViewTotal>(t)
     }
 
-    env.table(totals)
+    // Display results
+    env.table(totals.map((t) => makeObjectFixedDashed<ViewTotal>(t)))
 }
 
 ///////////////////////////// Orders
