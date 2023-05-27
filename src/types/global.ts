@@ -6,7 +6,6 @@ export type Transformation = true | "drop" | "insert-zero"
 
 export type CSVSource = {
     filename: string
-    reschemeRequired: boolean
     transformation: Transformation[]
     schema: string[]
 }

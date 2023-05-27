@@ -5,7 +5,11 @@ import { assert } from "../utils"
 import { env } from "../env"
 import { SchemedRecord, UnschemedRecord } from "../types/records"
 import { DATA_BASE_DIR } from "../config/config"
+import { CSVSource } from "../types/global"
 
+/**
+ * Loads data CSV as an array.
+ */
 const filenameToRecords = async (file: string) => {
     const records = []
     const parser = fs.createReadStream(file).pipe(
@@ -20,16 +24,37 @@ const filenameToRecords = async (file: string) => {
     return records
 }
 
-const reschemeRow = (row: UnschemedRecord, source: any): SchemedRecord => {
-    // Validate row length
-    assert(row.length === source.schema.length, "Row length does not conform to schema")
+/**
+ * Validates source definition.
+ */
+const validateSourceSchema = (source: CSVSource, realHeader: UnschemedRecord) => {
+    // Validate real header
+    assert(
+        realHeader.map((col) => col.trim()).join("") === source.schema.join(""),
+        `Source schema mismatch for ${source.filename}.`
+    )
 
-    // Dropping specific orders
-    if (row[6] === "IEP" && row[7] === "2021-09-30, 09:30:02") return null // some fractional sell of IEP, probably dividend reinvesting
+    // Validate schema vs transformations
+    assert(
+        source.schema.length === source.transformation.length,
+        `Source mismatch between schema and transformation lengths for ${source.filename}.`
+    )
 
-    if (!source.reschemeRequired) return row
+    // Validate final length of the schema
+    assert(
+        source.transformation.reduce((acc, next) => acc + (next === "drop" ? 0 : 1), 0) === 16,
+        `Source schema incorrect length for ${source.filename}.`
+    )
+}
 
-    const schemedRow = []
+/**
+ * Reschemes row based on source config.
+ */
+const reschemeRow = (row: UnschemedRecord, source: CSVSource): SchemedRecord => {
+    // Assert row length
+    assert(row.length === source.schema.length, `Row length does not conform to schema within ${source.filename}.`)
+
+    const schemedRow: SchemedRecord = []
     for (let j = 0; j < source.schema.length; j++) {
         switch (source.transformation[j]) {
             case true:
@@ -40,34 +65,29 @@ const reschemeRow = (row: UnschemedRecord, source: any): SchemedRecord => {
             case "insert-zero":
                 schemedRow.push("0")
                 break
-            default:
-                env.error("Unrecognized column " + j + " in scheme for " + source.filename)
         }
     }
 
     return schemedRow
 }
 
+/**
+ * Iterates over all sources, loads them with `filenameToRecords`, performs basic validation, and reschemes if necessary.
+ */
 const loadData = async (): Promise<SchemedRecord[]> => {
-    const records: SchemedRecord[] = []
+    let records: SchemedRecord[] = []
 
     for (const source of CSV_SOURCES) {
         env.log("Importing", source.filename)
 
+        // Load file
         const loadedRecords = await filenameToRecords(DATA_BASE_DIR + source.filename)
 
-        // Validate column names for first row
-        for (let j = 0; j < source.schema.length; j++) {
-            assert(
-                loadedRecords[0][j].trim() === source.schema[j],
-                "Validate column " + source.schema[j] + " failed for " + source.filename
-            )
-        }
+        // Validate schema
+        validateSourceSchema(source, loadedRecords[0])
 
-        for (let i = 0; i < loadedRecords.length; i++) {
-            const reschemedRow = reschemeRow(loadedRecords[i], source)
-            if (reschemedRow) records.push(reschemedRow)
-        }
+        // Save all records, reschemed if necessary
+        records = [...records, ...loadedRecords.map((row) => reschemeRow(row, source))]
     }
 
     return records
