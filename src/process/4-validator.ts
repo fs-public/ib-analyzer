@@ -13,7 +13,7 @@ const validateRecord = (record: SchemedRecord) => {
     assert(record.length === 16, errText("bad CSV - not 16 fields"))
 
     // Check recognized record type
-    assert(record[1] === "Data"), errText("unrecognized record type")
+    assert(record[1] === "Data", errText("unrecognized record type"))
 
     // Check recognized DataDiscriminator
     assert(record[2] === "Order", errText("unrecognized DataDiscriminator"))
@@ -29,7 +29,7 @@ const validateRecord = (record: SchemedRecord) => {
         // validate numerical non-zero columns
         if ([8, 10, 11].includes(k) && record[3] === ASSET_CATEGORIES.DERIVATIVE_OPTIONS) continue // Options can expire worthless (zero T. Price, proceeds, and fee)
 
-        assert(Number(record[k]) !== 0, `unexpected zero in column ${k}`)
+        assert(Number(record[k]) !== 0, errText(`unexpected zero in column ${k}`))
     }
 }
 

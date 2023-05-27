@@ -26,7 +26,6 @@ export type ConfigMultiplier = { matcher: string; multiplier: number }
 
 export type Env = {
     data: DataObject
-    logging: boolean
     errors: string[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     log: (...args: any) => void
