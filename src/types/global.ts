@@ -1,7 +1,7 @@
 import { Fill } from "./fills"
 import { Order } from "./orders"
 
-export type CsvSource = {
+export type CSVSource = {
     filename: string
     reschemeRequired: boolean
     transformation: (string | boolean)[]

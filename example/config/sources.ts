@@ -1,4 +1,4 @@
-import { CsvSource } from "../types/global"
+import { CSVSource } from "../types/global"
 import { SchemedRecord } from "../types/records"
 import { assert } from "../utils"
 
@@ -25,7 +25,7 @@ export const DATA_BASE_DIR = "data/"
 // prettier-ignore
 export const TARGET_SCHEMA = ["Trades","Header","DataDiscriminator","Asset Category","Currency","Symbol","Date/Time","Quantity","T. Price","C. Price","Proceeds","Comm/Fee","Basis","Realized P/L","MTM P/L","Code"]
 
-export const CSV_SOURCES: CsvSource[] = [
+export const CSV_SOURCES: CSVSource[] = [
     {
         filename: "IBCE-2020-pruned.csv",
         reschemeRequired: true,

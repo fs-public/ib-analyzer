@@ -1,10 +1,10 @@
 import { SchemedRecord } from "../types/records"
 import { env } from "../env"
+import { CSV_SOURCES } from "../config/sources"
 import loadData from "./1-loadData"
 import parseOrders from "./2-parseOrders"
 import matchFills from "./3-matchFills"
 import { validatorRecords, validatorOrders, validatorFills } from "./4-validator"
-import { CSV_SOURCES } from "../config/sources"
 
 export const performFullReload = async (firstLoad = false) => {
     if (!firstLoad) env.flushErrors()
