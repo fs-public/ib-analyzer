@@ -1,7 +1,7 @@
 import readline from "readline"
 import { MTM_PRICES } from "./config/prices"
 import { env } from "./env"
-import { DisplayRetyped } from "./types"
+import { DisplayRetyped } from "./types/utilities"
 
 // Env
 

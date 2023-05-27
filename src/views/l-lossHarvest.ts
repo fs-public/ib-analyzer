@@ -1,6 +1,7 @@
 import { getHarvestLoss, TAX_BRACKET } from "../config/config"
 import { env } from "../env"
-import { DisplayRetyped, Order } from "../types"
+import { Order } from "../types/orders"
+import { DisplayRetyped } from "../types/utilities"
 import { getDateDiffDisplay, getPriceBySymbol, getUserENTERInput, makeObjectFixedDashed } from "../utils"
 
 type View = {

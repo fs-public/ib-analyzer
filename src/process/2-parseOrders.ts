@@ -1,7 +1,8 @@
 import { DERIVATIVES_MULTIPLIERS } from "../config/prices"
 import { parseNumerical, recordKeyReplaceRule, shouldDropRecord } from "../config/sources"
-import { Order, SchemedRecord } from "../types"
 import { env } from "../env"
+import { Order } from "../types/orders"
+import { SchemedRecord } from "../types/records"
 
 const getMultiplier = (assetcategory: string, symbol: string): number => {
     if (assetcategory === "Stocks") return 1

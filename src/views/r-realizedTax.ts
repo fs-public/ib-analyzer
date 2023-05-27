@@ -1,5 +1,6 @@
 import { env } from "../env"
-import { DisplayRetyped, Order } from "../types"
+import { Order } from "../types/orders"
+import { DisplayRetyped } from "../types/utilities"
 import { fixed, getUserENTERInput, makeObjectFixedDashed } from "../utils"
 
 type View = {

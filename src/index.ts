@@ -1,6 +1,6 @@
 import { getUserInput } from "./utils"
 
-import { SchemedRecord } from "./types"
+import { SchemedRecord } from "./types/records"
 import { env } from "./env"
 
 import loader from "./process/1-loader"

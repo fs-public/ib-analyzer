@@ -1,6 +1,7 @@
 import { TAX_BRACKET } from "../config/config"
 import { env } from "../env"
-import { DisplayRetyped, Order } from "../types"
+import { Order } from "../types/orders"
+import { DisplayRetyped } from "../types/utilities"
 import { makeObjectFixedDashed, getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
 
 type View = {
