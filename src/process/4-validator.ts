@@ -28,27 +28,28 @@ const validateRecord = (record: SchemedRecord) => {
 
 /////////////////////////////  Orders
 
-const validateOrdersMath = (orders: Order[]) => {
-    for (const o of orders) {
-        assert(
-            Math.abs(o.quantity * o.tprice - -o.proceeds) <= 0.1,
-            `Incorrect o.proceeds validation in order ${o.datetime}`
-        )
+/**
+ * Validate IB reported math (proceeds, basis, realizedpl) and Codes.
+ */
+const validateOrderMath = (o: Order) => {
+    assert(
+        Math.abs(o.quantity * o.tprice - -o.proceeds) <= 0.1,
+        `Incorrect o.proceeds validation in order ${o.datetime}`
+    )
 
-        if (o.code.includes("O")) {
-            assert(
-                Math.abs(o.proceeds + o.commfee - -o.basis) <= 0.1,
-                `Incorrect o.basis validation in Open order ${o}`
-            )
+    if (o.code.includes("O")) {
+        assert(Math.abs(o.proceeds + o.commfee - -o.basis) <= 0.1, `Incorrect o.basis validation in Open order ${o}`)
 
-            assert(Math.abs(o.realizedpl) <= 0.1, `Incorrect o.realizedpl validation in Open order ${o}`)
-        }
-
-        // Check O;C orders which are not supported
-        assert(!o.code.includes("O") || !o.code.includes("C"), "Unsupported code O;C in Open order")
+        assert(Math.abs(o.realizedpl) <= 0.1, `Incorrect o.realizedpl validation in Open order ${o}`)
     }
+
+    // Check O;C orders which are not supported
+    assert(!o.code.includes("O") || !o.code.includes("C"), "Unsupported code O;C in Open order")
 }
 
+/**
+ * Validates that orders follow one another without imperatively sorting them, including after merging all CSVs.
+ */
 const validateOrdersSort = (orders: Order[]) => {
     for (let i = 0; i < orders.length - 1; i++) {
         for (let j = i + 1; j < orders.length; j++) {
@@ -86,12 +87,15 @@ const validateMatches = (orders: Order[]) => {
 
 ///////////////////////////// Exports
 
+/**
+ * Validates record length, recognization of types, and non-nullishness in columns that should not be null.
+ */
 export const validatorRecords = (records: SchemedRecord[]) => {
     records.forEach((record) => validateRecord(record))
 }
 
 export const validatorOrders = (orders: Order[]) => {
-    validateOrdersMath(orders)
+    orders.forEach((order) => validateOrderMath(order))
     validateOrdersSort(orders)
     validateSymbols()
 }
