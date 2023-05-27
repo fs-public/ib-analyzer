@@ -1,6 +1,7 @@
 import readline from "readline"
 import { MTM_PRICES } from "./config/prices"
 import { env } from "./env"
+import { DisplayRetyped } from "./types"
 
 // Env
 
@@ -51,14 +52,24 @@ export const fixed = (number: number, decimals = 2) => {
     return Math.round(number * 10 ** decimals) / 10 ** decimals
 }
 
-export const makeObjectFixedDashed = <T extends { [key: string]: any }>(obj: T, skipKeys: (keyof T)[] = []): T => {
+/**
+ * Transforms numerical entries of an object into pretty strings by replacing zeroes with '-'
+ * and rounding to two decimal places.
+ * @param obj Object to be transformed
+ * @param skipKeys Keys to exempt from transformation
+ * @returns Pretty-printable object
+ */
+export const makeObjectFixedDashed = <T extends { [key: string]: string | number | boolean }>(
+    obj: T,
+    skipKeys: (keyof T)[] = []
+): DisplayRetyped<T> => {
+    const transformedProperties: Partial<DisplayRetyped<T>> = {}
     for (const key in obj) {
         if (typeof obj[key] === "number" && !skipKeys.includes(key)) {
-            // @ts-ignore
-            obj[key] = obj[key] === 0 ? "-" : fixed(obj[key])
+            transformedProperties[key] = obj[key] === 0 ? "-" : fixed(obj[key] as number)
         }
     }
-    return obj
+    return { ...obj, ...transformedProperties }
 }
 
 // User input

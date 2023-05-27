@@ -11,8 +11,5 @@
         "sourceType": "module"
     },
     "plugins": ["@typescript-eslint"],
-    "ignorePatterns": ["suppress-experimental.cjs", "dist/"],
-    "rules": {
-        "@typescript-eslint/ban-ts-comment": "warn"
-    }
+    "ignorePatterns": ["suppress-experimental.cjs", "dist/"]
 }

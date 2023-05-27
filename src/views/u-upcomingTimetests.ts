@@ -1,6 +1,6 @@
 import { TAX_BRACKET } from "../config/config"
 import { env } from "../env"
-import { Order } from "../types"
+import { DisplayRetyped, Order } from "../types"
 import { makeObjectFixedDashed, getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
 
 type View = {
@@ -22,7 +22,7 @@ type View = {
     tax: number
 }
 
-const getTimetest = (o: Order): View => {
+const getTimetest = (o: Order) => {
     const mtmPrice = getPriceBySymbol(o.symbol)
 
     const q = o.quantity - o.filled
@@ -62,7 +62,7 @@ export const upcomingTimetestsView = async () => {
     const orderSlice = env.data.orders.filter((o) => o.quantity !== o.filled)
     orderSlice.sort((a, b) => getDateDiff(b.datetime, a.datetime))
 
-    const timetests: View[] = []
+    const timetests: DisplayRetyped<View>[] = []
     for (const o of orderSlice) {
         timetests.push(getTimetest(o))
     }

@@ -1,5 +1,6 @@
 import { TAX_BRACKET } from "../config/config"
 import { env } from "../env"
+import { DisplayRetyped } from "../types"
 import { fixed, getDateDiffDisplay, getPriceBySymbol, getUserENTERInput, makeObjectFixedDashed } from "../utils"
 
 ///////////////////////////// Totals
@@ -86,7 +87,7 @@ type ViewOrder = {
 
 const openViewOrders = () => {
     // Check open positions by order
-    const opens: ViewOrder[] = []
+    const opens: DisplayRetyped<ViewOrder>[] = []
 
     const unfilledOrders = env.data.orders.filter((o) => o.quantity !== o.filled)
     for (const o of unfilledOrders) {
@@ -115,7 +116,7 @@ const openViewOrders = () => {
     }
 
     // Sort
-    opens.sort((a, b) => a.symbol.localeCompare(b.symbol))
+    opens.sort((a, b) => (a.symbol as string).localeCompare(b.symbol as string))
 
     env.table(opens)
 }

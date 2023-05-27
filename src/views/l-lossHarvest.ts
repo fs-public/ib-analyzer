@@ -1,6 +1,6 @@
 import { getHarvestLoss, TAX_BRACKET } from "../config/config"
 import { env } from "../env"
-import { Order } from "../types"
+import { DisplayRetyped, Order } from "../types"
 import { getDateDiffDisplay, getPriceBySymbol, getUserENTERInput, makeObjectFixedDashed } from "../utils"
 
 type View = {
@@ -30,7 +30,7 @@ type RunningCumulative = {
 }
 
 const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
-    const harvests: View[] = []
+    const harvests: DisplayRetyped<View>[] = []
 
     const cum: RunningCumulative = {
         cumQuantity: 0,
