@@ -26,7 +26,7 @@ export type Order = {
     code: string // 'O' - codes, can be several with ';' delimiter
     //     - 'O'pening order, 'C'losing order
 
-    // Self-computed fields
+    // Computed fields during `3-matchFills` process.
     action: string
     filled: number // 0 - filled trace when analyzing sells
     tax: number

@@ -4,6 +4,9 @@ import { Fill } from "../types/fills"
 import { Order } from "../types/orders"
 import { assert, did3yPass, getDateDiff } from "../utils"
 
+/**
+ * Helper function. Creates a Fill object from [open order, close order, quantity].
+ */
 const spawnClosingFill = (open: Order, close: Order, quantity: number, id: number): Fill => {
     const openq = open.quantity
     const closeq = close.quantity
@@ -35,16 +38,17 @@ const spawnClosingFill = (open: Order, close: Order, quantity: number, id: numbe
     }
 }
 
-// Matches fills against close order. Does not support O;C orders.
-const matchFillsPerOrder = (matchableOpens: Order[], currentClose: Order): Fill[] => {
+/**
+ * Matches `currentClose` order against all potential `matchableOpens`.
+ * @notice Does not support O;C orders.
+ */
+const matchFillsPerCloseOrder = (matchableOpens: Order[], currentClose: Order): Fill[] => {
     const fills = []
 
     let unfilled = currentClose.quantity
 
     // Match fills
-    for (let i = 0; i < matchableOpens.length; i++) {
-        const open = matchableOpens[i]
-
+    for (const open of matchableOpens) {
         const availableToFill = open.quantity - open.filled
 
         let fill // becomes Math.min(availableToFill, unfilled)
@@ -115,16 +119,22 @@ const matchFillsPerOrder = (matchableOpens: Order[], currentClose: Order): Fill[
 const matchFillsPerSymbol = (orders: Order[]) => {
     let fills: Fill[] = []
 
-    for (const o of orders) {
-        // Filter only earlier orders with different direction
-        const matchableOpens = orders.filter((m) => m.datetime < o.datetime && o.quantity * m.quantity < 0)
-
-        // also modifies .filled and .action for o, even if does not spawn any new fills
-        const newFills = matchFillsPerOrder(
-            orders.filter((m) => m.datetime < o.datetime && o.quantity * m.quantity < 0),
-            o
+    for (const current of orders) {
+        // Filter only previous orders with different direction
+        const matchableOpens = orders.filter(
+            (matchCandidate) =>
+                Math.abs(matchCandidate.quantity) > Math.abs(matchCandidate.filled) && // is not already fully filled
+                matchCandidate.datetime < current.datetime && // is previous order
+                current.quantity * matchCandidate.quantity < 0 // is opposite direction
         )
-        fills = [...fills, ...newFills]
+
+        // If `current` is opening order, only assign text action flag.
+        if (matchableOpens.length === 0) {
+            current.action = current.quantity > 0 ? "Open (buy)" : "Open (short)"
+        } else {
+            // If `current` is closing order, spawn fills and mutate the order
+            fills = [...fills, ...matchFillsPerCloseOrder(matchableOpens, current)]
+        }
     }
 
     return fills
@@ -134,6 +144,7 @@ const matchFillsPerSymbol = (orders: Order[]) => {
  * Transform Order[] into Fill[] by iterating over all orders per symbol and matching them
  * against previous orders for the same symbol, not fully filled (closed) orders.
  * Also validates math that is being executed within this transformation.
+ * Mutates `action` flag and values for `filled` and `tax` for orders.
  */
 const matchFills = (orders: Order[], symbols: Set<string>): Fill[] => {
     let fills: Fill[] = []
