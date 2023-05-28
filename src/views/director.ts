@@ -17,7 +17,7 @@ export const playView = async (viewType: ViewType) => {
     instance.next()
 
     while (!instance.next().done) {
-        if (!(await getUserENTERInput(view.screenplay?.nextTableMessage))) break
+        if (!(await getUserENTERInput(view.screenplay?.nextTableMessage))) return
     }
 
     env.log(`\n${view.name} view completed.`)

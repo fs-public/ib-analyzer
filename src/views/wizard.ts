@@ -2,11 +2,7 @@ import { getUserInput } from "../utils"
 import { env } from "../env"
 import { HELP_STRING } from "../config/config"
 import { performFullReload } from "../process/loader"
-import historicalView from "./h-historical"
-import realizedTax from "./r-realizedTax"
 import openView from "./o-open"
-import lossHarvestView from "./l-lossHarvest"
-import upcomingTimetestsView from "./u-upcomingTimetests"
 import { VIEWS, ViewType } from "./definitions"
 import { playView } from "./director"
 
@@ -39,30 +35,22 @@ export const applicationWizardLoop = async () => {
                 quit = true
                 break
 
-            // Views
-            case "h":
-                await historicalView()
-                break
-            case "l":
-                await lossHarvestView()
-                break
+            // Undirected views
             case "o":
                 await openView()
                 break
-            case "r":
-                await realizedTax()
-                break
-            case "u":
-                await upcomingTimetestsView()
-                break
 
-            // Default
+            // Directed views and fallback
             default:
+                let viewMatched = false
                 for (const viewType in Object.keys(ViewType).filter((v) => !isNaN(Number(v)))) {
-                    if (command === VIEWS[Number(viewType) as ViewType].command.repeat(2))
+                    if (command === VIEWS[Number(viewType) as ViewType].command) {
+                        viewMatched = true
                         await playView(Number(viewType) as ViewType)
+                        break
+                    }
                 }
-                env.log("Unrecognized command.")
+                if (!viewMatched) env.log("Unrecognized command.")
         }
     }
 }
