@@ -1,6 +1,7 @@
 import { SchemedRecord } from "../types/trades"
 
 export const DATA_BASE_DIR = "data/"
+export const PERSONAL_DATA_PATH = "src/config/personal-data.json"
 
 export const TAX_BRACKET = 0.15
 

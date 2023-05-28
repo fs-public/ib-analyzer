@@ -1,7 +1,9 @@
 import { CSVSource, Transformation } from "../types/global"
 import { ConfigMultiplier } from "../types/global"
 import { assert } from "../utils"
-import personalData from "./personal-data.json" assert { type: "json" }
+import fs from "fs"
+import { PERSONAL_DATA_PATH } from "./config"
+//import personalData from "./personal-data.json" assert { type: "json" } // - clashes with Jest and no fallback options
 
 export const NO_TRANSFORM: Transformation[] = [...Array(16)].fill("ok")
 // prettier-ignore
@@ -11,7 +13,30 @@ export const CSV_SOURCES: CSVSource[] = []
 export let DERIVATIVES_MULTIPLIERS: ConfigMultiplier[] = []
 export let MTM_PRICES: { [key: string]: number } = {}
 
+interface ExpectedJsonFormat {
+    sources: {
+        filename: string
+        transformation?: string[]
+        schema?: string[]
+    }[]
+    derivativeMultipliers: {
+        matcher: string
+        multiplier: number
+    }[]
+    mtmPrices: { [key: string]: number }
+}
+
 export const loadAndValidateConfig = () => {
+    // Load synchronously
+    const personalData = (() => {
+        try {
+            return JSON.parse(fs.readFileSync(PERSONAL_DATA_PATH).toString()) as ExpectedJsonFormat
+        } catch (e) {
+            assert(!e, `Cannot read JSON source config from ${PERSONAL_DATA_PATH}`)
+            return { sources: [], derivativeMultipliers: [], mrmPrices: {} } as unknown as ExpectedJsonFormat
+        }
+    })()
+
     // Sources
     const sources = personalData.sources
 
