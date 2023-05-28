@@ -1,8 +1,8 @@
 import { CSVSource, Transformation } from "../types/global"
 import { ConfigMultiplier } from "../types/global"
-import { assert } from "../utils"
-import fs from "fs"
-import { PERSONAL_DATA_PATH } from "./config"
+import { assert, readJSONFromFile } from "../utils"
+import { PATHS } from "./config"
+import Ajv from "ajv"
 //import personalData from "./personal-data.json" assert { type: "json" } // - clashes with Jest and no fallback options
 
 export const NO_TRANSFORM: Transformation[] = [...Array(16)].fill("ok")
@@ -28,17 +28,17 @@ interface ExpectedJsonFormat {
 
 export const loadAndValidateConfig = () => {
     // Load synchronously
-    const personalData = (() => {
-        try {
-            return JSON.parse(fs.readFileSync(PERSONAL_DATA_PATH).toString()) as ExpectedJsonFormat
-        } catch (e) {
-            assert(!e, `Cannot read JSON source config from ${PERSONAL_DATA_PATH}`)
-            return { sources: [], derivativeMultipliers: [], mrmPrices: {} } as unknown as ExpectedJsonFormat
-        }
-    })()
+    const personalData = readJSONFromFile(PATHS.PERSONAL_CONFIG)
+
+    const schema = readJSONFromFile(PATHS.PERSONAL_CONFIG_SCHEMA)
+
+    // Basic schema validation
+    const ajv = new Ajv()
+    const validate = ajv.compile<ExpectedJsonFormat>(schema)
+    assert(validate(personalData), `Personal config not conforming to AJV schema - ${validate.errors}`, true)
 
     // Sources
-    const sources = personalData.sources
+    const sources = (personalData as ExpectedJsonFormat).sources
 
     for (const source of sources) {
         if (!source.schema || !source.transformation) {
@@ -81,10 +81,10 @@ export const loadAndValidateConfig = () => {
     }
 
     // Multipliers - parsed as 'symbol contains this'
-    DERIVATIVES_MULTIPLIERS = personalData.derivativeMultipliers
+    DERIVATIVES_MULTIPLIERS = (personalData as ExpectedJsonFormat).derivativeMultipliers
 
     // Prices
-    MTM_PRICES = personalData.mtmPrices
+    MTM_PRICES = (personalData as ExpectedJsonFormat).mtmPrices
     for (const symbol of Object.keys(MTM_PRICES)) {
         for (const pair of DERIVATIVES_MULTIPLIERS) {
             if (symbol.includes(pair.matcher)) {

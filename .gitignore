@@ -5,7 +5,7 @@ dist
 
 # Data
 data
-src/config/personal-data.json
+src/config/json/personal-config.json
 
 # Testing coverage
 coverage
