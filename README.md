@@ -89,3 +89,4 @@ The application has an interactive wizard for all commands and can be accessed a
 -   Create example data CSV for user understanding
 -   Add Jest and define E2E tests running on the example data CSV
 -   Refactor views themselves, employ more detailed enum for custom codes
+-   Check latest IB export format
