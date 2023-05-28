@@ -1,3 +1,4 @@
+import { env } from "../env"
 import { CSVSource, Transformation } from "../types/global"
 import { ConfigMultiplier } from "../types/global"
 import { assert, readJSONFromFile } from "../utils"
@@ -28,7 +29,16 @@ interface ExpectedJsonFormat {
 
 export const loadAndValidateConfig = () => {
     // Load synchronously
-    const personalData = readJSONFromFile(PATHS.PERSONAL_CONFIG)
+    const personalData = (() => {
+        try {
+            return readJSONFromFile(PATHS.PERSONAL_CONFIG)
+        } catch (e) {
+            env.log(
+                `Source config "${PATHS.PERSONAL_CONFIG}" not found, falling back to "${PATHS.PERSONAL_CONFIG_FALLBACK}".`
+            )
+            return readJSONFromFile(PATHS.PERSONAL_CONFIG_FALLBACK)
+        }
+    })()
 
     const schema = readJSONFromFile(PATHS.PERSONAL_CONFIG_SCHEMA)
 
