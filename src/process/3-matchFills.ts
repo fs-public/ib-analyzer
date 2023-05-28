@@ -6,7 +6,7 @@ import { assert, codeAddFlag, did3yPass, getDateDiff } from "../utils"
 /**
  * Helper function. Creates a Fill object from [open order, close order, quantity].
  */
-const spawnFill = (open: Order, close: Order, quantity: number, id: number): Fill => {
+const spawnFill = (open: Order, close: Order, quantity: number): Fill => {
     const openq = open.quantity
     const closeq = close.quantity
 
@@ -32,8 +32,6 @@ const spawnFill = (open: Order, close: Order, quantity: number, id: number): Fil
         timetest: getDateDiff(open.datetime, close.datetime),
         tax: timetestApplied ? 0.00001 : realizedpl * TAX_BRACKET,
         timetestApplied,
-
-        thisId: id,
     }
 }
 
@@ -81,7 +79,7 @@ const matchFillsPerCloseOrder = (matchableOpens: Order[], currentClose: Order): 
         unfilled -= fill
 
         // Spawn a fill
-        fills.push(spawnFill(open, currentClose, fill, fills.length))
+        fills.push(spawnFill(open, currentClose, fill))
 
         if (unfilled === 0) break
     }

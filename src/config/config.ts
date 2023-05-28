@@ -56,9 +56,9 @@ fs-public, 2023
 
 Admin Commands:
   - reload: reload
-  - i, issues: issues print
-  - example: example order print
-  - help: help print
+  - i: issues print
+  - dataformat: example order and fill print
+  - help: show help (this message)
   - q, quit: quit
 
 Views:

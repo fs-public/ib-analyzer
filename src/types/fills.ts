@@ -17,7 +17,4 @@ export type Fill = {
     timetest: number
     tax: number
     timetestApplied: boolean
-
-    // Self-computed fields - descriptors
-    thisId: number
 }

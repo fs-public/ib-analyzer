@@ -2,7 +2,8 @@ import { getHarvestLoss, TAX_BRACKET } from "../config/config"
 import { env } from "../env"
 import { Order } from "../types/orders"
 import { DisplayRetyped } from "../types/utilities"
-import { getDateDiffDisplay, getPriceBySymbol, getUserENTERInput, makeObjectFixedDashed } from "../utils"
+import { getDateDiffDisplay, getPriceBySymbol, isValueLastInSet, makeObjectFixedDashed } from "../utils"
+import { ViewGenerator } from "./definitions"
 
 type View = {
     since: string
@@ -75,31 +76,23 @@ const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
         )
     }
 
-    env.table(harvests)
+    return harvests
 }
 
-export const lossHarvestView = async () => {
-    env.log("\nLoss Harvest analysis launched. " + ">>>".repeat(40))
-
-    env.log("\nTable = one symbol.")
-    env.log("Row = unfilled orders, sorted by date.")
-    env.log("Notes: partially filled orders are displayed proportionately to unfilled part.")
-
+export function* lossHarvestView(): ViewGenerator {
     for (const sym of env.data.sets.symbols) {
         const mtmPrice = getPriceBySymbol(sym)
 
         const orderSlice = env.data.orders.filter((o) => o.symbol === sym && o.quantity !== o.filled)
 
         if (orderSlice.length > 0) {
-            env.log(`\n[Loss Harvest] ${sym} at current price`, mtmPrice)
-
-            lossHarvestOneSymbol(orderSlice, mtmPrice)
-
-            if (!(await getUserENTERInput("for next symbol"))) break
+            yield {
+                isLast: isValueLastInSet(sym, env.data.sets.symbols),
+                title: `${sym} at current price ${mtmPrice}`,
+                table: lossHarvestOneSymbol(orderSlice, mtmPrice),
+            }
         }
     }
-
-    env.log("Completed.")
 }
 
 export default lossHarvestView

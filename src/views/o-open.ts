@@ -1,7 +1,8 @@
 import { TAX_BRACKET } from "../config/config"
 import { env } from "../env"
 import { DisplayRetyped } from "../types/utilities"
-import { fixed, getDateDiffDisplay, getPriceBySymbol, getUserENTERInput, makeObjectFixedDashed } from "../utils"
+import { fixed, getDateDiffDisplay, getPriceBySymbol, makeObjectFixedDashed } from "../utils"
+import { ViewGenerator } from "./definitions"
 
 ///////////////////////////// Totals
 
@@ -62,7 +63,7 @@ const openViewTotals = () => {
     }
 
     // Display results
-    env.table(totals.map((t) => makeObjectFixedDashed<ViewTotal>(t)))
+    return totals.map((t) => makeObjectFixedDashed<ViewTotal>(t))
 }
 
 ///////////////////////////// Orders
@@ -117,23 +118,23 @@ const openViewOrders = () => {
     // Sort
     opens.sort((a, b) => (a.symbol as string).localeCompare(b.symbol as string))
 
-    env.table(opens)
+    return opens
 }
 
-const openView = async () => {
-    env.log("\nOpen Positions view launched. " + ">>>".repeat(40))
+export function* openPositionsView(): ViewGenerator {
+    yield {
+        table: openViewTotals(),
+        isLast: false,
+    }
 
-    env.log("\nOpen positions (total)")
-    env.log("\nRow = one symbol (with at least 1 unfilled order).")
-    env.log("Notes: every row sums over all unfilled or partially unfilled orders of the symbol.")
-    openViewTotals()
+    env.log("\nOpen positions (by order)")
+    env.log("\nRow = one unfilled order, sorted by symbol then date.")
+    env.log("Notes: values proportional to unfilled part.")
 
-    if (await getUserENTERInput("for breakdown into open orders")) {
-        env.log("\nOpen positions (by order)")
-        env.log("\nRow = one unfilled order, sorted by symbol then date.")
-        env.log("Notes: values proportional to unfilled part.")
-        openViewOrders()
+    yield {
+        table: openViewOrders(),
+        isLast: true,
     }
 }
 
-export default openView
+export default openPositionsView

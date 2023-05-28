@@ -2,7 +2,8 @@ import { env } from "../env"
 import { Fill } from "../types/fills"
 import { Order } from "../types/orders"
 import { DisplayRetyped } from "../types/utilities"
-import { getUserENTERInput, makeObjectFixedDashed, millisecondsToString } from "../utils"
+import { isValueLastInSet, makeObjectFixedDashed, millisecondsToString } from "../utils"
+import { ViewGenerator } from "./definitions"
 
 type View = {
     id: number // id for orders, relating id for fills
@@ -62,16 +63,8 @@ const getOneOrder = (order: Order, fills: Fill[]) => {
     return [orderTable, ...fillsTable]
 }
 
-const historicalView = async () => {
-    env.log("\nHistorical analysis launched. " + ">>>".repeat(40))
-
-    env.log("\nTable = one symbol.")
-    env.log("Row = orders and fills (consolidated), sorted by date.")
-    env.log("Notes: Fills (present for close orders) sum to the order just above it.")
-
+export function* historicalView(): ViewGenerator {
     for (const sym of env.data.sets.symbols) {
-        env.log("\n[Historical Analysis]", sym)
-
         const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
 
         let symbolTable: DisplayRetyped<View>[] = []
@@ -82,12 +75,12 @@ const historicalView = async () => {
             symbolTable = [...symbolTable, ...getOneOrder(o, relatingFills)]
         }
 
-        env.table(symbolTable)
-
-        if (!(await getUserENTERInput("for next symbol"))) break
+        yield {
+            isLast: isValueLastInSet(sym, env.data.sets.symbols),
+            title: sym,
+            table: symbolTable,
+        }
     }
-
-    env.log("Completed.")
 }
 
 export default historicalView

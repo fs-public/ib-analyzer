@@ -58,6 +58,15 @@ export const getDateDiffDisplay = (from: Date, to: Date): string => {
     return millisecondsToString(getDateDiff(from, to))
 }
 
+// Set manipulation ////////////////////////////////////////////////////////////////////////
+
+/**
+ * Checks whether current value is the last value in a set (useful in for...of Set).
+ */
+export const isValueLastInSet = <T>(value: T, set: Set<T>) => {
+    return value === Array.from(set).pop()
+}
+
 // Display utils ////////////////////////////////////////////////////////////////////////
 
 /**
