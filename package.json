@@ -10,6 +10,8 @@
         "watch": "tsc -p . --watch",
         "build": "tsc -p .",
         "test": "jest",
+        "test:coverage": "jest --coverage",
+        "test:coverage:show": "jest --coverage && start coverage/lcov-report/index.html",
         "lint": "eslint .",
         "format:write": "prettier . --write",
         "format:check": "prettier . --check",

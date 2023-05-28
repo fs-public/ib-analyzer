@@ -1,5 +1,7 @@
 # Interactive Brokers Analyzer
 
+![example workflow](https://github.com/fs-public/ib-analyzer/actions/workflows/ci.yml/badge.svg)
+
 NodeJS utility to parse and analyze [Interactive Brokers](https://www.interactivebrokers.com/) (stock trading platform, IB) trade reports from the POV of the local (Czech Republic) tax authority.
 
 In Czech Republic, capital gains are:
