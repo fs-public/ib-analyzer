@@ -1,3 +1,5 @@
+import { SchemedRecord } from "../types/records"
+
 export const DATA_BASE_DIR = "data/"
 
 export const TAX_BRACKET = 0.15
@@ -37,6 +39,11 @@ export const CODES = {
 }
 
 // Utils
+
+// Use with caution.
+export const shouldDropSpecificRecord = (record: SchemedRecord): boolean => {
+    return record[5] === "SYMBOL_EXEMPT_FROM_ANALYSIS"
+}
 
 export const getHarvestLoss = (quantity: number, value: number) => {
     const numOrders = Math.ceil(Math.abs(quantity) / HARVEST_COMM_BASE)

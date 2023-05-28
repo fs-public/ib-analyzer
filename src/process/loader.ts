@@ -1,6 +1,6 @@
 import { SchemedRecord } from "../types/records"
 import { env } from "../env"
-import { CSV_SOURCES } from "../config/sources"
+import { CSV_SOURCES, loadAndValidateConfig } from "../config/configLoader"
 import loadData from "./1-loadData"
 import parseOrders from "./2-parseOrders"
 import matchFills from "./3-matchFills"
@@ -8,6 +8,9 @@ import { validatorRecords, validatorOrders, validatorFills } from "./4-validator
 
 export const performFullReload = async (firstLoad = false) => {
     if (!firstLoad) env.flushErrors()
+
+    // Load source json
+    loadAndValidateConfig()
 
     // Load CSV data as records and validate
     const records: SchemedRecord[] = await loadData()

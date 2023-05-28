@@ -14,7 +14,7 @@
         "format:check": "prettier . --check",
         "copy_example:linux": "cp example/config/ src -r",
         "copy_example:windows": "XCOPY example\\config src\\config /I /Y",
-        "premerge": "npm run format:check && npm run lint && npm run build",
+        "premerge": "npm install && npm run format:check && npm run lint && npm run build",
         "start": "node --es-module-specifier-resolution=node --require=./suppress-experimental.cjs ."
     },
     "dependencies": {

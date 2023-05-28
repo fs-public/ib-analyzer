@@ -1,5 +1,5 @@
 import readline from "readline"
-import { DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/prices"
+import { DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/configLoader"
 import { env } from "./env"
 import { DisplayRetyped } from "./types/utilities"
 import { CODES } from "./config/config"

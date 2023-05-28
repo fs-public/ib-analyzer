@@ -1,6 +1,6 @@
 import fs from "fs"
 import { parse } from "csv-parse"
-import { CSV_SOURCES } from "../config/sources"
+import { CSV_SOURCES } from "../config/configLoader"
 import { assert } from "../utils"
 import { env } from "../env"
 import { SchemedRecord, UnschemedRecord } from "../types/records"
@@ -26,29 +26,6 @@ const filenameToRecords = async (file: string) => {
 }
 
 /**
- * Validates source definition.
- */
-const validateSourceSchema = (source: CSVSource, realHeader: UnschemedRecord) => {
-    // Validate real header
-    assert(
-        realHeader.map((col) => (col as string).trim()).join("") === source.schema.join(""),
-        `Source schema mismatch for ${source.filename}.`
-    )
-
-    // Validate schema vs transformations
-    assert(
-        source.schema.length === source.transformation.length,
-        `Source mismatch between schema and transformation lengths for ${source.filename}.`
-    )
-
-    // Validate final length of the schema
-    assert(
-        source.transformation.reduce((acc, next) => acc + (next === "drop" ? 0 : 1), 0) === 16,
-        `Source schema incorrect length for ${source.filename}.`
-    )
-}
-
-/**
  * Reschemes row based on source config.
  */
 const reschemeRow = (row: UnschemedRecord, source: CSVSource): SchemedRecord => {
@@ -58,7 +35,7 @@ const reschemeRow = (row: UnschemedRecord, source: CSVSource): SchemedRecord => 
     const schemedRow: SchemedRecord = []
     for (let j = 0; j < source.schema.length; j++) {
         switch (source.transformation[j]) {
-            case true:
+            case "ok":
                 schemedRow.push(row[j])
                 break
             case "drop":
@@ -85,8 +62,11 @@ const loadData = async (): Promise<SchemedRecord[]> => {
         // Load file
         const loadedRecords = await filenameToRecords(DATA_BASE_DIR + source.filename)
 
-        // Validate schema
-        validateSourceSchema(source, loadedRecords[0])
+        // Validate real header
+        assert(
+            loadedRecords[0].map((col: string) => col.trim()).join("") === source.schema.join(""),
+            `Source schema mismatch for ${source.filename}.`
+        )
 
         // Save all records, reschemed if necessary
         records = [...records, ...loadedRecords.map((row) => reschemeRow(row, source))]

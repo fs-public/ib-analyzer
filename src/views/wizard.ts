@@ -20,7 +20,7 @@ export const applicationWizardLoop = async () => {
                 break
             case "i":
             case "issues":
-                env.log(env.errors)
+                env.log("\n", env.errors.length > 0 ? env.errors : "No issues, you're all set to proceed!")
                 break
             case "example":
                 env.log("\nTypical order:")

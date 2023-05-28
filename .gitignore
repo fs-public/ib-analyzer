@@ -5,5 +5,4 @@ dist
 
 # Data
 data
-src/config/prices.ts
-src/config/sources.ts
+src/config/personal-data.json

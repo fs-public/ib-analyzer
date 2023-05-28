@@ -1,8 +1,8 @@
 import { Fill } from "./fills"
 import { Order } from "./orders"
 
-/** True (no transformation needed), "drop" (pop one value), "insert-zero" (push one '0' value) */
-export type Transformation = true | "drop" | "insert-zero"
+/** "ok" (no transformation needed), "drop" (pop one value), "insert-zero" (push one '0' value) */
+export type Transformation = "ok" | "drop" | "insert-zero"
 
 export type CSVSource = {
     filename: string
