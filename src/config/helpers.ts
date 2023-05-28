@@ -1,4 +1,4 @@
-import { SchemedRecord } from "../types/records"
+import { SchemedRecord } from "../types/trades"
 import { assert, codeHasOneFlag } from "../utils"
 import { CODES } from "./config"
 import { shouldDropSpecificRecord } from "./config"

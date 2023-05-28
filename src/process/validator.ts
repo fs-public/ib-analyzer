@@ -1,7 +1,5 @@
 import { ASSET_CATEGORIES, CODES } from "../config/config"
-import { Fill } from "../types/fills"
-import { Order } from "../types/orders"
-import { SchemedRecord } from "../types/records"
+import { SchemedRecord, Order, Fill } from "../types/trades"
 import { assert, codeHasAllFlags, codeHasFlag } from "../utils"
 
 ///////////////////////////// Records

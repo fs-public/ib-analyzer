@@ -1,13 +1,3 @@
-# TODO
-
-### old
-
-Set `if(row[6] === "IEP" && row[7] === "2021-09-30, 09:30:02")` in config
-validate symbols
-throw new Error("Bad numerical key " + numericalKey)
-implement Issues instead of throwing errors
-refactor fills as primary and secondary order, instead of close and open
-
 # Interactive Brokers Analyzer
 
 NodeJS utility to parse and analyze [Interactive Brokers](https://www.interactivebrokers.com/) (stock trading platform, IB) trade reports from the POV of the local (Czech Republic) tax authority.
@@ -84,8 +74,19 @@ The application has an interactive wizard for all commands and can be accessed a
 ### Limitations
 
 -   The functionality may break with a change to Interactive Brokers' export format. However, the main required columns are not expected to change semantically, and it is straightforward to update the parsing algorithm per CSV.
+-   It might be a good idea to implement automatical fetching of current (MTM) prices for symbols from a 3rd party API. Currently, it is required to save and update prices manually in `./src/config/personal-data.json`.
 
 ### Changelog
 
 -   **v0.1.0** (mid-2020): initial version
 -   **v0.2.0** (26th May 2023): update dependencies, add linter and formatter, Github Actions, first Readme version
+-   **v0.2.1** (27th May 2023): minor refactor - fixed all remaining lint warnings and `any` types, add automatic swap of config files by npm script
+-   **v0.3.0** (28th May 2023): major refactor - extend Readme, full `jsdoc`, improved project directory structure, refactor full load process (functional statements, separation of concerns, shifting filters upstream), add `dotenv` and load config by a JSON, separated common behavior of Views in `./src/views/director.ts` with generator functions
+
+### Todo
+
+-   Validate symbols, currencies in `./src/process/validator.ts`.
+-   Create example data CSV for user understanding
+-   Add Jest and define E2E tests running on the example data CSV
+-   Refactor views themselves, employ more detailed enum for custom codes
+-   Check latest IB export format

@@ -1,14 +1,9 @@
+import { ViewDefinition } from "../types/views"
 import { historicalView } from "./h-historical"
 import { lossHarvestView } from "./l-lossHarvest"
 import openPositionsView from "./o-open"
 import { realizedTaxView } from "./r-realizedTax"
 import { upcomingTimetestsView } from "./u-upcomingTimetests"
-
-export type ViewGenerator = Generator<
-    { title?: string; table: object; printMoreStats?: () => void; isLast: boolean }, // yield values
-    void, // final return value
-    never // next() arguments
->
 
 export enum ViewType {
     HISTORICAL,
@@ -16,20 +11,6 @@ export enum ViewType {
     OPEN_POSITIONS,
     REALIZED_TAX,
     UPCOMING_TIMETESTS,
-}
-
-export type ViewDefinition = {
-    name: string
-    command: string
-    generator: () => ViewGenerator
-    description: {
-        table?: string
-        row?: string
-        notes?: string[]
-    }
-    screenplay: {
-        nextTableMessage?: string
-    }
 }
 
 export const VIEWS: { [key in ViewType]: ViewDefinition } = {

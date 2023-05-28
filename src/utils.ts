@@ -1,7 +1,7 @@
 import readline from "readline"
 import { DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/configLoader"
 import { env } from "./env"
-import { DisplayRetyped } from "./types/utilities"
+import { DisplayRetyped } from "./types/global"
 import { CODES } from "./config/config"
 
 // Env ////////////////////////////////////////////////////////////////////////
