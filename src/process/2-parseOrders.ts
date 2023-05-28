@@ -1,7 +1,7 @@
 import { parseNumerical } from "../config/helpers"
 import { Order, UnschemedOrder } from "../types/orders"
 import { SchemedRecord } from "../types/records"
-import { TARGET_SCHEMA } from "../config/personalLoader"
+import { TARGET_SCHEMA } from "../config/configLoader"
 import { getMultiplier } from "../utils"
 
 /**

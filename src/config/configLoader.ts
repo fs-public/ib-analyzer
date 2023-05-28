@@ -67,6 +67,4 @@ export const loadAndValidateConfig = () => {
             }
         }
     }
-
-    console.log(CSV_SOURCES)
 }

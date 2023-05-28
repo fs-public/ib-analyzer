@@ -1,6 +1,6 @@
 import fs from "fs"
 import { parse } from "csv-parse"
-import { CSV_SOURCES } from "../config/personalLoader"
+import { CSV_SOURCES } from "../config/configLoader"
 import { assert } from "../utils"
 import { env } from "../env"
 import { SchemedRecord, UnschemedRecord } from "../types/records"

@@ -43,7 +43,7 @@ The project runs with `npm` and `node` and is written in Typescript. Community l
 
 The application sequentially executes the following steps:
 
-1. (`./src/process/1-loader.ts`) Data CSVs are loaded into memory and reschemed based on the configuration file. CSV validity under the scheme is validated.
+1. (`./src/process/1-loader.ts`) Data CSVs are loaded into memory and reschemed based on the configuration file. CSV validity under the scheme is checked.
 2. (`./src/process/2-parseOrders.ts`) Relevant rows are parsed into orders, matched with multipliers, and saved in typed objects. Multipliers are validated.
 3. (`./src/process/3-matchFills`) Orders are matched against themselves to find full and partial fills, as well as unfilled orders (_by fills we understand decreasing outstanding holdings, i.e. fills against oneself; not partial fulfillment of the orders on the market_). IB reports profits/losses (P&L) for closing orders, which is validated against self-computed P&L.
 4. (`./src/process/4-validator.ts`) Throughout 1-3, more validations are executed by the separated validator functions, including unrecognized or unsupported values, incorrect/unexpected computations on IB side, sorting, and unmatched orders.
@@ -69,7 +69,7 @@ The suggested file naming convention is `[ENTITY]-[ACCOUNT]-[YEAR or DATE-RANGE]
 
 #### 2. Configuration
 
-We have decided to keep data-parsing presets and prices in Typescript files (for easy employment of type-checking validation as opposed to plain JSON files. These should be configured in files `sources.ts` and `prices.ts` to be located in `./src/config/sources.ts` (not commited to repository to preserve personal data confidentiality), with example setup shown in `./example/config`.
+The basic setup is given by `./src/config/personal-data.json`, where you can specify your source files, multipliers for your derivatives, and current (mark-to-market, MTM) prices for your symbols. The file is not commited based on its personal nature, but an example can be viewed at `./example/config/personal-data.json` and also easily copyable to the correct source folder by `npm run copy_example:[windows/linux]`.
 
 #### 3. Running the analysis
 
