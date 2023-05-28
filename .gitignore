@@ -5,6 +5,5 @@ dist
 
 # Data
 data
-src/config/helpers.ts
 src/config/prices.ts
 src/config/sources.ts
