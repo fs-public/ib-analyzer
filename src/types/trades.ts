@@ -1,7 +1,29 @@
 import { TARGET_SCHEMA } from "../config/configLoader"
 
+// Records /////////////////////////////
+
+/**
+ * An unknown row of a source CSV file.
+ */
+export type UnschemedRecord = (string | number)[]
+
+/**
+ * A row of a source CSV file with expected length (16) and order of values:
+ *  0      1            2                3           4       5        6        7         8      9         10      11      12       13         14     15
+ * Trades,Header,DataDiscriminator,Asset Category,Currency,Symbol,Date/Time,Quantity,T. Price,C. Price,Proceeds,Comm/Fee,Basis,Realized P/L,MTM P/L,Code
+ */
+export type SchemedRecord = (string | number)[]
+
+// Orders /////////////////////////////
+
+/**
+ * Trade record that has been keyed with IB default schema.
+ */
 export type UnschemedOrder = { [column in (typeof TARGET_SCHEMA)[number]]: string | number }
 
+/**
+ * Basic data structure. Trade record that has been parsed, validated, and keyed with our own type.
+ */
 export type Order = {
     // Now data are prepared in 'orders' in SORTED format, as an array of 13-key trade objects:
     // Description of fields: https://ibkrguides.com/reportingreference/reportguide/trades_modelstatements.htm
@@ -30,4 +52,27 @@ export type Order = {
     action: string
     filled: number // 0 - filled trace when analyzing sells
     tax: number
+}
+
+// Fills /////////////////////////////
+
+/**
+ * Every fill matches an open order (increasing outstanding balance, positive or negative)
+ * and a close (decreasing outstanding balance). Spawned with the close.
+ */
+export type Fill = {
+    // Links to the orders
+    closeId: number // Primary identifier, links to the order that spawned this fill
+    openId: number // The order that this fill filled (open). If one close fills 2+ opens, 2+ fills are spawned.
+    symbol: string
+
+    // Self-computed fields - fill values
+    quantity: number
+    basis: number
+    proceeds: number
+    commfee: number
+    realizedpl: number /* xxx */
+    timetest: number
+    tax: number
+    timetestApplied: boolean
 }

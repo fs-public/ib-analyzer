@@ -1,4 +1,4 @@
-import { SchemedRecord } from "../types/records"
+import { SchemedRecord } from "../types/trades"
 import { env } from "../env"
 import { CSV_SOURCES, loadAndValidateConfig } from "../config/configLoader"
 import loadData from "./1-loadData"

@@ -1,4 +1,4 @@
-import { SchemedRecord } from "../types/records"
+import { SchemedRecord } from "../types/trades"
 
 export const DATA_BASE_DIR = "data/"
 

@@ -1,6 +1,5 @@
 import { CODES, TAX_BRACKET } from "../config/config"
-import { Fill } from "../types/fills"
-import { Order } from "../types/orders"
+import { Order, Fill } from "../types/trades"
 import { assert, codeAddFlag, did3yPass, getDateDiff } from "../utils"
 
 /**

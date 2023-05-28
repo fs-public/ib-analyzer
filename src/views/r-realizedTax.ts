@@ -1,6 +1,6 @@
 import { env } from "../env"
-import { Order } from "../types/orders"
-import { DisplayRetyped } from "../types/utilities"
+import { Order } from "../types/trades"
+import { DisplayRetyped } from "../types/global"
 import { fixed, isValueLastInSet, makeObjectFixedDashed } from "../utils"
 import { ViewGenerator } from "./definitions"
 
