@@ -6,3 +6,6 @@ dist
 # Data
 data
 src/config/personal-data.json
+
+# Testing coverage
+coverage
