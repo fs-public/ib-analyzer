@@ -38,8 +38,9 @@ The application sequentially executes the following steps:
 1. (`./src/process/1-loader.ts`) Data CSVs are loaded into memory and reschemed based on the configuration file. CSV validity under the scheme is checked.
 2. (`./src/process/2-parseOrders.ts`) Relevant rows are parsed into orders, matched with multipliers, and saved in typed objects. Multipliers are validated.
 3. (`./src/process/3-matchFills`) Orders are matched against themselves to find full and partial fills, as well as unfilled orders (_by fills we understand decreasing outstanding holdings, i.e. fills against oneself; not partial fulfillment of the orders on the market_). IB reports profits/losses (P&L) for closing orders, which is validated against self-computed P&L.
-4. (`./src/process/4-validator.ts`) Throughout 1-3, more validations are executed by the separated validator functions, including unrecognized or unsupported values, incorrect/unexpected computations on IB side, sorting, and unmatched orders.
-5. Application loop is ran, allowing to reload data, display issues, and show various views (see [Running the Analysis](#3-running-the-analysis) section) through an interactive wizard.
+4. Application loop is ran, allowing to reload data, display issues, and show various views (see [Running the Analysis](#3-running-the-analysis) section) through an interactive wizard.
+
+Furthermore, throughout steps 1-3, more validations are executed by separated validator functions in `./src/process/validator.ts`, including unrecognized or unsupported values, incorrect/unexpected computations on IB side, sorting, and unmatched orders.
 
 ### Usage
 
@@ -84,11 +85,3 @@ The application has an interactive wizard for all commands and can be accessed a
 -   **v0.2.0** (26th May 2023): update dependencies, add linter and formatter, Github Actions, first Readme version
 -   **v0.2.1** (27th May 2023): minor refactor - fixed all remaining lint warnings and `any` types, add automatic swap of config files by npm script
 -   **v0.3.0** (28th May 2023): major refactor - extend Readme, full `jsdoc`, improved project directory structure, refactor full load process (functional statements, separation of concerns, shifting filters upstream), add `dotenv` and load config by a JSON, separated common behavior of Views in `./src/views/director.ts` with generator functions
-
-### Todo
-
--   Validate symbols, currencies in `./src/process/validator.ts`.
--   Create example data CSV for user understanding
--   Add Jest and define E2E tests running on the example data CSV
--   Refactor views themselves, employ more detailed enum for custom codes
--   Check latest IB export format
