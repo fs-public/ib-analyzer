@@ -19,12 +19,13 @@ export const applicationWizardLoop = async () => {
                 await performFullReload()
                 break
             case "i":
-            case "issues":
                 env.log("\n", env.errors.length > 0 ? env.errors : "No issues, you're all set to proceed!")
                 break
-            case "example":
-                env.log("\nTypical order:")
+            case "dataformat":
+                env.log("\nFirst found order:")
                 env.log(env.data.orders[0])
+                env.log("\nFirst found fill:")
+                env.log(env.data.fills[0])
                 break
             case "help":
                 env.log(HELP_STRING)
@@ -33,6 +34,7 @@ export const applicationWizardLoop = async () => {
             case "quit":
                 quit = true
                 break
+
             // Views
             case "h":
                 await historicalView()
@@ -49,6 +51,7 @@ export const applicationWizardLoop = async () => {
             case "u":
                 await upcomingTimetestsView()
                 break
+
             // Default
             default:
                 env.log("Unrecognized command.")
