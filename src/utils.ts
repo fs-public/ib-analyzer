@@ -1,4 +1,5 @@
 import readline from "readline"
+import fs from "fs"
 import { DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/configLoader"
 import { env } from "./env"
 import { DisplayRetyped } from "./types/global"
@@ -94,6 +95,21 @@ export const makeObjectFixedDashed = <T extends { [key: string]: string | number
         }
     }
     return { ...obj, ...transformedProperties }
+}
+
+// File I/O ////////////////////////////////////////////////////////////////////////
+
+/**
+ * Safely reads JSON from a file.
+ */
+export const readJSONFromFile = (path: string) => {
+    try {
+        const data = JSON.parse(fs.readFileSync(path).toString())
+        return data
+    } catch (e) {
+        assert(false, `Cannot read JSON from ${path} - thrown error ${e}`, true)
+        return null
+    }
 }
 
 // User input ////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,10 @@
+import { env } from "../env"
 import { CSVSource, Transformation } from "../types/global"
 import { ConfigMultiplier } from "../types/global"
-import { assert } from "../utils"
-import personalData from "./personal-data.json" assert { type: "json" }
+import { assert, readJSONFromFile } from "../utils"
+import { PATHS } from "./config"
+import Ajv from "ajv"
+//import personalData from "./personal-data.json" assert { type: "json" } // - clashes with Jest and no fallback options
 
 export const NO_TRANSFORM: Transformation[] = [...Array(16)].fill("ok")
 // prettier-ignore
@@ -11,9 +14,47 @@ export const CSV_SOURCES: CSVSource[] = []
 export let DERIVATIVES_MULTIPLIERS: ConfigMultiplier[] = []
 export let MTM_PRICES: { [key: string]: number } = {}
 
+interface ExpectedJsonFormat {
+    sources: {
+        filename: string
+        transformation?: string[]
+        schema?: string[]
+    }[]
+    derivativeMultipliers: {
+        matcher: string
+        multiplier: number
+    }[]
+    mtmPrices: { [key: string]: number }
+}
+
 export const loadAndValidateConfig = () => {
+    // Load synchronously
+    const personalData = (() => {
+        try {
+            return readJSONFromFile(PATHS.PERSONAL_CONFIG)
+        } catch (e) {
+            env.log(
+                `Source config "${PATHS.PERSONAL_CONFIG}" not found, falling back to "${PATHS.PERSONAL_CONFIG_FALLBACK}".`
+            )
+            return readJSONFromFile(PATHS.PERSONAL_CONFIG_FALLBACK)
+        }
+    })()
+
+    const schema = readJSONFromFile(PATHS.PERSONAL_CONFIG_SCHEMA)
+
+    // Basic schema validation
+    const ajv = new Ajv()
+    const validate = ajv.compile<ExpectedJsonFormat>(schema)
+    assert(
+        validate(personalData),
+        `Personal config not conforming to AJV schema - ${JSON.stringify(validate.errors)}`,
+        true
+    )
+
+    const typedPersonalData = personalData as ExpectedJsonFormat
+
     // Sources
-    const sources = personalData.sources
+    const sources = typedPersonalData.sources
 
     for (const source of sources) {
         if (!source.schema || !source.transformation) {
@@ -37,15 +78,6 @@ export const loadAndValidateConfig = () => {
                 true
             )
 
-            // Validate only allowed keys for transformation
-            source.transformation.forEach((transf) =>
-                assert(
-                    ["ok", "drop", "insert-zero"].includes(transf),
-                    `Source unrecognized transformation "${transf}" for ${source.filename}`,
-                    true
-                )
-            )
-
             // Push
             CSV_SOURCES.push({
                 filename: source.filename,
@@ -56,10 +88,10 @@ export const loadAndValidateConfig = () => {
     }
 
     // Multipliers - parsed as 'symbol contains this'
-    DERIVATIVES_MULTIPLIERS = personalData.derivativeMultipliers
+    DERIVATIVES_MULTIPLIERS = typedPersonalData.derivativeMultipliers
 
     // Prices
-    MTM_PRICES = personalData.mtmPrices
+    MTM_PRICES = typedPersonalData.mtmPrices
     for (const symbol of Object.keys(MTM_PRICES)) {
         for (const pair of DERIVATIVES_MULTIPLIERS) {
             if (symbol.includes(pair.matcher)) {

@@ -4,7 +4,7 @@ import { CSV_SOURCES } from "../config/configLoader"
 import { assert } from "../utils"
 import { env } from "../env"
 import { SchemedRecord, UnschemedRecord } from "../types/trades"
-import { DATA_BASE_DIR } from "../config/config"
+import { PATHS } from "../config/config"
 import { CSVSource } from "../types/global"
 import { shouldDropRecord } from "../config/helpers"
 
@@ -60,7 +60,7 @@ const loadData = async (): Promise<SchemedRecord[]> => {
         env.log("Importing", source.filename)
 
         // Load file
-        const loadedRecords = await filenameToRecords(DATA_BASE_DIR + source.filename)
+        const loadedRecords = await filenameToRecords(PATHS.DATA_BASE_DIR + source.filename)
 
         // Validate real header
         assert(

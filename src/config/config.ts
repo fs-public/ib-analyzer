@@ -1,6 +1,11 @@
 import { SchemedRecord } from "../types/trades"
 
-export const DATA_BASE_DIR = "data/"
+export const PATHS = {
+    DATA_BASE_DIR: "data/",
+    PERSONAL_CONFIG: "src/config/json/personal-config.json",
+    PERSONAL_CONFIG_FALLBACK: "src/config/json/personal-config-example.json",
+    PERSONAL_CONFIG_SCHEMA: "src/config/json/ajv-schema.json",
+}
 
 export const TAX_BRACKET = 0.15
 
