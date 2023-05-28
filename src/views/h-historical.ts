@@ -90,4 +90,23 @@ const historicalView = async () => {
     env.log("Completed.")
 }
 
+export function* historicalViewGenerator(): Generator<void, void, never> {
+    for (const sym of env.data.sets.symbols) {
+        env.log("\n[Historical Analysis]", sym)
+
+        const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
+
+        let symbolTable: DisplayRetyped<View>[] = []
+
+        for (const o of orderSlice) {
+            const relatingFills = env.data.fills.filter((f) => f.symbol === sym && f.closeId === o.id)
+
+            symbolTable = [...symbolTable, ...getOneOrder(o, relatingFills)]
+        }
+
+        yield
+        env.table(symbolTable)
+    }
+}
+
 export default historicalView

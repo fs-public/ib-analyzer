@@ -7,6 +7,8 @@ import realizedTax from "./r-realizedTax"
 import openView from "./o-open"
 import lossHarvestView from "./l-lossHarvest"
 import upcomingTimetestsView from "./u-upcomingTimetests"
+import { playView } from "./director"
+import { ViewType } from "./definitions"
 
 export const applicationWizardLoop = async () => {
     let quit = false
@@ -15,6 +17,8 @@ export const applicationWizardLoop = async () => {
 
         switch (command) {
             // Admin
+            case "":
+                break
             case "reload":
                 await performFullReload()
                 break
@@ -36,6 +40,9 @@ export const applicationWizardLoop = async () => {
                 break
 
             // Views
+            case "hh":
+                await playView(ViewType.HISTORICAL)
+                break
             case "h":
                 await historicalView()
                 break
