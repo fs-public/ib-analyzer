@@ -6,11 +6,37 @@ const HARVEST_COMM = 10 // 10 USD or EUR
 const HARVEST_COMM_BASE = 500 // ^ for every 500 shares
 const HARVEST_SLIPPAGE = 0.001 // 0.1%
 
+// Asset Categories
+
 export enum ASSET_CATEGORIES {
     STOCKS = "Stocks",
     DERIVATIVE_OPTIONS = "Equity and Index Options",
     FUTURES = "Futures",
 }
+
+// Codes
+
+enum TO_DROP_ORDER {
+    FRACTIONAL_PORTION_AGENT = "FPA",
+}
+
+enum RECOGNIZED {
+    OPEN = "O",
+    CLOSE = "C",
+    IB_IRRELEVANT_PARTIAL = "P",
+}
+
+enum CUSTOM {
+    TIMETEST_PASSED = "TP",
+}
+
+export const CODES = {
+    TO_DROP_ORDER,
+    RECOGNIZED,
+    CUSTOM,
+}
+
+// Utils
 
 export const getHarvestLoss = (quantity: number, value: number) => {
     const numOrders = Math.ceil(Math.abs(quantity) / HARVEST_COMM_BASE)

@@ -3,7 +3,7 @@ import { DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/prices"
 import { env } from "./env"
 import { DisplayRetyped } from "./types/utilities"
 
-// Env
+// Env ////////////////////////////////////////////////////////////////////////
 
 export const assert = (condition: boolean, message = "Assertion Failed!", critical = false) => {
     if (!condition) {
@@ -22,7 +22,7 @@ export const delay = () => {
     return count
 }
 
-// Date manipulation
+// Date manipulation ////////////////////////////////////////////////////////////////////////
 
 export const getDatePlus3y = (date: Date): Date => {
     const newDate = new Date(date)
@@ -57,7 +57,7 @@ export const getDateDiffDisplay = (from: Date, to: Date): string => {
     return millisecondsToString(getDateDiff(from, to))
 }
 
-// Display utils
+// Display utils ////////////////////////////////////////////////////////////////////////
 
 /**
  * Rounds a number to specified number of decimals (keeping it as a number)
@@ -86,7 +86,7 @@ export const makeObjectFixedDashed = <T extends { [key: string]: string | number
     return { ...obj, ...transformedProperties }
 }
 
-// User input
+// User input ////////////////////////////////////////////////////////////////////////
 
 /**
  * Promps user for an input and returns it as a string.
@@ -113,7 +113,23 @@ export const getUserENTERInput = async (prompt = "for next page"): Promise<boole
     return command !== "s"
 }
 
-// Config access
+// Code Manipulation ////////////////////////////////////////////////////////////////////////
+
+/**
+ * Returns whether a string code contains a specific flag.
+ */
+export const codeContainsFlag = (code: string, flag: string) => {
+    return code.split(";").includes(flag)
+}
+
+/**
+ * Returns a string code with additional flag
+ */
+export const codeAddFlag = (code: string, flag: string) => {
+    return code + ";" + flag
+}
+
+// Config access ////////////////////////////////////////////////////////////////////////
 
 /**
  * Type-safe return of symbol price from config or zero if not found.
