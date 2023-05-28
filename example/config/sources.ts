@@ -1,4 +1,5 @@
 import { CSVSource } from "../types/global"
+import { SchemedRecord } from "../types/records"
 
 export const NO_TRANSFORM = [...Array(16)].fill(true)
 // prettier-ignore
@@ -35,3 +36,8 @@ export const CSV_SOURCES: CSVSource[] = [
         schema: TARGET_SCHEMA,
     },
 ]
+
+// Use with caution.
+export const shouldDropSpecificRecord = (record: SchemedRecord): boolean => {
+    return record[5] === "SYMBOL_EXEMPT_FROM_ANALYSIS"
+}

@@ -2,8 +2,9 @@ import readline from "readline"
 import { DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/prices"
 import { env } from "./env"
 import { DisplayRetyped } from "./types/utilities"
+import { CODES } from "./config/config"
 
-// Env
+// Env ////////////////////////////////////////////////////////////////////////
 
 export const assert = (condition: boolean, message = "Assertion Failed!", critical = false) => {
     if (!condition) {
@@ -11,7 +12,18 @@ export const assert = (condition: boolean, message = "Assertion Failed!", critic
     }
 }
 
-// Date manipulation
+export const delay = () => {
+    if (!process.env["SLOW_LOGGING"]) return
+
+    let count = 0
+    for (let i = 0; i < 100_000 * Number(process.env["SLOW_LOGGING"]); i++) {
+        count += i * i
+    }
+
+    return count
+}
+
+// Date manipulation ////////////////////////////////////////////////////////////////////////
 
 export const getDatePlus3y = (date: Date): Date => {
     const newDate = new Date(date)
@@ -46,7 +58,7 @@ export const getDateDiffDisplay = (from: Date, to: Date): string => {
     return millisecondsToString(getDateDiff(from, to))
 }
 
-// Display utils
+// Display utils ////////////////////////////////////////////////////////////////////////
 
 /**
  * Rounds a number to specified number of decimals (keeping it as a number)
@@ -75,7 +87,7 @@ export const makeObjectFixedDashed = <T extends { [key: string]: string | number
     return { ...obj, ...transformedProperties }
 }
 
-// User input
+// User input ////////////////////////////////////////////////////////////////////////
 
 /**
  * Promps user for an input and returns it as a string.
@@ -102,7 +114,37 @@ export const getUserENTERInput = async (prompt = "for next page"): Promise<boole
     return command !== "s"
 }
 
-// Config access
+// Code Manipulation ////////////////////////////////////////////////////////////////////////
+
+/**
+ * Returns whether a string code contains a specific flag.
+ */
+export const codeHasFlag = (code: string, flag: string) => {
+    return code.split(";").includes(flag)
+}
+
+/**
+ * Returns whether a string code contains all specific flags.
+ */
+export const codeHasAllFlags = (code: string, flags: string[]) => {
+    return !flags.map((flag) => codeHasFlag(code, flag)).includes(false)
+}
+
+/**
+ * Returns whether a string code contains at least one of specific flags.
+ */
+export const codeHasOneFlag = (code: string, flags: string[]) => {
+    return flags.map((flag) => codeHasFlag(code, flag)).includes(true)
+}
+
+/**
+ * Returns a string code with additional flag
+ */
+export const codeAddFlag = (code: string, flag: (typeof CODES.CUSTOM)[keyof typeof CODES.CUSTOM]) => {
+    return code + ";" + flag
+}
+
+// Config access ////////////////////////////////////////////////////////////////////////
 
 /**
  * Type-safe return of symbol price from config or zero if not found.

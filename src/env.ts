@@ -1,14 +1,5 @@
 import { Env } from "./types/global"
-
-const slowIfNeeded = () => {
-    if (!process.env["SLOW_LOGGING"]) return
-
-    let count = 0
-    for (let i = 0; i < 100_000_000; i++) {
-        count += i * i
-    }
-    return count
-}
+import { delay } from "./utils"
 
 export const env: Env = {
     data: {
@@ -28,14 +19,14 @@ export const env: Env = {
     log: (...args) => {
         if (process.env["LOGGING"]) {
             console.log(...args)
-            slowIfNeeded()
+            delay()
         }
     },
 
     table: (...args) => {
         if (process.env["LOGGING"]) {
             console.table(...args)
-            slowIfNeeded()
+            delay()
         }
     },
 

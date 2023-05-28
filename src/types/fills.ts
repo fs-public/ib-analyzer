@@ -1,8 +1,11 @@
-// Every fill matches an open and a close
+/**
+ * Every fill matches an open order (increasing outstanding balance, positive or negative)
+ * and a close (decreasing outstanding balance). Spawned with the close.
+ */
 export type Fill = {
     // Links to the orders
-    closeId: number // primary, order that spawned this
-    openId: number // the order that this fill filled (open)
+    closeId: number // Primary identifier, links to the order that spawned this fill
+    openId: number // The order that this fill filled (open). If one close fills 2+ opens, 2+ fills are spawned.
     symbol: string
 
     // Self-computed fields - fill values
@@ -10,8 +13,7 @@ export type Fill = {
     basis: number
     proceeds: number
     commfee: number
-    realizedpl: number
-
+    realizedpl: number /* xxx */
     timetest: number
     tax: number
     timetestApplied: boolean

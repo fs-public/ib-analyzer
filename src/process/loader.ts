@@ -25,7 +25,7 @@ export const performFullReload = async (firstLoad = false) => {
 
     // Compute and validate fills
     const fills = matchFills(orders, symbols)
-    validatorFills(orders)
+    validatorFills(fills, orders)
 
     // Finish sets
     const activeSymbols = new Set(orders.filter((o) => o.quantity !== o.filled).map((o) => o.symbol))
