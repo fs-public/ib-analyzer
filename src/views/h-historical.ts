@@ -2,7 +2,7 @@ import { env } from "../env"
 import { Fill } from "../types/fills"
 import { Order } from "../types/orders"
 import { DisplayRetyped } from "../types/utilities"
-import { makeObjectFixedDashed, millisecondsToString } from "../utils"
+import { isValueLastInSet, makeObjectFixedDashed, millisecondsToString } from "../utils"
 import { ViewGenerator } from "./definitions"
 
 type View = {
@@ -76,6 +76,7 @@ export function* historicalView(): ViewGenerator {
         }
 
         yield {
+            isLast: isValueLastInSet(sym, env.data.sets.symbols),
             title: sym,
             table: symbolTable,
         }

@@ -1,7 +1,7 @@
 import { env } from "../env"
 import { Order } from "../types/orders"
 import { DisplayRetyped } from "../types/utilities"
-import { fixed, makeObjectFixedDashed } from "../utils"
+import { fixed, isValueLastInSet, makeObjectFixedDashed } from "../utils"
 import { ViewGenerator } from "./definitions"
 
 type View = {
@@ -68,6 +68,7 @@ export function* realizedTaxView(): ViewGenerator {
         const orderSlice = env.data.orders.filter((o) => o.datetime.getFullYear() === y)
 
         yield {
+            isLast: isValueLastInSet(y, env.data.sets.years),
             title: String(y),
             ...realizedTaxOneYear(orderSlice),
         }

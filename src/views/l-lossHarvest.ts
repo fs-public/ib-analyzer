@@ -2,7 +2,7 @@ import { getHarvestLoss, TAX_BRACKET } from "../config/config"
 import { env } from "../env"
 import { Order } from "../types/orders"
 import { DisplayRetyped } from "../types/utilities"
-import { getDateDiffDisplay, getPriceBySymbol, makeObjectFixedDashed } from "../utils"
+import { getDateDiffDisplay, getPriceBySymbol, isValueLastInSet, makeObjectFixedDashed } from "../utils"
 import { ViewGenerator } from "./definitions"
 
 type View = {
@@ -87,6 +87,7 @@ export function* lossHarvestView(): ViewGenerator {
 
         if (orderSlice.length > 0) {
             yield {
+                isLast: isValueLastInSet(sym, env.data.sets.symbols),
                 title: `${sym} at current price ${mtmPrice}`,
                 table: lossHarvestOneSymbol(orderSlice, mtmPrice),
             }

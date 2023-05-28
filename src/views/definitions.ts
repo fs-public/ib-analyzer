@@ -5,7 +5,7 @@ import { realizedTaxView } from "./r-realizedTax"
 import { upcomingTimetestsView } from "./u-upcomingTimetests"
 
 export type ViewGenerator = Generator<
-    { title?: string; table: object; printMoreStats?: () => void }, // yield values
+    { title?: string; table: object; printMoreStats?: () => void; isLast: boolean }, // yield values
     void, // final return value
     never // next() arguments
 >

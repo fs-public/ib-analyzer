@@ -21,6 +21,7 @@ export const playView = async (viewType: ViewType) => {
         if (result.value.table) env.table(result.value.table)
         if (result.value.printMoreStats) result.value.printMoreStats()
 
+        if (result.value.isLast) break
         if (!(await getUserENTERInput(view.screenplay?.nextTableMessage))) return
 
         result = instance.next()

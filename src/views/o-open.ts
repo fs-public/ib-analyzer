@@ -124,6 +124,7 @@ const openViewOrders = () => {
 export function* openPositionsView(): ViewGenerator {
     yield {
         table: openViewTotals(),
+        isLast: false,
     }
 
     env.log("\nOpen positions (by order)")
@@ -132,6 +133,7 @@ export function* openPositionsView(): ViewGenerator {
 
     yield {
         table: openViewOrders(),
+        isLast: true,
     }
 }
 

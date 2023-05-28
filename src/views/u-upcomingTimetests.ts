@@ -65,6 +65,7 @@ export function* upcomingTimetestsView(): ViewGenerator {
 
     yield {
         table: timetests,
+        isLast: true,
     }
 }
 
