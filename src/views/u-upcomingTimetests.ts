@@ -54,13 +54,7 @@ const getTimetest = (o: Order) => {
     })
 }
 
-export const upcomingTimetestsView = async () => {
-    env.log("\nUpcoming Timetests view launched. " + ">>>".repeat(40))
-
-    env.log("\nOpen positions (total)")
-    env.log("\nRow = unfilled orders, sorted by date.")
-    env.log("Notes: values proportional to the unfilled part.")
-
+export function* upcomingTimetestsView(): ViewGenerator {
     const orderSlice = env.data.orders.filter((o) => o.quantity !== o.filled)
     orderSlice.sort((a, b) => getDateDiff(b.datetime, a.datetime))
 
@@ -69,20 +63,9 @@ export const upcomingTimetestsView = async () => {
         timetests.push(getTimetest(o))
     }
 
-    env.table(timetests)
-}
-
-export function* upcomingTimetestsViewGenerator(): ViewGenerator {
-    const orderSlice = env.data.orders.filter((o) => o.quantity !== o.filled)
-    orderSlice.sort((a, b) => getDateDiff(b.datetime, a.datetime))
-
-    const timetests: DisplayRetyped<View>[] = []
-    for (const o of orderSlice) {
-        timetests.push(getTimetest(o))
+    yield {
+        table: timetests,
     }
-
-    yield
-    env.table(timetests)
 }
 
 export default upcomingTimetestsView

@@ -2,7 +2,7 @@ import { env } from "../env"
 import { Fill } from "../types/fills"
 import { Order } from "../types/orders"
 import { DisplayRetyped } from "../types/utilities"
-import { getUserENTERInput, makeObjectFixedDashed, millisecondsToString } from "../utils"
+import { makeObjectFixedDashed, millisecondsToString } from "../utils"
 import { ViewGenerator } from "./definitions"
 
 type View = {
@@ -63,16 +63,8 @@ const getOneOrder = (order: Order, fills: Fill[]) => {
     return [orderTable, ...fillsTable]
 }
 
-const historicalView = async () => {
-    env.log("\nHistorical analysis launched. " + ">>>".repeat(40))
-
-    env.log("\nTable = one symbol.")
-    env.log("Row = orders and fills (consolidated), sorted by date.")
-    env.log("Notes: Fills (present for close orders) sum to the order just above it.")
-
+export function* historicalView(): ViewGenerator {
     for (const sym of env.data.sets.symbols) {
-        env.log("\n[Historical Analysis]", sym)
-
         const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
 
         let symbolTable: DisplayRetyped<View>[] = []
@@ -83,31 +75,10 @@ const historicalView = async () => {
             symbolTable = [...symbolTable, ...getOneOrder(o, relatingFills)]
         }
 
-        env.table(symbolTable)
-
-        if (!(await getUserENTERInput("for next symbol"))) break
-    }
-
-    env.log("Completed.")
-}
-
-export function* historicalViewGenerator(): ViewGenerator {
-    for (const sym of env.data.sets.symbols) {
-        yield
-
-        env.log("\n[Historical Analysis]", sym)
-
-        const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
-
-        let symbolTable: DisplayRetyped<View>[] = []
-
-        for (const o of orderSlice) {
-            const relatingFills = env.data.fills.filter((f) => f.symbol === sym && f.closeId === o.id)
-
-            symbolTable = [...symbolTable, ...getOneOrder(o, relatingFills)]
+        yield {
+            title: sym,
+            table: symbolTable,
         }
-
-        env.table(symbolTable)
     }
 }
 

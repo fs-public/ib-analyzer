@@ -1,14 +1,19 @@
-import { historicalViewGenerator } from "./h-historical"
-import { lossHarvestViewGenerator } from "./l-lossHarvest"
-import { realizedTaxGenerator } from "./r-realizedTax"
-import { upcomingTimetestsViewGenerator } from "./u-upcomingTimetests"
+import { historicalView } from "./h-historical"
+import { lossHarvestView } from "./l-lossHarvest"
+import openPositionsView from "./o-open"
+import { realizedTaxView } from "./r-realizedTax"
+import { upcomingTimetestsView } from "./u-upcomingTimetests"
 
-export type ViewGenerator = Generator<void, void, never>
+export type ViewGenerator = Generator<
+    { title?: string; table: object; printMoreStats?: () => void }, // yield values
+    void, // final return value
+    never // next() arguments
+>
 
 export enum ViewType {
     HISTORICAL,
     LOSS_HARVEST,
-    //OPEN_ORDERS,
+    OPEN_POSITIONS,
     REALIZED_TAX,
     UPCOMING_TIMETESTS,
 }
@@ -22,9 +27,8 @@ export type ViewDefinition = {
         row?: string
         notes?: string[]
     }
-    screenplay?: {
+    screenplay: {
         nextTableMessage?: string
-        skipFirstYield?: boolean
     }
 }
 
@@ -32,56 +36,65 @@ export const VIEWS: { [key in ViewType]: ViewDefinition } = {
     [ViewType.HISTORICAL]: {
         name: "Historical Analysis",
         command: "h",
-        generator: historicalViewGenerator,
+        generator: historicalView,
         description: {
             table: "one symbol",
             row: "orders and fills (consolidated), sorted by date",
             notes: ["fills (present for close orders) sum to the order just above it."],
         },
         screenplay: {
-            skipFirstYield: false,
             nextTableMessage: "for next symbol",
         },
     },
     [ViewType.LOSS_HARVEST]: {
         name: "Loss Harvest",
         command: "l",
-        generator: lossHarvestViewGenerator,
+        generator: lossHarvestView,
         description: {
             table: "one symbol",
             row: "unfilled orders, sorted by date",
             notes: ["partially filled orders are displayed proportionately to unfilled part."],
         },
         screenplay: {
-            skipFirstYield: false,
             nextTableMessage: "for next symbol",
+        },
+    },
+    [ViewType.OPEN_POSITIONS]: {
+        name: "Open Positions",
+        command: "o",
+        generator: openPositionsView,
+        description: {
+            table: "Open positions (total)",
+            row: "one symbol (with at least 1 unfilled order)",
+            notes: ["every row sums over all unfilled or partially unfilled orders of the symbol."],
+        },
+        screenplay: {
+            nextTableMessage: "for breakdown into open orders",
         },
     },
     [ViewType.REALIZED_TAX]: {
         name: "Realized Tax",
         command: "r",
-        generator: realizedTaxGenerator,
+        generator: realizedTaxView,
         description: {
             table: "one year",
             row: "filled orders, sorted by date",
             notes: [],
         },
         screenplay: {
-            skipFirstYield: false,
-            nextTableMessage: "for next symbol",
+            nextTableMessage: "for next year",
         },
     },
     [ViewType.UPCOMING_TIMETESTS]: {
         name: "Upcoming Timetests",
         command: "u",
-        generator: upcomingTimetestsViewGenerator,
+        generator: upcomingTimetestsView,
         description: {
             table: "open positions (total)",
             row: "unfilled orders, sorted by date",
             notes: ["values proportional to the unfilled part."],
         },
         screenplay: {
-            skipFirstYield: false,
             nextTableMessage: "for next symbol",
         },
     },

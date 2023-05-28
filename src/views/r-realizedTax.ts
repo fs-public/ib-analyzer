@@ -1,7 +1,7 @@
 import { env } from "../env"
 import { Order } from "../types/orders"
 import { DisplayRetyped } from "../types/utilities"
-import { fixed, getUserENTERInput, makeObjectFixedDashed } from "../utils"
+import { fixed, makeObjectFixedDashed } from "../utils"
 import { ViewGenerator } from "./definitions"
 
 type View = {
@@ -51,42 +51,27 @@ const realizedTaxOneYear = (orders: Order[]) => {
         }
     }
 
-    env.table(fullTable)
-
     for (const key in totalPnl) totalPnl[key] = fixed(totalPnl[key])
     totalTax = fixed(totalTax)
 
-    env.log("Total P&L:", totalPnl)
-    env.log("Total tax:", totalTax)
-}
-
-const realizedTax = async () => {
-    env.log("\nRealized Tax view launched. " + ">>>".repeat(40))
-
-    env.log("\nTable = one year.")
-    env.log("Row = filled orders, sorted by date.")
-
-    for (const y of env.data.sets.years) {
-        env.log(`\n[Realized Tax] ${y} `)
-
-        const orderSlice = env.data.orders.filter((o) => o.datetime.getFullYear() === y)
-
-        realizedTaxOneYear(orderSlice)
-
-        if (!(await getUserENTERInput("for next year"))) break
+    return {
+        table: fullTable,
+        printMoreStats: () => {
+            env.log("Total P&L:", totalPnl)
+            env.log("Total tax:", totalTax)
+        },
     }
 }
 
-export function* realizedTaxGenerator(): ViewGenerator {
+export function* realizedTaxView(): ViewGenerator {
     for (const y of env.data.sets.years) {
-        yield
-
-        env.log(`\n[Realized Tax] ${y} `)
-
         const orderSlice = env.data.orders.filter((o) => o.datetime.getFullYear() === y)
 
-        realizedTaxOneYear(orderSlice)
+        yield {
+            title: String(y),
+            ...realizedTaxOneYear(orderSlice),
+        }
     }
 }
 
-export default realizedTax
+export default realizedTaxView

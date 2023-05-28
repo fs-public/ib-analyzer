@@ -2,7 +2,6 @@ import { getUserInput } from "../utils"
 import { env } from "../env"
 import { HELP_STRING } from "../config/config"
 import { performFullReload } from "../process/loader"
-import openView from "./o-open"
 import { VIEWS, ViewType } from "./definitions"
 import { playView } from "./director"
 
@@ -35,12 +34,7 @@ export const applicationWizardLoop = async () => {
                 quit = true
                 break
 
-            // Undirected views
-            case "o":
-                await openView()
-                break
-
-            // Directed views and fallback
+            // Views and fallback
             default:
                 let viewMatched = false
                 for (const viewType in Object.keys(ViewType).filter((v) => !isNaN(Number(v)))) {

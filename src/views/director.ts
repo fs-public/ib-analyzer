@@ -14,10 +14,16 @@ export const playView = async (viewType: ViewType) => {
 
     const instance = view.generator()
 
-    instance.next()
+    let result = instance.next()
 
-    while (!instance.next().done) {
+    while (!result.done) {
+        if (result.value.title) env.log(`\n[${view.name}] ${result.value.title}`)
+        if (result.value.table) env.table(result.value.table)
+        if (result.value.printMoreStats) result.value.printMoreStats()
+
         if (!(await getUserENTERInput(view.screenplay?.nextTableMessage))) return
+
+        result = instance.next()
     }
 
     env.log(`\n${view.name} view completed.`)
