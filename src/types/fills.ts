@@ -1,6 +1,6 @@
 /**
  * Every fill matches an open order (increasing outstanding balance, positive or negative)
- * and a close (decreasing outstanding balance).
+ * and a close (decreasing outstanding balance). Spawned with the close.
  */
 export type Fill = {
     // Links to the orders
