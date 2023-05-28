@@ -24,7 +24,7 @@ export type UnschemedOrder = { [column in (typeof TARGET_SCHEMA)[number]]: strin
 /**
  * Basic data structure. Trade record that has been parsed, validated, and keyed with our own type.
  */
-export type Order = {
+export interface Order {
     // Now data are prepared in 'orders' in SORTED format, as an array of 13-key trade objects:
     // Description of fields: https://ibkrguides.com/reportingreference/reportguide/trades_modelstatements.htm
 
@@ -60,7 +60,7 @@ export type Order = {
  * Every fill matches an open order (increasing outstanding balance, positive or negative)
  * and a close (decreasing outstanding balance). Spawned with the close.
  */
-export type Fill = {
+export interface Fill {
     // Links to the orders
     closeId: number // Primary identifier, links to the order that spawned this fill
     openId: number // The order that this fill filled (open). If one close fills 2+ opens, 2+ fills are spawned.

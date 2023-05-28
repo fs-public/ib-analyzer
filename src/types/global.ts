@@ -3,13 +3,13 @@ import { Order, Fill } from "./trades"
 /** "ok" (no transformation needed), "drop" (pop one value), "insert-zero" (push one '0' value) */
 export type Transformation = "ok" | "drop" | "insert-zero"
 
-export type CSVSource = {
+export interface CSVSource {
     filename: string
     transformation: readonly Transformation[]
     schema: readonly string[]
 }
 
-export type DataObject = {
+export interface DataObject {
     orders: Order[]
     fills: Fill[]
     sets: {
@@ -23,7 +23,7 @@ export type DataObject = {
 
 export type ConfigMultiplier = { matcher: string; multiplier: number }
 
-export type Env = {
+export interface Env {
     data: DataObject
     errors: string[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

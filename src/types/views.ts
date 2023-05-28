@@ -4,7 +4,7 @@ export type ViewGenerator = Generator<
     never // next() arguments
 >
 
-export type ViewDefinition = {
+export interface ViewDefinition {
     name: string
     command: string
     generator: () => ViewGenerator
