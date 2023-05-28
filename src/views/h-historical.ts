@@ -3,6 +3,7 @@ import { Fill } from "../types/fills"
 import { Order } from "../types/orders"
 import { DisplayRetyped } from "../types/utilities"
 import { getUserENTERInput, makeObjectFixedDashed, millisecondsToString } from "../utils"
+import { ViewGenerator } from "./definitions"
 
 type View = {
     id: number // id for orders, relating id for fills
@@ -90,8 +91,10 @@ const historicalView = async () => {
     env.log("Completed.")
 }
 
-export function* historicalViewGenerator(): Generator<void, void, never> {
+export function* historicalViewGenerator(): ViewGenerator {
     for (const sym of env.data.sets.symbols) {
+        yield
+
         env.log("\n[Historical Analysis]", sym)
 
         const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
@@ -104,7 +107,6 @@ export function* historicalViewGenerator(): Generator<void, void, never> {
             symbolTable = [...symbolTable, ...getOneOrder(o, relatingFills)]
         }
 
-        yield
         env.table(symbolTable)
     }
 }

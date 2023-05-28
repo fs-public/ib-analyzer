@@ -2,6 +2,7 @@ import { env } from "../env"
 import { Order } from "../types/orders"
 import { DisplayRetyped } from "../types/utilities"
 import { fixed, getUserENTERInput, makeObjectFixedDashed } from "../utils"
+import { ViewGenerator } from "./definitions"
 
 type View = {
     date: string
@@ -73,6 +74,18 @@ const realizedTax = async () => {
         realizedTaxOneYear(orderSlice)
 
         if (!(await getUserENTERInput("for next year"))) break
+    }
+}
+
+export function* realizedTaxGenerator(): ViewGenerator {
+    for (const y of env.data.sets.years) {
+        yield
+
+        env.log(`\n[Realized Tax] ${y} `)
+
+        const orderSlice = env.data.orders.filter((o) => o.datetime.getFullYear() === y)
+
+        realizedTaxOneYear(orderSlice)
     }
 }
 

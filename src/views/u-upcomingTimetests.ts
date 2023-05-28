@@ -3,6 +3,7 @@ import { env } from "../env"
 import { Order } from "../types/orders"
 import { DisplayRetyped } from "../types/utilities"
 import { makeObjectFixedDashed, getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
+import { ViewGenerator } from "./definitions"
 
 type View = {
     symbol: string
@@ -68,6 +69,19 @@ export const upcomingTimetestsView = async () => {
         timetests.push(getTimetest(o))
     }
 
+    env.table(timetests)
+}
+
+export function* upcomingTimetestsViewGenerator(): ViewGenerator {
+    const orderSlice = env.data.orders.filter((o) => o.quantity !== o.filled)
+    orderSlice.sort((a, b) => getDateDiff(b.datetime, a.datetime))
+
+    const timetests: DisplayRetyped<View>[] = []
+    for (const o of orderSlice) {
+        timetests.push(getTimetest(o))
+    }
+
+    yield
     env.table(timetests)
 }
 

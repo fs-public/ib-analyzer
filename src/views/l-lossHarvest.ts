@@ -3,6 +3,7 @@ import { env } from "../env"
 import { Order } from "../types/orders"
 import { DisplayRetyped } from "../types/utilities"
 import { getDateDiffDisplay, getPriceBySymbol, getUserENTERInput, makeObjectFixedDashed } from "../utils"
+import { ViewGenerator } from "./definitions"
 
 type View = {
     since: string
@@ -100,6 +101,21 @@ export const lossHarvestView = async () => {
     }
 
     env.log("Completed.")
+}
+
+export function* lossHarvestViewGenerator(): ViewGenerator {
+    for (const sym of env.data.sets.symbols) {
+        const mtmPrice = getPriceBySymbol(sym)
+
+        const orderSlice = env.data.orders.filter((o) => o.symbol === sym && o.quantity !== o.filled)
+
+        if (orderSlice.length > 0) {
+            yield
+
+            env.log(`\n[Loss Harvest] ${sym} at current price`, mtmPrice)
+            lossHarvestOneSymbol(orderSlice, mtmPrice)
+        }
+    }
 }
 
 export default lossHarvestView

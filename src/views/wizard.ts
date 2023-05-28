@@ -7,8 +7,8 @@ import realizedTax from "./r-realizedTax"
 import openView from "./o-open"
 import lossHarvestView from "./l-lossHarvest"
 import upcomingTimetestsView from "./u-upcomingTimetests"
+import { VIEWS, ViewType } from "./definitions"
 import { playView } from "./director"
-import { ViewType } from "./definitions"
 
 export const applicationWizardLoop = async () => {
     let quit = false
@@ -40,9 +40,6 @@ export const applicationWizardLoop = async () => {
                 break
 
             // Views
-            case "hh":
-                await playView(ViewType.HISTORICAL)
-                break
             case "h":
                 await historicalView()
                 break
@@ -61,6 +58,10 @@ export const applicationWizardLoop = async () => {
 
             // Default
             default:
+                for (const viewType in Object.keys(ViewType).filter((v) => !isNaN(Number(v)))) {
+                    if (command === VIEWS[Number(viewType) as ViewType].command.repeat(2))
+                        await playView(Number(viewType) as ViewType)
+                }
                 env.log("Unrecognized command.")
         }
     }
