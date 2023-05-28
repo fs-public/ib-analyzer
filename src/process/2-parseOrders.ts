@@ -43,6 +43,10 @@ const schemeOrder = (o: UnschemedOrder, id: number): Order => {
     }
 }
 
+/**
+ * Transform SchemedRecord[] into Order[] by pure remapping of arrays into keyed objects.
+ * Also checks multiplier existence for derivatives.
+ */
 const parseOrders = (records: SchemedRecord[]): Order[] => {
     // Apply scheming pipeline to every record
     return records

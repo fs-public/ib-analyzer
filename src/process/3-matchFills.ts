@@ -101,31 +101,40 @@ const matchFillsPerOrder = (matchableOpens: Order[], currentClose: Order): Fill[
         // Set action
         currentClose.action = currentClose.quantity > 0 ? "Open (buy)" : "Open (short)"
     } else {
-        // Scenario C: close and open together
+        // Scenario C: close and open together (e.g. 10 AAPL, sell 20 AAPL -> 10 fill + 10 short-sell new order)
         env.error("Unimplemented situation: filled some, cannot match fully. Possibly a missing or mismatched trade.")
     }
 
     return fills
 }
 
-// computes fills per specific symbol
+/**
+ * Transform Order[] of a single symbol into Fill[] by iterating over them and matching them
+ * against previous orders for the same symbol, not fully filled (closed) orders.
+ */
 const matchFillsPerSymbol = (orders: Order[]) => {
     let fills: Fill[] = []
 
-    for (let i = 0; i < orders.length; i++) {
-        const o = orders[i]
-
+    for (const o of orders) {
         // Filter only earlier orders with different direction
         const matchableOpens = orders.filter((m) => m.datetime < o.datetime && o.quantity * m.quantity < 0)
 
         // also modifies .filled and .action for o, even if does not spawn any new fills
-        const newFills = matchFillsPerOrder(matchableOpens, o)
+        const newFills = matchFillsPerOrder(
+            orders.filter((m) => m.datetime < o.datetime && o.quantity * m.quantity < 0),
+            o
+        )
         fills = [...fills, ...newFills]
     }
 
     return fills
 }
 
+/**
+ * Transform Order[] into Fill[] by iterating over all orders per symbol and matching them
+ * against previous orders for the same symbol, not fully filled (closed) orders.
+ * Also validates math that is being executed within this transformation.
+ */
 const matchFills = (orders: Order[], symbols: Set<string>): Fill[] => {
     let fills: Fill[] = []
 

@@ -54,7 +54,8 @@ const validateOrderMath = (o: Order) => {
 }
 
 /**
- * Validates that orders follow one another without imperatively sorting them, including after merging all CSVs.
+ * Validates that orders for every symbol follow one another without imperatively sorting them,
+ * including after merging all CSVs.
  */
 const validateOrdersSort = (orders: Order[]) => {
     for (let i = 0; i < orders.length - 1; i++) {
