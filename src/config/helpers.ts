@@ -1,7 +1,7 @@
 import { SchemedRecord } from "../types/records"
 import { assert, codeHasOneFlag } from "../utils"
 import { CODES } from "./config"
-import { shouldDropSpecificRecord } from "./sources"
+import { shouldDropSpecificRecord } from "./config"
 
 /*
 This file defines helper functions for managing IB sources, that may or may not change

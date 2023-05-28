@@ -1,4 +1,4 @@
-import { TARGET_SCHEMA } from "../config/sources"
+import { TARGET_SCHEMA } from "../config/personalLoader"
 
 export type UnschemedOrder = { [column in (typeof TARGET_SCHEMA)[number]]: string | number }
 

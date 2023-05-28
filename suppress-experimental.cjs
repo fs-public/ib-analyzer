@@ -7,6 +7,7 @@ process.emit = function (name, data, ...args) {
         data.name === "ExperimentalWarning" &&
         (data.message.includes("--experimental-loader") ||
             data.message.includes("Custom ESM Loaders is an experimental feature") ||
+            data.message.includes("Importing JSON modules is an experimental feature") ||
             data.message.includes("The Node.js specifier resolution flag is experimental"))
     )
         return false

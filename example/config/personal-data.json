@@ -1,0 +1,37 @@
+{
+    "sources": [
+        {
+            "filename": "IBCE-2020-pruned.csv",
+            "transformation": ["ok","ok",      "ok",               "ok",        "ok",     "ok",      "ok",      "ok",       "ok",      "ok",      "ok",      "ok",    "ok",       "ok",       "drop",      "ok", "ok"],
+            "schema": ["Trades","Header","DataDiscriminator","Asset Category","Currency","Symbol","Date/Time","Quantity","T. Price","C. Price","Proceeds","Comm/Fee","Basis","Realized P/L","Realized P/L %","MTM P/L","Code"]
+        },
+        {
+            "filename": "IBCE-2021-pruned.csv",
+            "transformation": ["ok","ok",      "ok",               "ok",        "ok",     "drop",    "ok",      "ok",       "ok",      "ok",      "ok",      "ok",    "ok",     "ok",     "ok",        "ok",     "ok"],
+            "schema": ["Trades","Header","DataDiscriminator","Asset Category","Currency","Account","Symbol","Date/Time","Quantity","T. Price","C. Price","Proceeds","Comm/Fee","Basis","Realized P/L","MTM P/L","Code"]
+        },
+        {
+            "filename": "IBCE-2022-pruned.csv"
+        },
+        {
+            "filename": "IBIE-2022-pruned.csv"
+        },
+        {
+            "filename": "IBIE-2023-20230111-pruned.csv"
+        }
+    ],
+
+    "derivativeMultipliers": [
+        { "matcher": "DAX", "multiplier": 5 },
+        { "matcher": "XSP", "multiplier": 100 }
+    ],
+
+    "mtmPrices": {
+        "AAPL-USD": 137.59,
+        "AMZN-USD": 107.61,
+        "MSFT-USD": 252.56,
+        "DAX 15MAR24 12800 C-EUR": 3192.8 ,
+        "DAX 15MAR24 12800 P-EUR": 435.8 ,
+        "XSP 15DEC23 380 P-USD": 19.72 
+    }
+}
