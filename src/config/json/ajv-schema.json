@@ -14,12 +14,15 @@
                     },
                     "transformation": {
                         "type": "array",
+                        "minItems": 16,
                         "items": {
-                            "type": "string"
+                            "type": "string",
+                            "pattern": "ok|drop|insert-zero"
                         }
                     },
                     "schema": {
                         "type": "array",
+                        "minItems": 16,
                         "items": {
                             "type": "string"
                         }

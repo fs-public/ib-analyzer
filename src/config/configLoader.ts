@@ -35,10 +35,16 @@ export const loadAndValidateConfig = () => {
     // Basic schema validation
     const ajv = new Ajv()
     const validate = ajv.compile<ExpectedJsonFormat>(schema)
-    assert(validate(personalData), `Personal config not conforming to AJV schema - ${validate.errors}`, true)
+    assert(
+        validate(personalData),
+        `Personal config not conforming to AJV schema - ${JSON.stringify(validate.errors)}`,
+        true
+    )
+
+    const typedPersonalData = personalData as ExpectedJsonFormat
 
     // Sources
-    const sources = (personalData as ExpectedJsonFormat).sources
+    const sources = typedPersonalData.sources
 
     for (const source of sources) {
         if (!source.schema || !source.transformation) {
@@ -62,15 +68,6 @@ export const loadAndValidateConfig = () => {
                 true
             )
 
-            // Validate only allowed keys for transformation
-            source.transformation.forEach((transf) =>
-                assert(
-                    ["ok", "drop", "insert-zero"].includes(transf),
-                    `Source unrecognized transformation "${transf}" for ${source.filename}`,
-                    true
-                )
-            )
-
             // Push
             CSV_SOURCES.push({
                 filename: source.filename,
@@ -81,10 +78,10 @@ export const loadAndValidateConfig = () => {
     }
 
     // Multipliers - parsed as 'symbol contains this'
-    DERIVATIVES_MULTIPLIERS = (personalData as ExpectedJsonFormat).derivativeMultipliers
+    DERIVATIVES_MULTIPLIERS = typedPersonalData.derivativeMultipliers
 
     // Prices
-    MTM_PRICES = (personalData as ExpectedJsonFormat).mtmPrices
+    MTM_PRICES = typedPersonalData.mtmPrices
     for (const symbol of Object.keys(MTM_PRICES)) {
         for (const pair of DERIVATIVES_MULTIPLIERS) {
             if (symbol.includes(pair.matcher)) {
