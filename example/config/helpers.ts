@@ -1,5 +1,5 @@
 import { SchemedRecord } from "../types/records"
-import { assert, codeContainsFlag } from "../utils"
+import { assert, codeHasFlag } from "../utils"
 import { CODES } from "./config"
 
 /*
@@ -26,7 +26,7 @@ export const shouldDropRecord = (record: SchemedRecord): boolean => {
     // Drop by code
     if (
         Object.values(CODES.TO_DROP_ORDER)
-            .map((dropFlag) => codeContainsFlag(record[15] as string, dropFlag))
+            .map((dropFlag) => codeHasFlag(record[15] as string, dropFlag))
             .includes(true)
     )
         return true

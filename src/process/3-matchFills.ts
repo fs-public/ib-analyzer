@@ -1,7 +1,7 @@
-import { TAX_BRACKET } from "../config/config"
+import { CODES, TAX_BRACKET } from "../config/config"
 import { Fill } from "../types/fills"
 import { Order } from "../types/orders"
-import { assert, did3yPass, getDateDiff } from "../utils"
+import { assert, codeAddFlag, did3yPass, getDateDiff } from "../utils"
 
 /**
  * Helper function. Creates a Fill object from [open order, close order, quantity].
@@ -96,7 +96,8 @@ const matchFillsPerCloseOrder = (matchableOpens: Order[], currentClose: Order): 
     currentClose.action = currentClose.quantity > 0 ? "Close (rebuy short)" : "Close (sell)"
     currentClose.tax = fills.map((f) => f.tax).reduce((a, b) => a + b)
 
-    if (fills.filter((f) => f.timetestApplied).length > 0) currentClose.code += "; tt"
+    if (fills.filter((f) => f.timetestApplied).length > 0)
+        currentClose.code = codeAddFlag(currentClose.code, CODES.CUSTOM.TIMETEST_PASSED)
 
     // Validate against IB
     validateFillsPerCloseOrder(fills, currentClose)

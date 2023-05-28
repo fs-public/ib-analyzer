@@ -2,6 +2,7 @@ import readline from "readline"
 import { DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/prices"
 import { env } from "./env"
 import { DisplayRetyped } from "./types/utilities"
+import { CODES } from "./config/config"
 
 // Env ////////////////////////////////////////////////////////////////////////
 
@@ -118,14 +119,28 @@ export const getUserENTERInput = async (prompt = "for next page"): Promise<boole
 /**
  * Returns whether a string code contains a specific flag.
  */
-export const codeContainsFlag = (code: string, flag: string) => {
+export const codeHasFlag = (code: string, flag: string) => {
     return code.split(";").includes(flag)
+}
+
+/**
+ * Returns whether a string code contains all specific flags.
+ */
+export const codeHasAllFlags = (code: string, flags: string[]) => {
+    return !flags.map((flag) => codeHasFlag(code, flag)).includes(false)
+}
+
+/**
+ * Returns whether a string code contains at least one of specific flags.
+ */
+export const codeHasOneFlag = (code: string, flags: string[]) => {
+    return flags.map((flag) => codeHasFlag(code, flag)).includes(true)
 }
 
 /**
  * Returns a string code with additional flag
  */
-export const codeAddFlag = (code: string, flag: string) => {
+export const codeAddFlag = (code: string, flag: (typeof CODES.CUSTOM)[keyof typeof CODES.CUSTOM]) => {
     return code + ";" + flag
 }
 

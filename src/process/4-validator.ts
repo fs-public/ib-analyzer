@@ -1,7 +1,7 @@
-import { ASSET_CATEGORIES } from "../config/config"
+import { ASSET_CATEGORIES, CODES } from "../config/config"
 import { Order } from "../types/orders"
 import { SchemedRecord } from "../types/records"
-import { assert } from "../utils"
+import { assert, codeHasAllFlags, codeHasFlag } from "../utils"
 
 ///////////////////////////// Records
 
@@ -39,18 +39,18 @@ const validateRecord = (record: SchemedRecord) => {
  * Validate IB reported math (proceeds, basis, realizedpl) and Codes.
  */
 const validateOrderMath = (o: Order) => {
-    assert(
-        Math.abs(o.quantity * o.tprice - -o.proceeds) <= 0.1,
-        `Incorrect o.proceeds validation in order ${o.datetime}`
-    )
+    // Helper to identify order in asserts, `symbol on date`
+    const errText = (type: string) => `ValidateOrder error: ${type} for ${o.symbol} on ${o.datetime}`
 
-    if (o.code.includes("O")) {
-        assert(Math.abs(o.proceeds + o.commfee - -o.basis) <= 0.1, `Incorrect o.basis validation in Open order ${o}`)
-        assert(Math.abs(o.realizedpl) <= 0.1, `Incorrect o.realizedpl validation in Open order ${o}`)
+    assert(Math.abs(o.quantity * o.tprice - -o.proceeds) <= 0.1, errText("incorrect o.proceeds validation"))
+
+    if (codeHasFlag(o.code, CODES.RECOGNIZED.OPEN)) {
+        assert(Math.abs(o.proceeds + o.commfee - -o.basis) <= 0.1, errText("incorrect o.basis validation in Open"))
+        assert(Math.abs(o.realizedpl) <= 0.1, errText("incorrect o.realizedpl validation in Open"))
     }
 
     // Check O;C orders which are not supported
-    assert(!o.code.includes("O") || !o.code.includes("C"), "Unsupported code O;C in Open order")
+    assert(!codeHasAllFlags(o.code, [CODES.RECOGNIZED.OPEN, CODES.RECOGNIZED.CLOSE]), errText("unsupported code O;C"))
 }
 
 /**
@@ -64,7 +64,7 @@ const validateOrdersSort = (orders: Order[]) => {
             if (orders[i].symbol === orders[j].symbol) {
                 assert(
                     orders[i].datetime < orders[j].datetime,
-                    `Unsorted at order ${orders[i].datetime} in symbol ${orders[i].symbol} against ${orders[j].datetime}`
+                    `ValidateOrder error: unsorder in ${orders[i].symbol} from ${orders[i].datetime} to ${orders[j].datetime}`
                 )
             }
         }
@@ -82,7 +82,7 @@ const validateMatches = (orders: Order[]) => {
                     orders[i].quantity === orders[i].filled ||
                         orders[j].quantity === orders[j].filled ||
                         (orders[i].quantity - orders[i].filled) * (orders[j].quantity - orders[j].filled) > 0, // both + or both -
-                    `Unmatched orders of ${orders[i].symbol} (probably short sell as opening position).`
+                    `Unmatched orders of ${orders[i].symbol} on ${orders[i].datetime}.`
                 )
             }
         }
