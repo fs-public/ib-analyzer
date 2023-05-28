@@ -3,7 +3,7 @@ import { env } from "../env"
 import { Order } from "../types/trades"
 import { DisplayRetyped } from "../types/global"
 import { makeObjectFixedDashed, getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
-import { ViewGenerator } from "./definitions"
+import { ViewGenerator } from "../types/views"
 
 type View = {
     symbol: string
