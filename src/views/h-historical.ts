@@ -1,8 +1,8 @@
 import { env } from "../env"
-import { Order, Fill } from "../types/trades"
 import { DisplayRetyped } from "../types/global"
-import { isValueLastInSet, makeObjectFixedDashed, millisecondsToString } from "../utils"
+import { Order, Fill } from "../types/trades"
 import { ViewGenerator } from "../types/views"
+import { isValueLastInSet, makeObjectFixedDashed, millisecondsToString } from "../utils"
 
 type View = {
     id: number // id for orders, relating id for fills

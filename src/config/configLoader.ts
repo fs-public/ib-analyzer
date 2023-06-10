@@ -1,9 +1,8 @@
+import Ajv from "ajv"
 import { env } from "../env"
-import { CSVSource, Transformation } from "../types/global"
-import { ConfigMultiplier } from "../types/global"
+import { CSVSource, Transformation, ConfigMultiplier } from "../types/global"
 import { assert, readJSONFromFile } from "../utils"
 import { PATHS } from "./config"
-import Ajv from "ajv"
 //import personalData from "./personal-data.json" assert { type: "json" } // - clashes with Jest and no fallback options
 
 export const NO_TRANSFORM: Transformation[] = [...Array(16)].fill("ok")

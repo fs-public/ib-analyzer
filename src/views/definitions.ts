@@ -1,7 +1,7 @@
 import { ViewDefinition } from "../types/views"
 import { historicalView } from "./h-historical"
 import { lossHarvestView } from "./l-lossHarvest"
-import openPositionsView from "./o-open"
+import { openPositionsView } from "./o-open"
 import { realizedTaxView } from "./r-realizedTax"
 import { upcomingTimetestsView } from "./u-upcomingTimetests"
 

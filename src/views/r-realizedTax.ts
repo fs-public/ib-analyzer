@@ -1,8 +1,8 @@
 import { env } from "../env"
-import { Order } from "../types/trades"
 import { DisplayRetyped } from "../types/global"
-import { fixed, isValueLastInSet, makeObjectFixedDashed } from "../utils"
+import { Order } from "../types/trades"
 import { ViewGenerator } from "../types/views"
+import { fixed, isValueLastInSet, makeObjectFixedDashed } from "../utils"
 
 type View = {
     date: string

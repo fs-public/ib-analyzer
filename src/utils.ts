@@ -1,9 +1,9 @@
-import readline from "readline"
 import fs from "fs"
+import readline from "readline"
+import { CODES } from "./config/config"
 import { DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/configLoader"
 import { env } from "./env"
 import { DisplayRetyped } from "./types/global"
-import { CODES } from "./config/config"
 
 // Env ////////////////////////////////////////////////////////////////////////
 

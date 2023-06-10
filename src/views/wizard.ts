@@ -1,7 +1,7 @@
-import { getUserInput } from "../utils"
-import { env } from "../env"
 import { HELP_STRING } from "../config/config"
+import { env } from "../env"
 import { performFullReload } from "../process/loader"
+import { getUserInput } from "../utils"
 import { VIEWS, ViewType } from "./definitions"
 import { playView } from "./director"
 

@@ -1,9 +1,9 @@
 import { TAX_BRACKET } from "../config/config"
 import { env } from "../env"
-import { Order } from "../types/trades"
 import { DisplayRetyped } from "../types/global"
-import { makeObjectFixedDashed, getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
+import { Order } from "../types/trades"
 import { ViewGenerator } from "../types/views"
+import { makeObjectFixedDashed, getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
 
 type View = {
     symbol: string

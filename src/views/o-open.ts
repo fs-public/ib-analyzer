@@ -1,8 +1,8 @@
 import { TAX_BRACKET } from "../config/config"
 import { env } from "../env"
 import { DisplayRetyped } from "../types/global"
-import { fixed, getDateDiffDisplay, getPriceBySymbol, makeObjectFixedDashed } from "../utils"
 import { ViewGenerator } from "../types/views"
+import { fixed, getDateDiffDisplay, getPriceBySymbol, makeObjectFixedDashed } from "../utils"
 
 ///////////////////////////// Totals
 

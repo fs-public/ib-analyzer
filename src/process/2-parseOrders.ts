@@ -1,6 +1,6 @@
+import { TARGET_SCHEMA } from "../config/configLoader"
 import { parseNumerical } from "../config/helpers"
 import { SchemedRecord, Order, UnschemedOrder } from "../types/trades"
-import { TARGET_SCHEMA } from "../config/configLoader"
 import { getMultiplier } from "../utils"
 
 /**
