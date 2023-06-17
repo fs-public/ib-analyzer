@@ -62,6 +62,7 @@ fs-public, 2023
 Admin Commands:
   - reload: reload
   - i: issues print
+  - e: export all views to CSV
   - dataformat: example order and fill print
   - help: show help (this message)
   - q, quit: quit
