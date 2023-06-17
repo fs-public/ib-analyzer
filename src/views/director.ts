@@ -1,9 +1,9 @@
 import { env } from "../env"
 import { getUserENTERInput } from "../utils"
-import { VIEWS, ViewType } from "./definitions"
+import { Views, ViewType } from "./definitions"
 
 export const playView = async (viewType: ViewType) => {
-    const view = VIEWS[viewType]
+    const view = Views[viewType]
 
     env.log("")
     env.log(`${view.name} ${">>>".repeat(40)}`)

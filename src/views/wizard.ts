@@ -2,7 +2,7 @@ import { HELP_STRING } from "../config/config"
 import { env } from "../env"
 import { performFullReload } from "../process/loader"
 import { getUserInput } from "../utils"
-import { VIEWS, ViewType } from "./definitions"
+import { Views, ViewType } from "./definitions"
 import { playView } from "./director"
 
 export const applicationWizardLoop = async () => {
@@ -38,7 +38,7 @@ export const applicationWizardLoop = async () => {
             default:
                 let viewMatched = false
                 for (const viewType in Object.keys(ViewType).filter((v) => !isNaN(Number(v)))) {
-                    if (command === VIEWS[Number(viewType) as ViewType].command) {
+                    if (command === Views[Number(viewType) as ViewType].command) {
                         viewMatched = true
                         await playView(Number(viewType) as ViewType)
                         break
