@@ -13,7 +13,7 @@ export enum ViewType {
     UPCOMING_TIMETESTS,
 }
 
-export const Views: { [key in ViewType]: ViewDefinition } = {
+export const Views: { [key in ViewType]: ViewDefinition<{ [key: string]: string | number | boolean }> } = {
     [ViewType.HISTORICAL]: historicalView,
     [ViewType.LOSS_HARVEST]: lossHarvestView,
     [ViewType.OPEN_POSITIONS]: openPositionsView,

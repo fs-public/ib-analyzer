@@ -1,8 +1,7 @@
 import { env } from "../env"
-import { DisplayRetyped } from "../types/global"
 import { Order, Fill } from "../types/trades"
 import { ViewDefinition, ViewGenerator } from "../types/views"
-import { isValueLastInSet, makeObjectFixedDashed, millisecondsToString } from "../utils"
+import { isValueLastInSet, millisecondsToString } from "../utils"
 
 type View = {
     id: number // id for orders, relating id for fills
@@ -20,53 +19,45 @@ type View = {
 }
 
 const getOneOrder = (order: Order, fills: Fill[]) => {
-    const orderTable = makeObjectFixedDashed<View>(
-        {
-            id: order.id,
-            date: order.datetime.toLocaleDateString(),
-            action: order.action,
-            quantity: order.quantity,
-            tprice: order.tprice,
-            basis: order.basis,
-            proceeds: order.proceeds,
-            commfee: order.commfee,
-            realizedpl: order.realizedpl,
-            timetest: "-",
-            tax: order.tax,
-            codes: order.code + `; filled-${order.quantity === order.filled ? "all" : order.filled}`,
-        },
-        ["id"]
-    )
+    const orderTable: View = {
+        id: order.id,
+        date: order.datetime.toLocaleDateString(),
+        action: order.action,
+        quantity: order.quantity,
+        tprice: order.tprice,
+        basis: order.basis,
+        proceeds: order.proceeds,
+        commfee: order.commfee,
+        realizedpl: order.realizedpl,
+        timetest: "-",
+        tax: order.tax,
+        codes: order.code + `; filled-${order.quantity === order.filled ? "all" : order.filled}`,
+    }
 
-    const fillsTable = fills.map((f) => {
-        return makeObjectFixedDashed<View>(
-            {
-                //"[op,cl,this]": [f.openId, f.closeId, f.thisFillIdPerClose],
-                id: -f.openId,
-                date: "^",
-                action: "fill",
-                quantity: f.quantity,
-                tprice: "-",
-                basis: f.basis,
-                proceeds: f.proceeds,
-                commfee: f.commfee,
-                realizedpl: f.realizedpl,
-                timetest: millisecondsToString(f.timetest),
-                tax: f.tax,
-                codes: "",
-            },
-            ["id"]
-        )
-    })
+    const fillsTables: View[] = fills.map((f) => ({
+        //"[op,cl,this]": [f.openId, f.closeId, f.thisFillIdPerClose],
+        id: -f.openId,
+        date: "^",
+        action: "fill",
+        quantity: f.quantity,
+        tprice: "-",
+        basis: f.basis,
+        proceeds: f.proceeds,
+        commfee: f.commfee,
+        realizedpl: f.realizedpl,
+        timetest: millisecondsToString(f.timetest),
+        tax: f.tax,
+        codes: "",
+    }))
 
-    return [orderTable, ...fillsTable]
+    return [orderTable, ...fillsTables]
 }
 
-function* historicalView(): ViewGenerator {
+function* historicalView(): ViewGenerator<View> {
     for (const sym of env.data.sets.symbols) {
         const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
 
-        let symbolTable: DisplayRetyped<View>[] = []
+        let symbolTable: View[] = []
 
         for (const o of orderSlice) {
             const relatingFills = env.data.fills.filter((f) => f.symbol === sym && f.closeId === o.id)
@@ -82,7 +73,7 @@ function* historicalView(): ViewGenerator {
     }
 }
 
-const viewDefinition: ViewDefinition = {
+const viewDefinition: ViewDefinition<View> = {
     name: "Historical Analysis",
     command: "h",
     generator: historicalView,

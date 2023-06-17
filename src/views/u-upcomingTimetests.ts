@@ -1,9 +1,8 @@
 import { TAX_BRACKET } from "../config/config"
 import { env } from "../env"
-import { DisplayRetyped } from "../types/global"
 import { Order } from "../types/trades"
 import { ViewDefinition, ViewGenerator } from "../types/views"
-import { makeObjectFixedDashed, getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
+import { getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
 
 type View = {
     symbol: string
@@ -24,7 +23,7 @@ type View = {
     tax: number
 }
 
-const getTimetest = (o: Order) => {
+const getTimetest = (o: Order): View => {
     const mtmPrice = getPriceBySymbol(o.symbol)
 
     const q = o.quantity - o.filled
@@ -34,7 +33,7 @@ const getTimetest = (o: Order) => {
     const unrlzd = mtmPrice * q - o.basis * m
     const tax = unrlzd * TAX_BRACKET
 
-    return makeObjectFixedDashed<View>({
+    return {
         symbol: o.symbol,
 
         since: o.datetime.toLocaleDateString(),
@@ -51,14 +50,14 @@ const getTimetest = (o: Order) => {
 
         unrlzd: unrlzd,
         tax: tax,
-    })
+    }
 }
 
-function* upcomingTimetestsView(): ViewGenerator {
+function* upcomingTimetestsView(): ViewGenerator<View> {
     const orderSlice = env.data.orders.filter((o) => o.quantity !== o.filled)
     orderSlice.sort((a, b) => getDateDiff(b.datetime, a.datetime))
 
-    const timetests: DisplayRetyped<View>[] = []
+    const timetests: View[] = []
     for (const o of orderSlice) {
         timetests.push(getTimetest(o))
     }
@@ -69,7 +68,7 @@ function* upcomingTimetestsView(): ViewGenerator {
     }
 }
 
-const viewDefinition: ViewDefinition = {
+const viewDefinition: ViewDefinition<View> = {
     name: "Upcoming Timetests",
     command: "u",
     generator: upcomingTimetestsView,

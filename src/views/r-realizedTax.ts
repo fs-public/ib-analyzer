@@ -1,8 +1,7 @@
 import { env } from "../env"
-import { DisplayRetyped } from "../types/global"
 import { Order } from "../types/trades"
 import { ViewDefinition, ViewGenerator } from "../types/views"
-import { fixed, isValueLastInSet, makeObjectFixedDashed } from "../utils"
+import { fixed, isValueLastInSet } from "../utils"
 
 type View = {
     date: string
@@ -18,8 +17,8 @@ type View = {
     codes: string
 }
 
-const getOrderView = (order: Order) => {
-    return makeObjectFixedDashed<View>({
+const getOrderView = (order: Order): View => {
+    return {
         date: order.datetime.toLocaleDateString(),
         symbol: order.symbol,
         quantity: order.quantity,
@@ -31,11 +30,11 @@ const getOrderView = (order: Order) => {
         timetest: "-",
         tax: order.tax,
         codes: order.code + `; filled-${order.quantity === order.filled ? "all" : order.filled}`,
-    })
+    }
 }
 
 const realizedTaxOneYear = (orders: Order[]) => {
-    const fullTable: DisplayRetyped<View>[] = []
+    const fullTable: View[] = []
 
     const totalPnl: { [key: string]: number } = {}
     for (const cur of Array.from(env.data.sets.currencies)) totalPnl[cur] = 0
@@ -63,7 +62,7 @@ const realizedTaxOneYear = (orders: Order[]) => {
     }
 }
 
-function* realizedTaxView(): ViewGenerator {
+function* realizedTaxView(): ViewGenerator<View> {
     for (const y of env.data.sets.years) {
         const orderSlice = env.data.orders.filter((o) => o.datetime.getFullYear() === y)
 
@@ -75,7 +74,7 @@ function* realizedTaxView(): ViewGenerator {
     }
 }
 
-const viewDefinition: ViewDefinition = {
+const viewDefinition: ViewDefinition<View> = {
     name: "Realized Tax",
     command: "r",
     generator: realizedTaxView,

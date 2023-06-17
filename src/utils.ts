@@ -86,7 +86,7 @@ export const fixed = (number: number, decimals = 2) => {
  */
 export const makeObjectFixedDashed = <T extends { [key: string]: string | number | boolean }>(
     obj: T,
-    skipKeys: (keyof T)[] = []
+    skipKeys: (keyof T)[] = ["id"]
 ): DisplayRetyped<T> => {
     const transformedProperties: Partial<DisplayRetyped<T>> = {}
     for (const key in obj) {
