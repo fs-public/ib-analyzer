@@ -1,7 +1,7 @@
 import { env } from "../env"
 import { DisplayRetyped } from "../types/global"
 import { Order, Fill } from "../types/trades"
-import { ViewGenerator } from "../types/views"
+import { ViewDefinition, ViewGenerator } from "../types/views"
 import { isValueLastInSet, makeObjectFixedDashed, millisecondsToString } from "../utils"
 
 type View = {
@@ -62,7 +62,7 @@ const getOneOrder = (order: Order, fills: Fill[]) => {
     return [orderTable, ...fillsTable]
 }
 
-export function* historicalView(): ViewGenerator {
+function* historicalView(): ViewGenerator {
     for (const sym of env.data.sets.symbols) {
         const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
 
@@ -82,4 +82,18 @@ export function* historicalView(): ViewGenerator {
     }
 }
 
-export default historicalView
+const viewDefinition: ViewDefinition = {
+    name: "Historical Analysis",
+    command: "h",
+    generator: historicalView,
+    description: {
+        table: "one symbol",
+        row: "orders and fills (consolidated), sorted by date",
+        notes: ["fills (present for close orders) sum to the order just above it."],
+    },
+    screenplay: {
+        nextTableMessage: "for next symbol",
+    },
+}
+
+export default viewDefinition

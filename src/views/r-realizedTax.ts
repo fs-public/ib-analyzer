@@ -1,7 +1,7 @@
 import { env } from "../env"
 import { DisplayRetyped } from "../types/global"
 import { Order } from "../types/trades"
-import { ViewGenerator } from "../types/views"
+import { ViewDefinition, ViewGenerator } from "../types/views"
 import { fixed, isValueLastInSet, makeObjectFixedDashed } from "../utils"
 
 type View = {
@@ -63,7 +63,7 @@ const realizedTaxOneYear = (orders: Order[]) => {
     }
 }
 
-export function* realizedTaxView(): ViewGenerator {
+function* realizedTaxView(): ViewGenerator {
     for (const y of env.data.sets.years) {
         const orderSlice = env.data.orders.filter((o) => o.datetime.getFullYear() === y)
 
@@ -75,4 +75,18 @@ export function* realizedTaxView(): ViewGenerator {
     }
 }
 
-export default realizedTaxView
+const viewDefinition: ViewDefinition = {
+    name: "Realized Tax",
+    command: "r",
+    generator: realizedTaxView,
+    description: {
+        table: "one year",
+        row: "filled orders, sorted by date",
+        notes: [],
+    },
+    screenplay: {
+        nextTableMessage: "for next year",
+    },
+}
+
+export default viewDefinition

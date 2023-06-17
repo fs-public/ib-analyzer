@@ -1,7 +1,7 @@
 import { TAX_BRACKET } from "../config/config"
 import { env } from "../env"
 import { DisplayRetyped } from "../types/global"
-import { ViewGenerator } from "../types/views"
+import { ViewDefinition, ViewGenerator } from "../types/views"
 import { fixed, getDateDiffDisplay, getPriceBySymbol, makeObjectFixedDashed } from "../utils"
 
 ///////////////////////////// Totals
@@ -121,7 +121,7 @@ const openViewOrders = () => {
     return opens
 }
 
-export function* openPositionsView(): ViewGenerator {
+function* openPositionsView(): ViewGenerator {
     yield {
         table: openViewTotals(),
         isLast: false,
@@ -137,4 +137,18 @@ export function* openPositionsView(): ViewGenerator {
     }
 }
 
-export default openPositionsView
+const viewDefinition: ViewDefinition = {
+    name: "Open Positions",
+    command: "o",
+    generator: openPositionsView,
+    description: {
+        table: "Open positions (total)",
+        row: "one symbol (with at least 1 unfilled order)",
+        notes: ["every row sums over all unfilled or partially unfilled orders of the symbol."],
+    },
+    screenplay: {
+        nextTableMessage: "for breakdown into open orders",
+    },
+}
+
+export default viewDefinition

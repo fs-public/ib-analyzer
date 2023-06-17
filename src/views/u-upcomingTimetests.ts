@@ -2,7 +2,7 @@ import { TAX_BRACKET } from "../config/config"
 import { env } from "../env"
 import { DisplayRetyped } from "../types/global"
 import { Order } from "../types/trades"
-import { ViewGenerator } from "../types/views"
+import { ViewDefinition, ViewGenerator } from "../types/views"
 import { makeObjectFixedDashed, getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
 
 type View = {
@@ -54,7 +54,7 @@ const getTimetest = (o: Order) => {
     })
 }
 
-export function* upcomingTimetestsView(): ViewGenerator {
+function* upcomingTimetestsView(): ViewGenerator {
     const orderSlice = env.data.orders.filter((o) => o.quantity !== o.filled)
     orderSlice.sort((a, b) => getDateDiff(b.datetime, a.datetime))
 
@@ -69,4 +69,18 @@ export function* upcomingTimetestsView(): ViewGenerator {
     }
 }
 
-export default upcomingTimetestsView
+const viewDefinition: ViewDefinition = {
+    name: "Upcoming Timetests",
+    command: "u",
+    generator: upcomingTimetestsView,
+    description: {
+        table: "open positions (total)",
+        row: "unfilled orders, sorted by date",
+        notes: ["values proportional to the unfilled part."],
+    },
+    screenplay: {
+        nextTableMessage: "for next symbol",
+    },
+}
+
+export default viewDefinition

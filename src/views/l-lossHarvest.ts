@@ -2,7 +2,7 @@ import { getHarvestLoss, TAX_BRACKET } from "../config/config"
 import { env } from "../env"
 import { DisplayRetyped } from "../types/global"
 import { Order } from "../types/trades"
-import { ViewGenerator } from "../types/views"
+import { ViewDefinition, ViewGenerator } from "../types/views"
 import { getDateDiffDisplay, getPriceBySymbol, isValueLastInSet, makeObjectFixedDashed } from "../utils"
 
 type View = {
@@ -79,7 +79,7 @@ const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
     return harvests
 }
 
-export function* lossHarvestView(): ViewGenerator {
+function* lossHarvestView(): ViewGenerator {
     for (const sym of env.data.sets.symbols) {
         const mtmPrice = getPriceBySymbol(sym)
 
@@ -95,4 +95,18 @@ export function* lossHarvestView(): ViewGenerator {
     }
 }
 
-export default lossHarvestView
+const viewDefinition: ViewDefinition = {
+    name: "Loss Harvest",
+    command: "l",
+    generator: lossHarvestView,
+    description: {
+        table: "one symbol",
+        row: "unfilled orders, sorted by date",
+        notes: ["partially filled orders are displayed proportionately to unfilled part."],
+    },
+    screenplay: {
+        nextTableMessage: "for next symbol",
+    },
+}
+
+export default viewDefinition
