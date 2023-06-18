@@ -1,9 +1,9 @@
 import { env } from "../env"
-import { getUserENTERInput } from "../utils"
-import { VIEWS, ViewType } from "./definitions"
+import { getUserENTERInput, makeObjectFixedDashed } from "../utils"
+import { Views, ViewType } from "./definitions"
 
 export const playView = async (viewType: ViewType) => {
-    const view = VIEWS[viewType]
+    const view = Views[viewType]
 
     env.log("")
     env.log(`${view.name} ${">>>".repeat(40)}`)
@@ -18,7 +18,7 @@ export const playView = async (viewType: ViewType) => {
 
     while (!result.done) {
         if (result.value.title) env.log(`\n[${view.name}] ${result.value.title}`)
-        if (result.value.table) env.table(result.value.table)
+        if (result.value.table) env.table(result.value.table.map((row) => makeObjectFixedDashed(row)))
         if (result.value.printMoreStats) result.value.printMoreStats()
 
         if (result.value.isLast) break

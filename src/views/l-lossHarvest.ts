@@ -1,9 +1,8 @@
 import { getHarvestLoss, TAX_BRACKET } from "../config/config"
 import { env } from "../env"
 import { Order } from "../types/trades"
-import { DisplayRetyped } from "../types/global"
-import { getDateDiffDisplay, getPriceBySymbol, isValueLastInSet, makeObjectFixedDashed } from "../utils"
-import { ViewGenerator } from "../types/views"
+import { ViewDefinition, ViewGenerator } from "../types/views"
+import { getDateDiffDisplay, getPriceBySymbol, isValueLastInSet } from "../utils"
 
 type View = {
     since: string
@@ -32,7 +31,7 @@ type RunningCumulative = {
 }
 
 const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
-    const harvests: DisplayRetyped<View>[] = []
+    const harvests: View[] = []
 
     const cum: RunningCumulative = {
         cumQuantity: 0,
@@ -54,32 +53,30 @@ const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
         cum.cumValue += mtmValue
         cum.cumTax += tax
 
-        harvests.push(
-            makeObjectFixedDashed<View>({
-                since: o.datetime.toLocaleDateString(),
-                quantity: q,
+        harvests.push({
+            since: o.datetime.toLocaleDateString(),
+            quantity: q,
 
-                basisPrice: o.tprice,
-                basis: o.basis * m,
+            basisPrice: o.tprice,
+            basis: o.basis * m,
 
-                mtmValue: mtmValue,
+            mtmValue: mtmValue,
 
-                unrlzd: unrlzd,
-                timetest: getDateDiffDisplay(o.datetime, new Date()),
-                tax: tax,
+            unrlzd: unrlzd,
+            timetest: getDateDiffDisplay(o.datetime, new Date()),
+            tax: tax,
 
-                cumUnrlzd: cum.cumUnrlzd,
-                cumValue: cum.cumValue,
-                cumTax: cum.cumTax,
-                slipLoss: -getHarvestLoss(cum.cumQuantity, cum.cumValue),
-            })
-        )
+            cumUnrlzd: cum.cumUnrlzd,
+            cumValue: cum.cumValue,
+            cumTax: cum.cumTax,
+            slipLoss: -getHarvestLoss(cum.cumQuantity, cum.cumValue),
+        })
     }
 
     return harvests
 }
 
-export function* lossHarvestView(): ViewGenerator {
+function* lossHarvestView(): ViewGenerator<View> {
     for (const sym of env.data.sets.symbols) {
         const mtmPrice = getPriceBySymbol(sym)
 
@@ -95,4 +92,18 @@ export function* lossHarvestView(): ViewGenerator {
     }
 }
 
-export default lossHarvestView
+const viewDefinition: ViewDefinition<View> = {
+    name: "Loss Harvest",
+    command: "l",
+    generator: lossHarvestView,
+    description: {
+        table: "one symbol",
+        row: "unfilled orders, sorted by date",
+        notes: ["partially filled orders are displayed proportionately to unfilled part."],
+    },
+    screenplay: {
+        nextTableMessage: "for next symbol",
+    },
+}
+
+export default viewDefinition

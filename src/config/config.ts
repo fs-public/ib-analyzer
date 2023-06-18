@@ -1,7 +1,8 @@
 import { SchemedRecord } from "../types/trades"
 
 export const PATHS = {
-    DATA_BASE_DIR: "data/",
+    DATA_DIR: "data/",
+    OUTPUT_DIR: "output/",
     PERSONAL_CONFIG: "src/config/json/personal-config.json",
     PERSONAL_CONFIG_FALLBACK: "src/config/json/personal-config-example.json",
     PERSONAL_CONFIG_SCHEMA: "src/config/json/ajv-schema.json",
@@ -62,6 +63,7 @@ fs-public, 2023
 Admin Commands:
   - reload: reload
   - i: issues print
+  - e: export all views to CSV
   - dataformat: example order and fill print
   - help: show help (this message)
   - q, quit: quit

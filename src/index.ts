@@ -1,8 +1,8 @@
-import { env } from "./env"
+import * as dotenv from "dotenv"
 import { HELP_STRING } from "./config/config"
+import { env } from "./env"
 import { performFullReload } from "./process/loader"
 import { applicationWizardLoop } from "./views/wizard"
-import * as dotenv from "dotenv"
 
 dotenv.config()
 

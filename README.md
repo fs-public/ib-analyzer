@@ -87,3 +87,4 @@ The application has an interactive wizard for all commands and can be accessed a
 -   **v0.2.0** (26th May 2023): update dependencies, add linter and formatter, Github Actions, first Readme version
 -   **v0.2.1** (27th May 2023): minor refactor - fixed all remaining lint warnings and `any` types, add automatic swap of config files by npm script
 -   **v0.3.0** (28th May 2023): major refactor - extend Readme, full `jsdoc`, improved project directory structure, refactor full load process (functional statements, separation of concerns, shifting filters upstream), add `dotenv` and load config by a JSON, separated common behavior of Views in `./src/views/director.ts` with generator functions
+-   **v0.3.1** (18th June 2023): feature - export results as CSV files. Added eslint plugin for imports.

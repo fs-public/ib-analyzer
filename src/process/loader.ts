@@ -1,6 +1,6 @@
-import { SchemedRecord } from "../types/trades"
-import { env } from "../env"
 import { CSV_SOURCES, loadAndValidateConfig } from "../config/configLoader"
+import { env } from "../env"
+import { SchemedRecord } from "../types/trades"
 import loadData from "./1-loadData"
 import parseOrders from "./2-parseOrders"
 import matchFills from "./3-matchFills"

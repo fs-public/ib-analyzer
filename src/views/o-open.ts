@@ -1,8 +1,7 @@
 import { TAX_BRACKET } from "../config/config"
 import { env } from "../env"
-import { DisplayRetyped } from "../types/global"
-import { fixed, getDateDiffDisplay, getPriceBySymbol, makeObjectFixedDashed } from "../utils"
-import { ViewGenerator } from "../types/views"
+import { ViewDefinition, ViewGenerator } from "../types/views"
+import { fixed, getDateDiffDisplay, getPriceBySymbol } from "../utils"
 
 ///////////////////////////// Totals
 
@@ -63,7 +62,7 @@ const openViewTotals = () => {
     }
 
     // Display results
-    return totals.map((t) => makeObjectFixedDashed<ViewTotal>(t))
+    return totals
 }
 
 ///////////////////////////// Orders
@@ -87,7 +86,7 @@ type ViewOrder = {
 
 const openViewOrders = () => {
     // Check open positions by order
-    const opens: DisplayRetyped<ViewOrder>[] = []
+    const opens: ViewOrder[] = []
 
     const unfilledOrders = env.data.orders.filter((o) => o.quantity !== o.filled)
     for (const o of unfilledOrders) {
@@ -95,24 +94,22 @@ const openViewOrders = () => {
         const m = q / o.quantity
         const mtmPrice = getPriceBySymbol(o.symbol)
 
-        opens.push(
-            makeObjectFixedDashed<ViewOrder>({
-                since: o.datetime.toLocaleDateString(),
-                symbol: o.symbol,
-                quantity: q,
-                partFill: o.filled !== 0,
+        opens.push({
+            since: o.datetime.toLocaleDateString(),
+            symbol: o.symbol,
+            quantity: q,
+            partFill: o.filled !== 0,
 
-                basisPrice: o.tprice,
-                basis: o.basis * m,
+            basisPrice: o.tprice,
+            basis: o.basis * m,
 
-                mtmPrice: mtmPrice,
-                mtmValue: mtmPrice * q,
+            mtmPrice: mtmPrice,
+            mtmValue: mtmPrice * q,
 
-                unrlzd: mtmPrice * q - o.basis * m,
-                timetest: getDateDiffDisplay(o.datetime, new Date()),
-                tax: (mtmPrice * q - o.basis * m) * TAX_BRACKET,
-            })
-        )
+            unrlzd: mtmPrice * q - o.basis * m,
+            timetest: getDateDiffDisplay(o.datetime, new Date()),
+            tax: (mtmPrice * q - o.basis * m) * TAX_BRACKET,
+        })
     }
 
     // Sort
@@ -121,7 +118,7 @@ const openViewOrders = () => {
     return opens
 }
 
-export function* openPositionsView(): ViewGenerator {
+function* openPositionsView(): ViewGenerator<ViewTotal | ViewOrder> {
     yield {
         table: openViewTotals(),
         isLast: false,
@@ -137,4 +134,18 @@ export function* openPositionsView(): ViewGenerator {
     }
 }
 
-export default openPositionsView
+const viewDefinition: ViewDefinition<ViewTotal | ViewOrder> = {
+    name: "Open Positions",
+    command: "o",
+    generator: openPositionsView,
+    description: {
+        table: "Open positions (total)",
+        row: "one symbol (with at least 1 unfilled order)",
+        notes: ["every row sums over all unfilled or partially unfilled orders of the symbol."],
+    },
+    screenplay: {
+        nextTableMessage: "for breakdown into open orders",
+    },
+}
+
+export default viewDefinition

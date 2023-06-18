@@ -1,12 +1,12 @@
 import fs from "fs"
-import { parse } from "csv-parse"
-import { CSV_SOURCES } from "../config/configLoader"
-import { assert } from "../utils"
-import { env } from "../env"
-import { SchemedRecord, UnschemedRecord } from "../types/trades"
+import { parse } from "csv"
 import { PATHS } from "../config/config"
-import { CSVSource } from "../types/global"
+import { CSV_SOURCES } from "../config/configLoader"
 import { shouldDropRecord } from "../config/helpers"
+import { env } from "../env"
+import { CSVSource } from "../types/global"
+import { SchemedRecord, UnschemedRecord } from "../types/trades"
+import { assert } from "../utils"
 
 /**
  * Loads data CSV as an array.
@@ -60,7 +60,7 @@ const loadData = async (): Promise<SchemedRecord[]> => {
         env.log("Importing", source.filename)
 
         // Load file
-        const loadedRecords = await filenameToRecords(PATHS.DATA_BASE_DIR + source.filename)
+        const loadedRecords = await filenameToRecords(PATHS.DATA_DIR + source.filename)
 
         // Validate real header
         assert(
