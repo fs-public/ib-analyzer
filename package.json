@@ -1,6 +1,6 @@
 {
     "name": "ib-analyzer",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "author": "fs-public",
     "license": "MIT",
     "main": "dist/index.js",

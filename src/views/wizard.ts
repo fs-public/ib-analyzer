@@ -4,7 +4,7 @@ import { performFullReload } from "../process/loader"
 import { getUserInput } from "../utils"
 import { Views, ViewType } from "./definitions"
 import { playView } from "./director"
-import { exportCsv } from "./exportCsv"
+import exportAllCsvs from "./exportCsv"
 
 export const applicationWizardLoop = async () => {
     let quit = false
@@ -22,7 +22,7 @@ export const applicationWizardLoop = async () => {
                 env.log("\n", env.errors.length > 0 ? env.errors : "No issues, you're all set to proceed!")
                 break
             case "e":
-                exportCsv()
+                exportAllCsvs()
                 break
             case "dataformat":
                 env.log("\nFirst found order:")

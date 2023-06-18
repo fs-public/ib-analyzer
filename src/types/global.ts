@@ -35,4 +35,7 @@ export interface Env {
 
 // Utilities
 
+export type Value = string | number | boolean
+export type ValueObject = { [key: string]: string | number | boolean }
+
 export type DisplayRetyped<T> = { [key in keyof T]: string | number }

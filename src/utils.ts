@@ -3,7 +3,7 @@ import readline from "readline"
 import { CODES } from "./config/config"
 import { DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/configLoader"
 import { env } from "./env"
-import { DisplayRetyped } from "./types/global"
+import { DisplayRetyped, ValueObject } from "./types/global"
 
 // Env ////////////////////////////////////////////////////////////////////////
 
@@ -84,7 +84,7 @@ export const fixed = (number: number, decimals = 2) => {
  * @param skipKeys Keys to exempt from transformation
  * @returns Correctly typed pretty-printable object
  */
-export const makeObjectFixedDashed = <T extends { [key: string]: string | number | boolean }>(
+export const makeObjectFixedDashed = <T extends ValueObject>(
     obj: T,
     skipKeys: (keyof T)[] = ["id"]
 ): DisplayRetyped<T> => {

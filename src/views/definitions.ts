@@ -1,3 +1,4 @@
+import { ValueObject } from "../types/global"
 import { ViewDefinition } from "../types/views"
 import historicalView from "./h-historical"
 import lossHarvestView from "./l-lossHarvest"
@@ -13,7 +14,7 @@ export enum ViewType {
     UPCOMING_TIMETESTS,
 }
 
-export const Views: { [key in ViewType]: ViewDefinition<{ [key: string]: string | number | boolean }> } = {
+export const Views: { [key in ViewType]: ViewDefinition<ValueObject> } = {
     [ViewType.HISTORICAL]: historicalView,
     [ViewType.LOSS_HARVEST]: lossHarvestView,
     [ViewType.OPEN_POSITIONS]: openPositionsView,
