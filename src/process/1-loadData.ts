@@ -1,5 +1,5 @@
 import fs from "fs"
-import { parse } from "csv-parse"
+import { parse } from "csv"
 import { PATHS } from "../config/config"
 import { CSV_SOURCES } from "../config/configLoader"
 import { shouldDropRecord } from "../config/helpers"
@@ -60,7 +60,7 @@ const loadData = async (): Promise<SchemedRecord[]> => {
         env.log("Importing", source.filename)
 
         // Load file
-        const loadedRecords = await filenameToRecords(PATHS.DATA_BASE_DIR + source.filename)
+        const loadedRecords = await filenameToRecords(PATHS.DATA_DIR + source.filename)
 
         // Validate real header
         assert(

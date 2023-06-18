@@ -5,6 +5,7 @@ dist
 
 # Data
 data
+output
 src/config/json/personal-config.json
 
 # Testing coverage

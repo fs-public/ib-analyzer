@@ -1,4 +1,7 @@
-import { env } from "../env"
+import fs from "fs"
+import { stringify } from "csv/sync"
+import moment from "moment"
+import { PATHS } from "../config/config"
 import { Views, ViewType } from "./definitions"
 
 type GenericViewRow = { [key: string]: string | number | boolean }
@@ -26,5 +29,8 @@ export const exportCsv = async () => {
         result = instance.next()
     }
 
-    env.table(results)
+    fs.writeFileSync(
+        PATHS.OUTPUT_DIR + moment().format("YYYYMMDD-HHmmss ") + view.name + ".csv",
+        stringify(results, { header: true })
+    )
 }
