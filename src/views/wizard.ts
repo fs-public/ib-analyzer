@@ -5,6 +5,7 @@ import { getUserInput } from "../utils"
 import { Views, ViewType } from "./definitions"
 import { playView } from "./director"
 import exportAllCsvs from "./exportCsv"
+import exportPdf from "./exportPdf"
 
 export const applicationWizardLoop = async () => {
     let quit = false
@@ -23,6 +24,9 @@ export const applicationWizardLoop = async () => {
                 break
             case "e":
                 exportAllCsvs()
+                break
+            case "p":
+                exportPdf()
                 break
             case "dataformat":
                 env.log("\nFirst found order:")
