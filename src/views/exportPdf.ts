@@ -20,7 +20,7 @@ const exportPdf = async () => {
             .create(Handlebars.compile(fs.readFileSync("./src/templates/template.hbs").toString())(data), {
                 format: "A4",
                 orientation: "landscape",
-                border: "2in",
+                border: "1in",
             })
             .toFile("output/pdf.pdf", (err: Error) => resolve(err))
     )
