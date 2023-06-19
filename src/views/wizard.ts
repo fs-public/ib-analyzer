@@ -26,7 +26,7 @@ export const applicationWizardLoop = async () => {
                 exportAllCsvs()
                 break
             case "p":
-                exportPdf()
+                await exportPdf()
                 break
             case "dataformat":
                 env.log("\nFirst found order:")

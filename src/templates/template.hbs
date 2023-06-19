@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PDF</title>
+  </head>
+  <body>
+    {{#with table}}
+    <h2>{{title}}</h2>
+    <table>
+      <thead>
+        <tr>
+          {{#each rows.[0]}}
+          <th>{{@key}}</th>
+          {{/each}}
+        </tr>
+      </thead>
+      <tbody>
+        {{#each rows}}
+        <tr>
+          {{#each this}}
+          <td>{{this}}</td>
+          {{/each}}
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {{/with}}
+  </body>
+</html>
