@@ -1,10 +1,10 @@
 import { ValueObject } from "../types/global"
 import { ViewDefinition } from "../types/views"
-import historicalView from "./h-historical"
-import lossHarvestView from "./l-lossHarvest"
-import openPositionsView from "./o-open"
-import realizedTaxView from "./r-realizedTax"
-import upcomingTimetestsView from "./u-upcomingTimetests"
+import historicalView from "./definitions/historical"
+import lossHarvestView from "./definitions/lossHarvest"
+import openPositionsView from "./definitions/open"
+import realizedTaxView from "./definitions/realizedTax"
+import upcomingTimetestsView from "./definitions/upcomingTimetests"
 
 export enum ViewType {
     HISTORICAL,

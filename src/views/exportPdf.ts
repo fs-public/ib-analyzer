@@ -17,9 +17,12 @@ const exportPdf = async () => {
         },
     }
 
+    const hbsTemplate = fs.readFileSync("./src/templates/template.hbs").toString()
+    const renderedHtml = Handlebars.compile(hbsTemplate)(data)
+
     const err: Error = await new Promise((resolve) =>
         pdf
-            .create(Handlebars.compile(fs.readFileSync("./src/templates/template.hbs").toString())(data), {
+            .create(renderedHtml, {
                 base: "file:///" + path.resolve("./src/templates/").replaceAll("\\", "/") + "/",
                 localUrlAccess: true,
                 format: "A4",
