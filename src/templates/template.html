@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>PDF</title>
+    <title>Interactive Brokers Analyzer Export</title>
     <style>
       body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -23,12 +23,20 @@
         font-weight: 700;
       }
 
+      thead tr {
+        border-bottom: 2px solid #696969;
+      }
+
       tr {
         border-bottom: 1px solid #d7d7d7;
       }
 
       thead tr :first-child {
         min-width: 200px;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #f6f6f6;
       }
 
       th, td {

@@ -1,11 +1,13 @@
 import fs from "fs"
 import Handlebars from "handlebars"
 import pdf from "html-pdf"
+import moment from "moment"
 import { env } from "../env"
 import { assert } from "../utils"
 
 const exportPdf = async () => {
     const data = {
+        date: moment().format("DD. MM. YYYY"),
         table: {
             title: "hello world",
             rows: [
@@ -20,7 +22,12 @@ const exportPdf = async () => {
             .create(Handlebars.compile(fs.readFileSync("./src/templates/template.hbs").toString())(data), {
                 format: "A4",
                 orientation: "landscape",
-                border: "1in",
+                border: {
+                    top: "0.6in",
+                    right: "0.4in",
+                    bottom: "0.6in",
+                    left: "0.4in",
+                },
             })
             .toFile("output/pdf.pdf", (err: Error) => resolve(err))
     )

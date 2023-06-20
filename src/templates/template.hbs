@@ -1,33 +1,108 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>PDF</title>
+    <title>Interactive Brokers Analyzer Export</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      h2 {
+        margin-top: 30px;
+        padding: 6px;
+        background-color: #ebf1f7;
+        border: 1px solid #d7d7d7;
+      }
+
+      table {
+        page-break-inside: avoid;
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      thead {
+        font-weight: 700;
+      }
+
+      thead tr {
+        border-bottom: 2px solid #696969;
+      }
+
+      tr {
+        border-bottom: 1px solid #d7d7d7;
+      }
+
+      thead tr :first-child {
+        min-width: 200px;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #f6f6f6;
+      }
+
+      th, td {
+        padding: 6px 12px;
+      }
+
+      p {
+        margin: 4px 0;
+      }
+
+      b {
+        color: #c19a00;
+      }
+
+      h1 {
+        margin-top: 0px;
+      }
+      
+      h4 {
+        margin-bottom: 12px;
+      }
+    </style>
   </head>
   <body>
     <div style="text-align: center">
       <h1>Interactive Brokers Analyzer</h1>
-      <h3>Export at {{date}}</h3>
+      <h3>(c) 2023 Filip Svoboda</h3>
     </div>
+    <div>
+      <h4>Export from: <b>{{date}}</b></h4>
+      <h4>Loaded sources</h4>
+      <ul>
+        <li>IBCE-2020-pruned.csv</li>
+        <li>IBCE-2021-pruned.csv</li>
+        <li>IBCE-2022-pruned.csv</li>
+      </ul>
+      <h4>Statistics</h4>
+      <p>Categories (<b>3</b>): Stocks, Equity and Index Options, Futures</p>
+      <p>Currencies (<b>2</b>): EUR, USD</p>
+      <p>Active Symbols (<b>6</b>): AAPL-USD, AMZN-USD, MSFT-USD, DAX 15MAR24 12800 C-EUR, DAX 15MAR24 12800 P-EUR, XSP 15DEC23 380 P-USD</p>
+      <p>Issues: <b>0</b></p>
+    </div>
+
     {{#with table}}
-    <h2>{{title}}</h2>
-    <table>
-      <thead>
-        <tr>
-          {{#each rows.[0]}}
-          <th>{{@key}}</th>
+    <div style="page-break-inside: avoid">
+      <h2>{{title}}</h2>
+      <table>
+        <thead>
+          <tr>
+            {{#each rows.[0]}}
+            <th>{{@key}}</th>
+            {{/each}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each rows}}
+          <tr>
+            {{#each this}}
+            <td>{{this}}</td>
+            {{/each}}
+          </tr>
           {{/each}}
-        </tr>
-      </thead>
-      <tbody>
-        {{#each rows}}
-        <tr>
-          {{#each this}}
-          <td>{{this}}</td>
-          {{/each}}
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
     {{/with}}
   </body>
 </html>
