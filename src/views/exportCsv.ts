@@ -7,7 +7,7 @@ import { ValueObject } from "../types/global"
 import { ViewDefinition } from "../types/views"
 import { Views } from "./definitions"
 
-const exportOneCsv = (view: ViewDefinition) => {
+export const getRowsForView = (view: ViewDefinition) => {
     const instance = view.generator()
 
     let result = instance.next()
@@ -22,6 +22,12 @@ const exportOneCsv = (view: ViewDefinition) => {
 
         result = instance.next()
     }
+
+    return results
+}
+
+const exportOneCsv = (view: ViewDefinition) => {
+    const results = getRowsForView(view)
 
     fs.writeFileSync(
         PATHS.OUTPUT_DIR + moment().format("YYYYMMDD-HHmmss ") + view.name + ".csv",

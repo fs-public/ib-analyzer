@@ -1,25 +1,27 @@
 import fs from "fs"
+import path from "path"
 import Handlebars from "handlebars"
 import pdf from "html-pdf"
 import moment from "moment"
 import { env } from "../env"
 import { assert } from "../utils"
+import { ViewType, Views } from "./definitions"
+import { getRowsForView } from "./exportCsv"
 
 const exportPdf = async () => {
     const data = {
         date: moment().format("DD. MM. YYYY"),
         table: {
             title: "hello world",
-            rows: [
-                { A: 15, B: 1 },
-                { A: 2, B: 2 },
-            ],
+            rows: getRowsForView(Views[ViewType.HISTORICAL]),
         },
     }
 
     const err: Error = await new Promise((resolve) =>
         pdf
             .create(Handlebars.compile(fs.readFileSync("./src/templates/template.hbs").toString())(data), {
+                base: "file:///" + path.resolve("./src/templates/").replaceAll("\\", "/") + "/",
+                localUrlAccess: true,
                 format: "A4",
                 orientation: "landscape",
                 border: {
