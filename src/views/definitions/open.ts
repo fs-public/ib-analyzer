@@ -1,6 +1,6 @@
 import { TAX_BRACKET } from "../../config/config"
 import { env } from "../../env"
-import { ViewDefinition, ViewGenerator } from "../../types/views"
+import { ViewDefinition, GeneratedView } from "../../types/views"
 import { fixed, getDateDiffDisplay, getPriceBySymbol } from "../../utils"
 
 ///////////////////////////// Totals
@@ -118,26 +118,26 @@ const openViewOrders = () => {
     return opens
 }
 
-function* openPositionsView(): ViewGenerator<ViewTotal | ViewOrder> {
-    yield {
-        table: openViewTotals(),
-        isLast: false,
-    }
-
-    env.log("\nOpen positions (by order)")
-    env.log("\nRow = one unfilled order, sorted by symbol then date.")
-    env.log("Notes: values proportional to unfilled part.")
-
-    yield {
-        table: openViewOrders(),
-        isLast: true,
-    }
+function openPositionsView() {
+    const results: GeneratedView<ViewTotal | ViewOrder>[] = [
+        {
+            title: "Open totals",
+            table: openViewTotals(),
+        },
+        {
+            title: "Open orders",
+            additionalContentBefore: `\nRow = one unfilled order, sorted by symbol then date.
+Notes: values proportional to unfilled part.\n`,
+            table: openViewOrders(),
+        },
+    ]
+    return results
 }
 
 const viewDefinition: ViewDefinition<ViewTotal | ViewOrder> = {
     name: "Open Positions",
     command: "o",
-    generator: openPositionsView,
+    generateView: openPositionsView,
     description: {
         table: "Open positions (total)",
         row: "one symbol (with at least 1 unfilled order)",

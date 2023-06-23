@@ -1,8 +1,8 @@
 import { getHarvestLoss, TAX_BRACKET } from "../../config/config"
 import { env } from "../../env"
 import { Order } from "../../types/trades"
-import { ViewDefinition, ViewGenerator } from "../../types/views"
-import { getDateDiffDisplay, getPriceBySymbol, isValueLastInSet } from "../../utils"
+import { ViewDefinition, GeneratedView } from "../../types/views"
+import { getDateDiffDisplay, getPriceBySymbol } from "../../utils"
 
 type View = {
     since: string
@@ -76,26 +76,29 @@ const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
     return harvests
 }
 
-function* lossHarvestView(): ViewGenerator<View> {
+function lossHarvestView() {
+    const results: GeneratedView<View>[] = []
+
     for (const sym of env.data.sets.symbols) {
         const mtmPrice = getPriceBySymbol(sym)
 
         const orderSlice = env.data.orders.filter((o) => o.symbol === sym && o.quantity !== o.filled)
 
         if (orderSlice.length > 0) {
-            yield {
-                isLast: isValueLastInSet(sym, env.data.sets.symbols),
+            results.push({
                 title: `${sym} at current price ${mtmPrice}`,
                 table: lossHarvestOneSymbol(orderSlice, mtmPrice),
-            }
+            })
         }
     }
+
+    return results
 }
 
 const viewDefinition: ViewDefinition<View> = {
     name: "Loss Harvest",
     command: "l",
-    generator: lossHarvestView,
+    generateView: lossHarvestView,
     description: {
         table: "one symbol",
         row: "unfilled orders, sorted by date",

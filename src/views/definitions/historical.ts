@@ -1,7 +1,7 @@
 import { env } from "../../env"
 import { Order, Fill } from "../../types/trades"
-import { ViewDefinition, ViewGenerator } from "../../types/views"
-import { isValueLastInSet, millisecondsToString } from "../../utils"
+import { GeneratedView, ViewDefinition } from "../../types/views"
+import { millisecondsToString } from "../../utils"
 
 type View = {
     id: number // id for orders, relating id for fills
@@ -53,7 +53,9 @@ const getOneOrder = (order: Order, fills: Fill[]) => {
     return [orderTable, ...fillsTables]
 }
 
-function* historicalView(): ViewGenerator<View> {
+function historicalView() {
+    const results: GeneratedView<View>[] = []
+
     for (const sym of env.data.sets.symbols) {
         const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
 
@@ -65,18 +67,19 @@ function* historicalView(): ViewGenerator<View> {
             symbolTable = [...symbolTable, ...getOneOrder(o, relatingFills)]
         }
 
-        yield {
-            isLast: isValueLastInSet(sym, env.data.sets.symbols),
+        results.push({
             title: sym,
             table: symbolTable,
-        }
+        })
     }
+
+    return results
 }
 
 const viewDefinition: ViewDefinition<View> = {
     name: "Historical Analysis",
     command: "h",
-    generator: historicalView,
+    generateView: historicalView,
     description: {
         table: "one symbol",
         row: "orders and fills (consolidated), sorted by date",

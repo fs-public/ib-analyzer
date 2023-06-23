@@ -1,7 +1,7 @@
 import { env } from "../../env"
 import { Order } from "../../types/trades"
-import { ViewDefinition, ViewGenerator } from "../../types/views"
-import { fixed, isValueLastInSet } from "../../utils"
+import { ViewDefinition, GeneratedView } from "../../types/views"
+import { fixed } from "../../utils"
 
 type View = {
     date: string
@@ -33,7 +33,7 @@ const getOrderView = (order: Order): View => {
     }
 }
 
-const realizedTaxOneYear = (orders: Order[]) => {
+const realizedTaxOneYear = (orders: Order[]): Omit<GeneratedView<View>, "title"> => {
     const fullTable: View[] = []
 
     const totalPnl: { [key: string]: number } = {}
@@ -55,29 +55,29 @@ const realizedTaxOneYear = (orders: Order[]) => {
 
     return {
         table: fullTable,
-        printMoreStats: () => {
-            env.log("Total P&L:", totalPnl)
-            env.log("Total tax:", totalTax)
-        },
+        additionalContentAfter: `Total P&L: ${totalPnl}\nTotal tax: ${totalTax}`,
     }
 }
 
-function* realizedTaxView(): ViewGenerator<View> {
+function realizedTaxView() {
+    const results: GeneratedView<View>[] = []
+
     for (const y of env.data.sets.years) {
         const orderSlice = env.data.orders.filter((o) => o.datetime.getFullYear() === y)
 
-        yield {
-            isLast: isValueLastInSet(y, env.data.sets.years),
+        results.push({
             title: String(y),
             ...realizedTaxOneYear(orderSlice),
-        }
+        })
     }
+
+    return results
 }
 
 const viewDefinition: ViewDefinition<View> = {
     name: "Realized Tax",
     command: "r",
-    generator: realizedTaxView,
+    generateView: realizedTaxView,
     description: {
         table: "one year",
         row: "filled orders, sorted by date",
