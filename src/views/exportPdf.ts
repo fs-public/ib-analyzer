@@ -5,13 +5,27 @@ import pdf from "html-pdf"
 import moment from "moment"
 import { env } from "../env"
 import { ValueObject } from "../types/global"
+import { ViewDefinition } from "../types/views"
 import { assert, makeObjectFixedDashed } from "../utils"
 import { Views } from "./definitions"
-import { getRowsForView } from "./exportCsv"
 
 interface TemplateTable {
     title: string
     rows: ValueObject[]
+}
+
+const getOneTable = (view: ViewDefinition) => {
+    const results = view.generateView()
+
+    const titledResults: ValueObject[] = results.flatMap((generatedView) => [
+        { title: generatedView.title },
+        ...generatedView.table.map((row) => makeObjectFixedDashed(row)),
+    ])
+
+    return {
+        title: view.name,
+        rows: titledResults,
+    }
 }
 
 const getTables = () => {
@@ -23,10 +37,7 @@ const getTables = () => {
         // Temp (massive table)
         if (view.name === "Historical Analysis") continue
 
-        tables.push({
-            title: view.name,
-            rows: getRowsForView(view).map((row) => makeObjectFixedDashed(row)),
-        })
+        tables.push(getOneTable(view))
     }
 
     return tables
