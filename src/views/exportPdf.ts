@@ -5,7 +5,7 @@ import pdf from "html-pdf"
 import moment from "moment"
 import { env } from "../env"
 import { ValueObject } from "../types/global"
-import { assert } from "../utils"
+import { assert, makeObjectFixedDashed } from "../utils"
 import { Views } from "./definitions"
 import { getRowsForView } from "./exportCsv"
 
@@ -25,7 +25,7 @@ const getTables = () => {
 
         tables.push({
             title: view.name,
-            rows: getRowsForView(view),
+            rows: getRowsForView(view).map((row) => makeObjectFixedDashed(row)),
         })
     }
 
@@ -40,6 +40,9 @@ const exportPdf = async () => {
 
     const hbsTemplate = fs.readFileSync("./src/templates/template.hbs").toString()
     const renderedHtml = Handlebars.compile(hbsTemplate)(data)
+
+    // Uncomment this for styling troubleshooting
+    fs.writeFileSync("./src/templates/rendered.html", renderedHtml)
 
     const err: Error = await new Promise((resolve) =>
         pdf

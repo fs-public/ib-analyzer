@@ -1,15 +1,16 @@
 import { ValueObject } from "./global"
 
-export type ViewGenerator<T extends ValueObject> = Generator<
-    { title?: string; table: T[]; printMoreStats?: () => void; isLast: boolean }, // yield values
-    void, // final return value
-    never // next() arguments
->
+export type GeneratedView<T extends ValueObject> = {
+    title: string
+    table: T[]
+    additionalContentBefore?: string
+    additionalContentAfter?: string
+}
 
 export interface ViewDefinition<T extends ValueObject = ValueObject> {
     name: string
     command: string
-    generator: () => ViewGenerator<T>
+    generateView: () => GeneratedView<T>[]
     description: {
         table?: string
         row?: string

@@ -8,22 +8,13 @@ import { ViewDefinition } from "../types/views"
 import { Views } from "./definitions"
 
 export const getRowsForView = (view: ViewDefinition) => {
-    const instance = view.generator()
+    const results = view.generateView()
 
-    let result = instance.next()
+    const titledResults: ValueObject[] = results.flatMap((generatedView) =>
+        generatedView.table.map((row) => ({ title: generatedView.title || "", ...row }))
+    )
 
-    let results: ValueObject[] = []
-
-    while (!result.done) {
-        if (result.value.table) {
-            const u = result.value.table.map((row) => ({ title: result.value?.title || "", ...row }))
-            results = [...results, ...u]
-        }
-
-        result = instance.next()
-    }
-
-    return results
+    return titledResults
 }
 
 const exportOneCsv = (view: ViewDefinition) => {
