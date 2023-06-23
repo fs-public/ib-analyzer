@@ -4,17 +4,38 @@ import Handlebars from "handlebars"
 import pdf from "html-pdf"
 import moment from "moment"
 import { env } from "../env"
+import { ValueObject } from "../types/global"
 import { assert } from "../utils"
-import { ViewType, Views } from "./definitions"
+import { Views } from "./definitions"
 import { getRowsForView } from "./exportCsv"
+
+interface TemplateTable {
+    title: string
+    rows: ValueObject[]
+}
+
+const getTables = () => {
+    const tables: TemplateTable[] = []
+
+    for (const key in Views) {
+        const view = Views[key as unknown as keyof typeof Views]
+
+        // Temp (massive table)
+        if (view.name === "Historical Analysis") continue
+
+        tables.push({
+            title: view.name,
+            rows: getRowsForView(view),
+        })
+    }
+
+    return tables
+}
 
 const exportPdf = async () => {
     const data = {
         date: moment().format("DD. MM. YYYY"),
-        table: {
-            title: "hello world",
-            rows: getRowsForView(Views[ViewType.HISTORICAL]),
-        },
+        tables: getTables(),
     }
 
     const hbsTemplate = fs.readFileSync("./src/templates/template.hbs").toString()
