@@ -72,6 +72,7 @@ Admin Commands:
 Views:
   - h: historical analysis (verbose)
   - l: loss harvest
-  - o: open positions
+  - o: open positions (totals)
+  - oo: open positions (detailed)
   - r: realized tax
   - u: upcoming timetests`

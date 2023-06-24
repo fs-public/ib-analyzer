@@ -2,6 +2,7 @@ import fs from "fs"
 import path from "path"
 import Handlebars from "handlebars"
 import pdf from "html-pdf"
+import _ from "lodash"
 import moment from "moment"
 import { CSV_SOURCES } from "../config/configLoader"
 import { env } from "../env"
@@ -9,13 +10,16 @@ import { ValueObject } from "../types/global"
 import { ViewDefinition } from "../types/views"
 import { assert, makeObjectFixedDashed } from "../utils"
 import { Views } from "./definitions"
-import _ from "lodash"
 
 interface TemplateTable {
     title: string
+    columns: string[]
     rows: ValueObject[]
 }
 
+/**
+ * Transforms one ValueObject's (i.e. one row's) values into nicely colorized table cells (e.g. {key: '<td data-negative>1.5</td>}).
+ */
 const colorizeRow = (row: ValueObject) => {
     const colorized = makeObjectFixedDashed(row)
 
@@ -33,7 +37,10 @@ const colorizeRow = (row: ValueObject) => {
     return colorized
 }
 
-const getOneTable = (view: ViewDefinition) => {
+/**
+ * Creates one full table (TemplateTable) comprised of one or more sub-sections.
+ */
+const getOneTable = (view: ViewDefinition): TemplateTable => {
     const results = view.generateView()
 
     const titledResults: ValueObject[] = results.flatMap((generatedView) => [
@@ -43,6 +50,9 @@ const getOneTable = (view: ViewDefinition) => {
 
     return {
         title: view.name,
+        columns: Object.keys(results[0].table[0] || results[1].table[0] || results[2].table[0] || {}).map((key) =>
+            _.startCase(key)
+        ),
         rows: titledResults,
     }
 }

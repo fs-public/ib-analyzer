@@ -23,12 +23,12 @@
     </div>
 
     {{#each tables}}
-      <h2>{{title}}</h2>
+      <h2 style="page-break-before: always">{{title}}</h2>
       <table>
         <thead>
           <tr>
-            {{#each rows.[1]}}
-              <th>{{@key}}</th>
+            {{#each columns}}
+              <th>{{this}}</th>
             {{/each}}
           </tr>
         </thead>
