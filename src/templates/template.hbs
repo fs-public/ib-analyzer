@@ -12,39 +12,36 @@
       <h4>Export from: <b>{{date}}</b></h4>
       <h4>Loaded sources</h4>
       <ul>
-        <li>IBCE-2020-pruned.csv</li>
-        <li>IBCE-2021-pruned.csv</li>
-        <li>IBCE-2022-pruned.csv</li>
+        {{#each sources}}
+        <li>{{this}}</li>
+        {{/each}}
       </ul>
       <h4>Statistics</h4>
-      <p>Categories (<b>3</b>): Stocks, Equity and Index Options, Futures</p>
-      <p>Currencies (<b>2</b>): EUR, USD</p>
-      <p>Active Symbols (<b>6</b>): AAPL-USD, AMZN-USD, MSFT-USD, DAX 15MAR24 12800 C-EUR, DAX 15MAR24 12800 P-EUR, XSP 15DEC23 380 P-USD</p>
-      <p>Issues: <b>0</b></p>
+      {{#each statistics}}
+        <p>{{{this}}}</p>
+      {{/each}}
     </div>
 
     {{#each tables}}
-      <div style="page-break-inside: avoid">
-        <h2>{{title}}</h2>
-        <table>
-          <thead>
+      <h2>{{title}}</h2>
+      <table>
+        <thead>
+          <tr>
+            {{#each rows.[1]}}
+              <th>{{@key}}</th>
+            {{/each}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each rows}}
             <tr>
-              {{#each rows.[1]}}
-                <th>{{@key}}</th>
+              {{#each this}}
+                {{{this}}}
               {{/each}}
             </tr>
-          </thead>
-          <tbody>
-            {{#each rows}}
-              <tr>
-                {{#each this}}
-                  {{{this}}}
-                {{/each}}
-              </tr>
-            {{/each}}
-          </tbody>
-        </table>
-      </div>
+          {{/each}}
+        </tbody>
+      </table>
     {{/each}}
   </body>
 </html>

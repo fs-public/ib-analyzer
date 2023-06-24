@@ -3,11 +3,13 @@ import path from "path"
 import Handlebars from "handlebars"
 import pdf from "html-pdf"
 import moment from "moment"
+import { CSV_SOURCES } from "../config/configLoader"
 import { env } from "../env"
 import { ValueObject } from "../types/global"
 import { ViewDefinition } from "../types/views"
 import { assert, makeObjectFixedDashed } from "../utils"
 import { Views } from "./definitions"
+import _ from "lodash"
 
 interface TemplateTable {
     title: string
@@ -19,7 +21,7 @@ const colorizeRow = (row: ValueObject) => {
 
     Object.keys(colorized).forEach((key) => {
         const val = colorized[key]
-        if (typeof val === "number" && val < 0) {
+        if (typeof val === "number" && val < 0 && !["id"].includes(key)) {
             colorized[key] = `<td data-negative>${val}</td>`
         } else if (typeof val === "number" && val > 0 && ["quantity", "proceeds", "realizedpl"].includes(key)) {
             colorized[key] = `<td data-positive>${val}</td>`
@@ -59,7 +61,18 @@ const getTables = () => {
 
 const exportPdf = async () => {
     const data = {
-        date: moment().format("DD. MM. YYYY"),
+        date: moment().format("DD. MM. YYYY [at] HH:mm"),
+        sources: CSV_SOURCES.map((source) => source.filename),
+        statistics: (
+            ["categories", "currencies", "symbols", "activeSymbols", "years"] as (keyof typeof env.data.sets)[]
+        )
+            .map(
+                (key) =>
+                    `${_.startCase(key)} (<b>${env.data.sets[key].size}</b>): ${Array.from(
+                        env.data.sets[key] as Set<string>
+                    ).join(", ")}`
+            )
+            .concat([`Issues: <b>${env.errors.length}</b>`]),
         tables: getTables(),
     }
 
