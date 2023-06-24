@@ -5,7 +5,7 @@ body {
 h2 {
   margin-top: 30px;
   padding: 6px;
-  background-color: #ebf1f7;
+  background-color: #bad8f7;
   border: 1px solid #d7d7d7;
 }
 
@@ -40,6 +40,19 @@ tbody tr:nth-child(even) {
 th,
 td {
   padding: 6px 12px;
+}
+
+td[data-subsection] {
+  background-color: #ebf1f7;
+  font-weight: 700;
+}
+
+td[data-negative] {
+  color: red;
+}
+
+td[data-positive] {
+  /* color: green; */
 }
 
 p {

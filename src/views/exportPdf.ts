@@ -14,12 +14,29 @@ interface TemplateTable {
     rows: ValueObject[]
 }
 
+const colorizeRow = (row: ValueObject) => {
+    const colorized = makeObjectFixedDashed(row)
+
+    Object.keys(colorized).forEach((key) => {
+        const val = colorized[key]
+        if (typeof val === "number" && val < 0) {
+            colorized[key] = `<td data-negative>${val}</td>`
+        } else if (typeof val === "number" && val > 0 && ["quantity", "proceeds", "realizedpl"].includes(key)) {
+            colorized[key] = `<td data-positive>${val}</td>`
+        } else {
+            colorized[key] = `<td>${val}</td>`
+        }
+    })
+
+    return colorized
+}
+
 const getOneTable = (view: ViewDefinition) => {
     const results = view.generateView()
 
     const titledResults: ValueObject[] = results.flatMap((generatedView) => [
-        { title: generatedView.title },
-        ...generatedView.table.map((row) => makeObjectFixedDashed(row)),
+        { title: `<td data-subsection colspan="50">${generatedView.title}</td>` },
+        ...generatedView.table.map((row) => colorizeRow(row)),
     ])
 
     return {
@@ -33,9 +50,6 @@ const getTables = () => {
 
     for (const key in Views) {
         const view = Views[key as unknown as keyof typeof Views]
-
-        // Temp (massive table)
-        if (view.name === "Historical Analysis") continue
 
         tables.push(getOneTable(view))
     }

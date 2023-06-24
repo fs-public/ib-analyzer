@@ -29,7 +29,7 @@
         <table>
           <thead>
             <tr>
-              {{#each rows.[0]}}
+              {{#each rows.[1]}}
                 <th>{{@key}}</th>
               {{/each}}
             </tr>
@@ -38,7 +38,7 @@
             {{#each rows}}
               <tr>
                 {{#each this}}
-                  <td>{{this}}</td>
+                  {{{this}}}
                 {{/each}}
               </tr>
             {{/each}}
