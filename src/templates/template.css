@@ -1,16 +1,45 @@
+/* General ================================================================== */
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+body {
+  width: 75%;
+  zoom: .75;
+}
+
+/* Text ================================================================== */
+
+p {
+  margin: 4px 0;
+}
+
+b {
+  color: #c19a00;
+}
+
+h1 {
+  margin-top: 0px;
+}
+
 h2 {
-  margin-top: 30px;
+  font-size: 18px;
+  margin-bottom: 7.5px;
   padding: 6px;
   background-color: #bad8f7;
   border: 1px solid #d7d7d7;
 }
 
+h4 {
+  margin-bottom: 12px;
+}
+
+/* Tables ================================================================== */
+
 table {
-  page-break-inside: avoid;
+  /*display:block;
+  page-break-inside: avoid;*/
   border-collapse: collapse;
   text-align: left;
   font-size: 11px;
@@ -22,28 +51,57 @@ thead {
 }
 
 thead tr {
+  border-top: none;
   border-bottom: 2px solid #696969;
 }
 
-tr {
-  page-break-inside: avoid;
-  break-inside: avoid;
-  border-bottom: 1px solid #d7d7d7;
+tbody {
+  position: relative;
 }
 
-/*thead tr :first-child {
-  min-width: 200px;
+tr {
+  /*page-break-inside: avoid;
+  break-inside: avoid;*/
+  position: relative;
+  border-bottom: 1px solid #d7d7d7;
+  height: 25px;
+}
+
+/*tbody tr:nth-child(even) {
+  background-color: #fafafa;
 }*/
 
-tbody tr:nth-child(even) {
-  background-color: #fafafa;
+tbody tr:nth-child(odd) {
+  background-color: green;
 }
+tbody tr:nth-child(even) {
+  background-color: red;
+}
+
+/* Current sizes: headlined pages 25 rows exact, full table pages 27 full rows and space*/
+/* PhantomJS does not respect this...*/
+tbody tr:nth-child(10) {
+}
+tbody tr:nth-child(10):after
+{
+  display:block;
+  height:0px;
+  visibility: hidden;
+  page-break-after: always !important;
+}
+
+/*tbody tr:nth-child(28n+53) td {
+  /* page-break-before: always; */
+  /*color: yellow;
+  font-weight: bold;
+  padding-bottom: 4px;
+}*/
 
 th,
 td {
   padding: 6px 12px;
-  page-break-inside: avoid;
-  break-inside: avoid;
+  /*page-break-inside: avoid;
+  break-inside: avoid;*/
 }
 
 td[data-subsection] {
@@ -59,18 +117,3 @@ td[data-positive] {
   /* color: green; */
 }
 
-p {
-  margin: 4px 0;
-}
-
-b {
-  color: #c19a00;
-}
-
-h1 {
-  margin-top: 0px;
-}
-
-h4 {
-  margin-bottom: 12px;
-}
