@@ -53,7 +53,7 @@ const getOneTable = (view: ViewDefinition): TemplateTable => {
         columns: Object.keys(results[0].table[0] || results[1].table[0] || results[2].table[0] || {}).map((key) =>
             _.startCase(key)
         ),
-        rows: titledResults.slice(0, 25),
+        rows: titledResults,
     }
 }
 
@@ -105,6 +105,13 @@ const exportPdf = async () => {
                     bottom: "0.6in",
                     left: "0.4in",
                 },
+                /*footer: {
+                    height: "28mm",
+                    contents: {
+                        first: "Cover page",
+                        default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>',
+                    },
+                },*/
             })
             .toFile("output/pdf.pdf", (err: Error) => resolve(err))
     )

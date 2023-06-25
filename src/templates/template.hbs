@@ -8,7 +8,7 @@
       <h1>Interactive Brokers Analyzer</h1>
       <h3>(c) 2023 Filip Svoboda</h3>
     </div>
-    <div>
+    <div style="margin-bottom: 30px">
       <h4>Export from: <b>{{date}}</b></h4>
       <h4>Loaded sources</h4>
       <ul>
@@ -33,14 +33,6 @@
           </tr>
         </thead>
         <tbody>
-          {{#each rows}}
-            <tr>
-              {{#each this}}
-                {{{this}}}
-              {{/each}}
-            </tr>
-          {{/each}}
-          <div style="page-break-after:always;float: none">break</div>
           {{#each rows}}
             <tr>
               {{#each this}}
