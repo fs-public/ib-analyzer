@@ -4,11 +4,6 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body {
-  width: 75%;
-  zoom: .75;
-}
-
 /* Text ================================================================== */
 
 p {
@@ -25,7 +20,6 @@ h1 {
 
 h2 {
   font-size: 18px;
-  margin-bottom: 7.5px;
   padding: 6px;
   background-color: #bad8f7;
   border: 1px solid #d7d7d7;
@@ -42,7 +36,7 @@ table {
   page-break-inside: avoid;*/
   border-collapse: collapse;
   text-align: left;
-  font-size: 11px;
+  font-size: 10px;
   width: 100%;
 }
 
@@ -64,7 +58,6 @@ tr {
   break-inside: avoid;*/
   position: relative;
   border-bottom: 1px solid #d7d7d7;
-  height: 25px;
 }
 
 /*tbody tr:nth-child(even) {
@@ -79,27 +72,27 @@ tbody tr:nth-child(even) {
 }
 
 /* Current sizes: headlined pages 25 rows exact, full table pages 27 full rows and space*/
-/* PhantomJS does not respect this...*/
-tbody tr:nth-child(10) {
-}
-tbody tr:nth-child(10):after
-{
-  display:block;
-  height:0px;
-  visibility: hidden;
-  page-break-after: always !important;
+/* PhantomJS does not respect simple 'page-break-after: always' within tables, see discussions:
+https://github.com/marcbachmann/node-html-pdf/issues/223, https://github.com/ariya/phantomjs/issues/13524 
+Final working fix: https://github.com/ariya/phantomjs/issues/10638#issuecomment-20186253 */
+tbody tr:nth-child(20) {
+  color: yellow;
+  height: 25px;
 }
 
-/*tbody tr:nth-child(28n+53) td {
-  /* page-break-before: always; */
-  /*color: yellow;
-  font-weight: bold;
-  padding-bottom: 4px;
-}*/
+tbody tr:nth-child(20):after
+{
+  display: inline-block;
+  width: 0px;
+  height: 0px;
+  visibility: hidden;
+  page-break-after: always; 
+  content: 'break';
+}
 
 th,
 td {
-  padding: 6px 12px;
+  padding: 4px 12px;
   /*page-break-inside: avoid;
   break-inside: avoid;*/
 }
@@ -113,7 +106,8 @@ td[data-negative] {
   color: red;
 }
 
+/*
 td[data-positive] {
-  /* color: green; */
-}
+   color: green;
+}*/
 

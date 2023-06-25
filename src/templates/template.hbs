@@ -40,6 +40,14 @@
               {{/each}}
             </tr>
           {{/each}}
+          <div style="page-break-after:always;float: none">break</div>
+          {{#each rows}}
+            <tr>
+              {{#each this}}
+                {{{this}}}
+              {{/each}}
+            </tr>
+          {{/each}}
         </tbody>
       </table>
     {{/each}}

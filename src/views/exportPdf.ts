@@ -53,7 +53,7 @@ const getOneTable = (view: ViewDefinition): TemplateTable => {
         columns: Object.keys(results[0].table[0] || results[1].table[0] || results[2].table[0] || {}).map((key) =>
             _.startCase(key)
         ),
-        rows: titledResults,
+        rows: titledResults.slice(0, 25),
     }
 }
 
