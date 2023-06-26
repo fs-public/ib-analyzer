@@ -1,8 +1,8 @@
-import { TAX_BRACKET } from "../config/config"
-import { env } from "../env"
-import { Order } from "../types/trades"
-import { ViewDefinition, ViewGenerator } from "../types/views"
-import { getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../utils"
+import { TAX_BRACKET } from "../../config/config"
+import { env } from "../../env"
+import { Order } from "../../types/trades"
+import { ViewDefinition, GeneratedView } from "../../types/views"
+import { getPriceBySymbol, getDatePlus3y, getDateDiffDisplay, getDateDiff } from "../../utils"
 
 type View = {
     symbol: string
@@ -53,7 +53,7 @@ const getTimetest = (o: Order): View => {
     }
 }
 
-function* upcomingTimetestsView(): ViewGenerator<View> {
+function upcomingTimetestsView(): GeneratedView<View>[] {
     const orderSlice = env.data.orders.filter((o) => o.quantity !== o.filled)
     orderSlice.sort((a, b) => getDateDiff(b.datetime, a.datetime))
 
@@ -62,16 +62,18 @@ function* upcomingTimetestsView(): ViewGenerator<View> {
         timetests.push(getTimetest(o))
     }
 
-    yield {
-        table: timetests,
-        isLast: true,
-    }
+    return [
+        {
+            title: "",
+            table: timetests,
+        },
+    ]
 }
 
 const viewDefinition: ViewDefinition<View> = {
     name: "Upcoming Timetests",
     command: "u",
-    generator: upcomingTimetestsView,
+    generateView: upcomingTimetestsView,
     description: {
         table: "open positions (total)",
         row: "unfilled orders, sorted by date",

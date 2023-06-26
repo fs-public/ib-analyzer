@@ -1,0 +1,95 @@
+/* General ================================================================== */
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Text ================================================================== */
+
+p {
+  margin: 4px 0;
+}
+
+b {
+  color: #c19a00;
+}
+
+h1 {
+  margin-top: 0px;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 28px;
+  padding: 6px;
+  background-color: #bad8f7;
+  border-top: 1px solid #d7d7d7;
+  border-bottom: 1px solid #d7d7d7;
+}
+
+h4 {
+  margin-bottom: 12px;
+}
+
+/* Tables ================================================================== */
+
+table {
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 10px;
+  width: 100%;
+}
+
+thead {
+  font-weight: 700;
+}
+
+thead tr {
+  border-bottom: 2px solid #696969;
+}
+
+tr {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  border-bottom: 1px solid #d7d7d7;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/*
+PhantomJS does not respect simple 'page-break-after: always' within tables, see discussions:
+https://github.com/marcbachmann/node-html-pdf/issues/223, https://github.com/ariya/phantomjs/issues/13524 
+Closest fix (works in early rows, but extends late rows): https://github.com/ariya/phantomjs/issues/10638#issuecomment-20186253
+see https://github.com/fs-public/ib-analyzer/issues/21
+
+tbody tr:nth-child(20):after
+{
+  display: block;
+  width: 0px;
+  height: 0px;
+  visibility: hidden;
+  page-break-after: always; 
+  content: 'break';
+}
+*/
+
+th, td {
+  padding: 4px 12px;
+}
+
+td[data-subsection] {
+  background-color: #ebf1f7;
+  font-weight: 700;
+}
+
+td[data-negative] {
+  color: red;
+}
+
+/*
+td[data-positive] {
+   color: green;
+}*/
+

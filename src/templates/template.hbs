@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="template.css" />
+    <title>Interactive Brokers Analyzer Export</title>
+  </head>
+  <body>
+    <div style="text-align: center">
+      <h1>Interactive Brokers Analyzer</h1>
+      <h3>(c) 2023 Filip Svoboda</h3>
+    </div>
+    <div style="margin-bottom: 30px">
+      <h4>Export from: <b>{{date}}</b></h4>
+      <h4>Loaded sources</h4>
+      <ul>
+        {{#each sources}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
+      <h4>Statistics</h4>
+      {{#each statistics}}
+        <p>{{{this}}}</p>
+      {{/each}}
+    </div>
+
+    {{#each tables}}
+      <h2 style="page-break-before: always">{{title}}</h2>
+      <table>
+        <thead>
+          <tr>
+            {{#each columns}}
+              <th>{{this}}</th>
+            {{/each}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each rows}}
+            <tr>
+              {{#each this}}
+                {{{this}}}
+              {{/each}}
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{/each}}
+  </body>
+</html>

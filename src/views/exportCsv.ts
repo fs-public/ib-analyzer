@@ -7,21 +7,18 @@ import { ValueObject } from "../types/global"
 import { ViewDefinition } from "../types/views"
 import { Views } from "./definitions"
 
+export const getRowsForView = (view: ViewDefinition) => {
+    const results = view.generateView()
+
+    const titledResults: ValueObject[] = results.flatMap((generatedView) =>
+        generatedView.table.map((row) => ({ title: generatedView.title || "", ...row }))
+    )
+
+    return titledResults
+}
+
 const exportOneCsv = (view: ViewDefinition) => {
-    const instance = view.generator()
-
-    let result = instance.next()
-
-    let results: ValueObject[] = []
-
-    while (!result.done) {
-        if (result.value.table) {
-            const u = result.value.table.map((row) => ({ title: result.value?.title || "", ...row }))
-            results = [...results, ...u]
-        }
-
-        result = instance.next()
-    }
+    const results = getRowsForView(view)
 
     fs.writeFileSync(
         PATHS.OUTPUT_DIR + moment().format("YYYYMMDD-HHmmss ") + view.name + ".csv",

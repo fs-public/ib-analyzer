@@ -12,19 +12,17 @@ export const playView = async (viewType: ViewType) => {
     if (view.description.row) env.log(`Row = ${view.description.table}.`)
     view.description.notes?.forEach((note) => env.log(`Note: ${note}`))
 
-    const instance = view.generator()
+    const results = view.generateView()
 
-    let result = instance.next()
+    for (let i = 0; i < results.length; i++) {
+        const generatedView = results[i]
 
-    while (!result.done) {
-        if (result.value.title) env.log(`\n[${view.name}] ${result.value.title}`)
-        if (result.value.table) env.table(result.value.table.map((row) => makeObjectFixedDashed(row)))
-        if (result.value.printMoreStats) result.value.printMoreStats()
+        env.log(`\n[${view.name}] ${generatedView.title}`)
+        if (generatedView.additionalContentBefore) env.log(generatedView.additionalContentBefore)
+        env.table(generatedView.table.map((row) => makeObjectFixedDashed(row)))
+        if (generatedView.additionalContentAfter) env.log(generatedView.additionalContentAfter)
 
-        if (result.value.isLast) break
-        if (!(await getUserENTERInput(view.screenplay?.nextTableMessage))) return
-
-        result = instance.next()
+        if (i === results.length - 1 || !(await getUserENTERInput(view.screenplay?.nextTableMessage))) return
     }
 
     env.log(`\n${view.name} view completed.`)

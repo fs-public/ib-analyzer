@@ -7,6 +7,7 @@ dist
 data
 output
 src/config/json/personal-config.json
+src/templates/rendered.html
 
 # Testing coverage
 coverage

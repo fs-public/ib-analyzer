@@ -19,6 +19,13 @@ The application matches your trades based on these rules, computes tax obligatio
 
 The application has been used on Central Europe (IBCE) and Ireland (IBIE) offices and is being maintained at least on a yearly basis for IBIE.
 
+**Features**
+
+-   Imports CSV exports from Interactive Brokers, with architecture that is easily extendable for other platforms & future-proofed for IB schema changes.
+-   Validates loaded data, cross-checks calculations on dependent columns between the app and the source.
+-   Displays statistics and various views for further analysis in the terminal, such as realized tax and possible tax optimizations.
+-   Exports all views into CSV and PDF files.
+
 ### Installation
 
 The project is not published on _npm_. Please pull the source to a local directory, then run the following command.
@@ -33,7 +40,7 @@ Analysis launches with npm script `npm start`. For configuration, see the [Usage
 
 ### Technology
 
-The project runs with `npm` and `node` and is written in Typescript. Community library `csv-parse` is used for parsing the CSV exports from Interactive Brokers. Code quality assured by `prettier` and `eslint` and enforced by `Github Actions`.
+The project runs with `npm` and `node` and is written in Typescript. Uses `ajv`, `dotenv`, `lodash`, and `moment` for logic and `csv`, `html-pdf`, and `handlebars` for file I/O. Code quality assured by `prettier` and `eslint` and enforced by `Github Actions`. `Jest` test cases will be developed in future versions.
 
 The application sequentially executes the following steps:
 
@@ -72,7 +79,7 @@ The application has an interactive wizard for all commands and can be accessed a
 
 1. **Historical Analysis (verbose) view**: displays full trading history ticker by ticker, sorted by date.
 2. **Loss Harvest view**: displays all orders that have not been fully filled (i.e. active balances) ticker by ticker, including expected tax and time elapsed since order origination.
-3. **Open Positions view**: displays all outstanding balances together, summarized by ticker and then by open (unfilled) orders.
+3. **Open Positions view**: displays all outstanding balances together, summarized either by ticker (totals) or by open (not fully filled) orders (detailed).
 4. **Realized Tax view**: displays realized P&L and tax obligations year by year to cross-check your tax accountant and estimate current year tax liability.
 5. **Upcoming Timetests view**: displays all open orders similarly to the detailed part of Open Positions view, but sorted by elapsed time since order origination.
 
@@ -80,6 +87,7 @@ The application has an interactive wizard for all commands and can be accessed a
 
 -   The functionality may break with a change to Interactive Brokers' export format. However, the main required columns are not expected to change semantically, and it is straightforward to update the parsing algorithm per CSV.
 -   It might be a good idea to implement automatical fetching of current (MTM) prices for symbols from a 3rd party API. Currently, it is required to save and update prices manually in `./src/config/personal-data.json`.
+-   PDF export pagebreak issues: see [Github issue](https://github.com/fs-public/ib-analyzer/issues/21).
 
 ### Changelog
 
@@ -88,3 +96,4 @@ The application has an interactive wizard for all commands and can be accessed a
 -   **v0.2.1** (27th May 2023): minor refactor - fixed all remaining lint warnings and `any` types, add automatic swap of config files by npm script
 -   **v0.3.0** (28th May 2023): major refactor - extend Readme, full `jsdoc`, improved project directory structure, refactor full load process (functional statements, separation of concerns, shifting filters upstream), add `dotenv` and load config by a JSON, separated common behavior of Views in `./src/views/director.ts` with generator functions
 -   **v0.3.1** (18th June 2023): feature - export results as CSV files. Added eslint plugin for imports.
+-   **v0.3.2** (): feature - export results as PDF file.
