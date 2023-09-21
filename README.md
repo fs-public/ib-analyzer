@@ -19,6 +19,8 @@ The application matches your trades based on these rules, computes tax obligatio
 
 The application has been used on Central Europe (IBCE) and Ireland (IBIE) offices and is being maintained at least on a yearly basis for IBIE.
 
+_Latest schema update: 21. Sep 2023._
+
 **Features**
 
 -   Imports CSV exports from Interactive Brokers, with architecture that is easily extendable for other platforms & future-proofed for IB schema changes.

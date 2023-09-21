@@ -175,7 +175,8 @@ export const codeAddFlag = (code: string, flag: (typeof CODES.CUSTOM)[keyof type
  * Type-safe return of symbol price from config or zero if not found.
  */
 export const getPriceBySymbol = (symbol: string): number => {
-    return symbol in MTM_PRICES ? MTM_PRICES[symbol as keyof typeof MTM_PRICES] : 0
+    assert(MTM_PRICES[symbol as keyof typeof MTM_PRICES] !== undefined, `No MTM price found for symbol ${symbol}.`)
+    return MTM_PRICES[symbol as keyof typeof MTM_PRICES] || 0
 }
 
 /**
