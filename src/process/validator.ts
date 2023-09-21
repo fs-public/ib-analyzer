@@ -1,6 +1,6 @@
 import { ASSET_CATEGORIES, CODES } from "../config/config"
 import { SchemedRecord, Order, Fill } from "../types/trades"
-import { assert, codeHasAllFlags, codeHasFlag } from "../utils"
+import { assert, codeHasAllFlags, codeHasFlag, getPriceBySymbol } from "../utils"
 
 ///////////////////////////// Records
 
@@ -102,8 +102,9 @@ const validateMaximumFulfillment = (orders: Order[]) => {
  * Validates that all unfilled orders have MTM_PRICES defined as well as their currencies for open position display and valuation.
  */
 const validateMTMForUnfilled = (orders: Order[]) => {
-    orders
-    return true
+    orders.forEach((o) => {
+        if (o.filled !== o.quantity) getPriceBySymbol(o.symbol)
+    })
 }
 
 ///////////////////////////// Exports
