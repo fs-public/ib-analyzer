@@ -27,6 +27,10 @@ interface ExpectedJsonFormat {
 }
 
 export const loadAndValidateConfig = () => {
+    CSV_SOURCES.length = 0
+    DERIVATIVES_MULTIPLIERS = []
+    MTM_PRICES = {}
+
     // Load synchronously
     const personalData = (() => {
         try {
