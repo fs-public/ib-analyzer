@@ -19,7 +19,7 @@ type View = {
 }
 
 const getOneOrder = (order: Order, fills: Fill[]) => {
-    const orderTable: View = {
+    const orderRow: View = {
         id: order.id,
         date: order.datetime.toLocaleDateString(),
         action: order.action,
@@ -34,7 +34,7 @@ const getOneOrder = (order: Order, fills: Fill[]) => {
         codes: order.code + `; filled-${order.quantity === order.filled ? "all" : order.filled}`,
     }
 
-    const fillsTables: View[] = fills.map((f) => ({
+    const fillRows: View[] = fills.map((f) => ({
         //"[op,cl,this]": [f.openId, f.closeId, f.thisFillIdPerClose],
         id: -f.openId,
         date: "^",
@@ -50,7 +50,7 @@ const getOneOrder = (order: Order, fills: Fill[]) => {
         codes: "",
     }))
 
-    return [orderTable, ...fillsTables]
+    return [orderRow, ...fillRows]
 }
 
 function historicalView() {

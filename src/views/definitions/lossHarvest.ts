@@ -44,9 +44,11 @@ const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
         const q = o.quantity - o.filled
         const m = q / o.quantity
 
+        const timetest = getDateDiffDisplay(o.datetime, new Date())
+
         const mtmValue = mtmPrice * q
         const unrlzd = mtmPrice * q - o.basis * m
-        const tax = unrlzd * TAX_BRACKET
+        const tax = timetest.includes("3y+ !!") ? 0 : unrlzd * TAX_BRACKET
 
         cum.cumQuantity += q
         cum.cumUnrlzd += unrlzd
@@ -63,7 +65,7 @@ const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
             mtmValue: mtmValue,
 
             unrlzd: unrlzd,
-            timetest: getDateDiffDisplay(o.datetime, new Date()),
+            timetest,
             tax: tax,
 
             cumUnrlzd: cum.cumUnrlzd,
