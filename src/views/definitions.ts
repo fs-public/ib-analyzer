@@ -8,19 +8,19 @@ import realizedTaxView from "./definitions/realizedTax"
 import upcomingTimetestsView from "./definitions/upcomingTimetests"
 
 export enum ViewType {
-    HISTORICAL,
-    LOSS_HARVEST,
-    OPEN_POSITIONS,
-    OPEN_POSITIONS_DETAILED,
-    REALIZED_TAX,
-    UPCOMING_TIMETESTS,
+  HISTORICAL,
+  LOSS_HARVEST,
+  OPEN_POSITIONS,
+  OPEN_POSITIONS_DETAILED,
+  REALIZED_TAX,
+  UPCOMING_TIMETESTS,
 }
 
 export const Views: { [key in ViewType]: ViewDefinition<ValueObject> } = {
-    [ViewType.HISTORICAL]: historicalView,
-    [ViewType.LOSS_HARVEST]: lossHarvestView,
-    [ViewType.OPEN_POSITIONS]: openPositionsView,
-    [ViewType.OPEN_POSITIONS_DETAILED]: openPositionsDetailedView,
-    [ViewType.REALIZED_TAX]: realizedTaxView,
-    [ViewType.UPCOMING_TIMETESTS]: upcomingTimetestsView,
+  [ViewType.HISTORICAL]: historicalView,
+  [ViewType.LOSS_HARVEST]: lossHarvestView,
+  [ViewType.OPEN_POSITIONS]: openPositionsView,
+  [ViewType.OPEN_POSITIONS_DETAILED]: openPositionsDetailedView,
+  [ViewType.REALIZED_TAX]: realizedTaxView,
+  [ViewType.UPCOMING_TIMETESTS]: upcomingTimetestsView,
 }

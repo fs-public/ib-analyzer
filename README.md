@@ -8,12 +8,12 @@ NodeJS utility to parse and analyze [Interactive Brokers](https://www.interactiv
 
 In Czech Republic, capital gains are:
 
--   Taxed 15 %,
--   Matched in a first-in-first-out (FIFO) fashion,
--   Losses offset gains in full within one tax year (and cannot be carried over), and
--   Capital gains or losses realized after 3 years or more are fully exempt (neither tax obligation required nor offset possible).
--   All securities (stocks, bonds, derivatives, ...) are taxed together for as long as they have an ISIN.
--   Currency exchanges are not taxed (when exchanged for personal consumption or primarily for security purchases, only Forex trading with the goal of profit solely off the Forex trading would be taxed).
+- Taxed 15 %,
+- Matched in a first-in-first-out (FIFO) fashion,
+- Losses offset gains in full within one tax year (and cannot be carried over), and
+- Capital gains or losses realized after 3 years or more are fully exempt (neither tax obligation required nor offset possible).
+- All securities (stocks, bonds, derivatives, ...) are taxed together for as long as they have an ISIN.
+- Currency exchanges are not taxed (when exchanged for personal consumption or primarily for security purchases, only Forex trading with the goal of profit solely off the Forex trading would be taxed).
 
 The application matches your trades based on these rules, computes tax obligation to cross-check your tax accountant, and suggests possible tax loss harvests and coming-up 3-year exemptions. Short sells and derivatives are supported as well.
 
@@ -23,10 +23,10 @@ _Latest schema update: 21. Sep 2023._
 
 **Features**
 
--   Imports CSV exports from Interactive Brokers, with architecture that is easily extendable for other platforms & future-proofed for IB schema changes.
--   Validates loaded data, cross-checks calculations on dependent columns between the app and the source.
--   Displays statistics and various views for further analysis in the terminal, such as realized tax and possible tax optimizations.
--   Exports all views into CSV and PDF files.
+- Imports CSV exports from Interactive Brokers, with architecture that is easily extendable for other platforms & future-proofed for IB schema changes.
+- Validates loaded data, cross-checks calculations on dependent columns between the app and the source.
+- Displays statistics and various views for further analysis in the terminal, such as realized tax and possible tax optimizations.
+- Exports all views into CSV and PDF files.
 
 ### Installation
 
@@ -87,15 +87,15 @@ The application has an interactive wizard for all commands and can be accessed a
 
 ### Limitations
 
--   The functionality may break with a change to Interactive Brokers' export format. However, the main required columns are not expected to change semantically, and it is straightforward to update the parsing algorithm per CSV.
--   It might be a good idea to implement automatical fetching of current (MTM) prices for symbols from a 3rd party API. Currently, it is required to save and update prices manually in `./src/config/personal-data.json`.
--   PDF export pagebreak issues: see [Github issue](https://github.com/fs-public/ib-analyzer/issues/21).
+- The functionality may break with a change to Interactive Brokers' export format. However, the main required columns are not expected to change semantically, and it is straightforward to update the parsing algorithm per CSV.
+- It might be a good idea to implement automatical fetching of current (MTM) prices for symbols from a 3rd party API. Currently, it is required to save and update prices manually in `./src/config/personal-data.json`.
+- PDF export pagebreak issues: see [Github issue](https://github.com/fs-public/ib-analyzer/issues/21).
 
 ### Changelog
 
--   **v0.1.0** (mid-2020): initial version
--   **v0.2.0** (26th May 2023): update dependencies, add linter and formatter, Github Actions, first Readme version
--   **v0.2.1** (27th May 2023): minor refactor - fixed all remaining lint warnings and `any` types, add automatic swap of config files by npm script
--   **v0.3.0** (28th May 2023): major refactor - extend Readme, full `jsdoc`, improved project directory structure, refactor full load process (functional statements, separation of concerns, shifting filters upstream), add `dotenv` and load config by a JSON, separated common behavior of Views in `./src/views/director.ts` with generator functions
--   **v0.3.1** (18th June 2023): feature - export results as CSV files. Added eslint plugin for imports.
--   **v0.3.2** (): feature - export results as PDF file.
+- **v0.1.0** (mid-2020): initial version
+- **v0.2.0** (26th May 2023): update dependencies, add linter and formatter, Github Actions, first Readme version
+- **v0.2.1** (27th May 2023): minor refactor - fixed all remaining lint warnings and `any` types, add automatic swap of config files by npm script
+- **v0.3.0** (28th May 2023): major refactor - extend Readme, full `jsdoc`, improved project directory structure, refactor full load process (functional statements, separation of concerns, shifting filters upstream), add `dotenv` and load config by a JSON, separated common behavior of Views in `./src/views/director.ts` with generator functions
+- **v0.3.1** (18th June 2023): feature - export results as CSV files. Added eslint plugin for imports.
+- **v0.3.2** (): feature - export results as PDF file.

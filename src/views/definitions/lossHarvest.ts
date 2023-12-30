@@ -5,110 +5,110 @@ import { ViewDefinition, GeneratedView } from "../../types/views"
 import { getDateDiffDisplay, getPriceBySymbol } from "../../utils"
 
 type View = {
-    since: string
-    quantity: number
+  since: string
+  quantity: number
 
-    basisPrice: number
-    basis: number
+  basisPrice: number
+  basis: number
 
-    mtmValue: number
+  mtmValue: number
 
-    unrlzd: number
-    timetest: string
-    tax: number
+  unrlzd: number
+  timetest: string
+  tax: number
 
-    cumUnrlzd: number
-    cumValue: number
-    cumTax: number
-    slipLoss: number
+  cumUnrlzd: number
+  cumValue: number
+  cumTax: number
+  slipLoss: number
 }
 
 type RunningCumulative = {
-    cumQuantity: number
-    cumUnrlzd: number
-    cumValue: number
-    cumTax: number
+  cumQuantity: number
+  cumUnrlzd: number
+  cumValue: number
+  cumTax: number
 }
 
 const lossHarvestOneSymbol = (orders: Order[], mtmPrice: number) => {
-    const harvests: View[] = []
+  const harvests: View[] = []
 
-    const cum: RunningCumulative = {
-        cumQuantity: 0,
-        cumUnrlzd: 0,
-        cumValue: 0,
-        cumTax: 0,
-    }
+  const cum: RunningCumulative = {
+    cumQuantity: 0,
+    cumUnrlzd: 0,
+    cumValue: 0,
+    cumTax: 0,
+  }
 
-    for (const o of orders) {
-        const q = o.quantity - o.filled
-        const m = q / o.quantity
+  for (const o of orders) {
+    const q = o.quantity - o.filled
+    const m = q / o.quantity
 
-        const timetest = getDateDiffDisplay(o.datetime, new Date())
+    const timetest = getDateDiffDisplay(o.datetime, new Date())
 
-        const mtmValue = mtmPrice * q
-        const unrlzd = mtmPrice * q - o.basis * m
-        const tax = timetest.includes("3y+ !!") ? 0 : unrlzd * TAX_BRACKET
+    const mtmValue = mtmPrice * q
+    const unrlzd = mtmPrice * q - o.basis * m
+    const tax = timetest.includes("3y+ !!") ? 0 : unrlzd * TAX_BRACKET
 
-        cum.cumQuantity += q
-        cum.cumUnrlzd += unrlzd
-        cum.cumValue += mtmValue
-        cum.cumTax += tax
+    cum.cumQuantity += q
+    cum.cumUnrlzd += unrlzd
+    cum.cumValue += mtmValue
+    cum.cumTax += tax
 
-        harvests.push({
-            since: o.datetime.toLocaleDateString(),
-            quantity: q,
+    harvests.push({
+      since: o.datetime.toLocaleDateString(),
+      quantity: q,
 
-            basisPrice: o.tprice,
-            basis: o.basis * m,
+      basisPrice: o.tprice,
+      basis: o.basis * m,
 
-            mtmValue: mtmValue,
+      mtmValue: mtmValue,
 
-            unrlzd: unrlzd,
-            timetest,
-            tax: tax,
+      unrlzd: unrlzd,
+      timetest,
+      tax: tax,
 
-            cumUnrlzd: cum.cumUnrlzd,
-            cumValue: cum.cumValue,
-            cumTax: cum.cumTax,
-            slipLoss: -getHarvestLoss(cum.cumQuantity, cum.cumValue),
-        })
-    }
+      cumUnrlzd: cum.cumUnrlzd,
+      cumValue: cum.cumValue,
+      cumTax: cum.cumTax,
+      slipLoss: -getHarvestLoss(cum.cumQuantity, cum.cumValue),
+    })
+  }
 
-    return harvests
+  return harvests
 }
 
 function lossHarvestView() {
-    const results: GeneratedView<View>[] = []
+  const results: GeneratedView<View>[] = []
 
-    for (const sym of env.data.sets.symbols) {
-        const mtmPrice = getPriceBySymbol(sym)
+  for (const sym of env.data.sets.symbols) {
+    const mtmPrice = getPriceBySymbol(sym)
 
-        const orderSlice = env.data.orders.filter((o) => o.symbol === sym && o.quantity !== o.filled)
+    const orderSlice = env.data.orders.filter((o) => o.symbol === sym && o.quantity !== o.filled)
 
-        if (orderSlice.length > 0) {
-            results.push({
-                title: `${sym} at current price ${mtmPrice}`,
-                table: lossHarvestOneSymbol(orderSlice, mtmPrice),
-            })
-        }
+    if (orderSlice.length > 0) {
+      results.push({
+        title: `${sym} at current price ${mtmPrice}`,
+        table: lossHarvestOneSymbol(orderSlice, mtmPrice),
+      })
     }
+  }
 
-    return results
+  return results
 }
 
 const viewDefinition: ViewDefinition<View> = {
-    name: "Loss Harvest",
-    command: "l",
-    generateView: lossHarvestView,
-    description: {
-        table: "one symbol",
-        row: "unfilled orders, sorted by date",
-        notes: ["partially filled orders are displayed proportionately to unfilled part."],
-    },
-    screenplay: {
-        nextTableMessage: "for next symbol",
-    },
+  name: "Loss Harvest",
+  command: "l",
+  generateView: lossHarvestView,
+  description: {
+    table: "one symbol",
+    row: "unfilled orders, sorted by date",
+    notes: ["partially filled orders are displayed proportionately to unfilled part."],
+  },
+  screenplay: {
+    nextTableMessage: "for next symbol",
+  },
 }
 
 export default viewDefinition
