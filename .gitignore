@@ -4,10 +4,8 @@ node_modules
 dist
 
 # Data
-data
-output
-src/config/json/personal-config.json
-src/templates/rendered.html
+data/*
+output/*
 
 # Testing coverage
 coverage

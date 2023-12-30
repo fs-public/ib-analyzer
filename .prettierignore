@@ -1,5 +1,5 @@
 dist
+data
+output
 node_modules
-**/*.json
 coverage
-src/templates
