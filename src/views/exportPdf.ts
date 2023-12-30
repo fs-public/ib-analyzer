@@ -4,13 +4,13 @@ import Handlebars from "handlebars"
 import pdf from "html-pdf"
 import _ from "lodash"
 import moment from "moment"
+import { PATHS } from "../config/config"
 import { CSV_SOURCES } from "../config/configLoader"
 import { env } from "../env"
 import { ValueObject } from "../types/global"
 import { ViewDefinition } from "../types/views"
 import { assert, makeObjectFixedDashed } from "../utils"
 import { Views } from "./definitions"
-import { PATHS } from "../config/config"
 
 interface TemplateTable {
   title: string

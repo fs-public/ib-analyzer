@@ -3,10 +3,10 @@ import fs from "fs"
 import { stringify } from "csv/sync" // see see https://github.com/import-js/eslint-plugin-import/issues/1810
 import moment from "moment"
 import { PATHS } from "../config/config"
+import { env } from "../env"
 import { ValueObject } from "../types/global"
 import { ViewDefinition } from "../types/views"
 import { Views } from "./definitions"
-import { env } from "../env"
 
 export const getRowsForView = (view: ViewDefinition) => {
   const results = view.generateView()
