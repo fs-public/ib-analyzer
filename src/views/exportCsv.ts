@@ -6,6 +6,7 @@ import { PATHS } from "../config/config"
 import { ValueObject } from "../types/global"
 import { ViewDefinition } from "../types/views"
 import { Views } from "./definitions"
+import { env } from "../env"
 
 export const getRowsForView = (view: ViewDefinition) => {
   const results = view.generateView()
@@ -25,6 +26,7 @@ const exportAllCsvs = () => {
   for (const key in Views) {
     exportOneCsv(Views[key as unknown as keyof typeof Views])
   }
+  env.log("Successfully exported CSVs!")
 }
 
 export default exportAllCsvs

@@ -10,6 +10,7 @@ import { ValueObject } from "../types/global"
 import { ViewDefinition } from "../types/views"
 import { assert, makeObjectFixedDashed } from "../utils"
 import { Views } from "./definitions"
+import { PATHS } from "../config/config"
 
 interface TemplateTable {
   title: string
@@ -80,8 +81,7 @@ const exportPdf = async () => {
   const hbsTemplate = fs.readFileSync("./src/templates/template.hbs").toString()
   const renderedHtml = Handlebars.compile(hbsTemplate)(data)
 
-  // Uncomment this for styling troubleshooting
-  fs.writeFileSync("./src/templates/rendered.html", renderedHtml)
+  fs.writeFileSync(`${PATHS.OUTPUT_DIR}/rendered.html`, renderedHtml)
 
   const err: Error = await new Promise((resolve) =>
     pdf

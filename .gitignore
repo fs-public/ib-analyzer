@@ -4,10 +4,8 @@ node_modules
 dist
 
 # Data
-data
-output
-**personal**
-**/rendered.html
+data/*
+output/*
 
 # Testing coverage
 coverage
