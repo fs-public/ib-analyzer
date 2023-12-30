@@ -78,7 +78,7 @@ const exportPdf = async () => {
     tables: getTables(),
   }
 
-  const hbsTemplate = fs.readFileSync("./src/templates/template.hbs").toString()
+  const hbsTemplate = fs.readFileSync("./src/templates/pdf-template.hbs").toString()
   const renderedHtml = Handlebars.compile(hbsTemplate)(data)
 
   fs.writeFileSync(`${PATHS.OUTPUT_DIR}/rendered.html`, renderedHtml)

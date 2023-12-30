@@ -60,7 +60,7 @@ const loadData = async (): Promise<SchemedRecord[]> => {
     env.log("Importing", source.filename)
 
     // Load file
-    const loadedRecords = await filenameToRecords(PATHS.DATA_DIR + source.filename)
+    const loadedRecords = await filenameToRecords(`${PATHS.DATA_DIR}/${source.filename}`)
 
     // Validate real header
     assert(loadedRecords[0].map((col: string) => col.trim()).join("") === source.schema.join(""), `Source schema mismatch for ${source.filename}.`)

@@ -34,14 +34,14 @@ export const loadAndValidateConfig = () => {
   // Load synchronously
   const personalData = (() => {
     try {
-      return readJSONFromFile(PATHS.PERSONAL_CONFIG)
+      return readJSONFromFile(PATHS.PERSONAL_DATASOURCES)
     } catch (e) {
-      env.log(`Source config "${PATHS.PERSONAL_CONFIG}" not found, falling back to "${PATHS.PERSONAL_CONFIG_FALLBACK}".`)
-      return readJSONFromFile(PATHS.PERSONAL_CONFIG_FALLBACK)
+      env.error(`Source config "${PATHS.PERSONAL_DATASOURCES}" not found, falling back to "${PATHS.PERSONAL_DATASOURCE_FALLBACK}".`)
+      return readJSONFromFile(PATHS.PERSONAL_DATASOURCE_FALLBACK)
     }
   })()
 
-  const schema = readJSONFromFile(PATHS.PERSONAL_CONFIG_SCHEMA)
+  const schema = readJSONFromFile("src/assets/config-ajv-schema.json")
 
   // Basic schema validation
   const ajv = new Ajv()

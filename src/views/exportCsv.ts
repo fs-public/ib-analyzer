@@ -19,7 +19,7 @@ export const getRowsForView = (view: ViewDefinition) => {
 const exportOneCsv = (view: ViewDefinition) => {
   const results = getRowsForView(view)
 
-  fs.writeFileSync(PATHS.OUTPUT_DIR + moment().format("YYYYMMDD-HHmmss ") + view.name + ".csv", stringify(results, { header: true }))
+  fs.writeFileSync(`${PATHS.OUTPUT_DIR}/${moment().format("YYYYMMDD-HHmmss")} ${view.name}.csv`, stringify(results, { header: true }))
 }
 
 const exportAllCsvs = () => {

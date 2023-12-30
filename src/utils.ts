@@ -97,7 +97,7 @@ export const makeObjectFixedDashed = <T extends ValueObject>(obj: T, skipKeys: (
 // File I/O ////////////////////////////////////////////////////////////////////////
 
 /**
- * Safely reads JSON from a file.
+ * Safely reads JSON from a file, throwing if not found.
  */
 export const readJSONFromFile = (path: string) => {
   try {
