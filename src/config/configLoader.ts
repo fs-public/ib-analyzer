@@ -12,6 +12,7 @@ export const TARGET_SCHEMA = ["Trades","Header","DataDiscriminator","Asset Categ
 export const CSV_SOURCES: CSVSource[] = []
 export let DERIVATIVES_MULTIPLIERS: ConfigMultiplier[] = []
 export let MTM_PRICES: { [key: string]: number } = {}
+export let CURRENCIES: { [key: string]: number } = {}
 
 interface ExpectedJsonFormat {
   sources: {
@@ -24,12 +25,14 @@ interface ExpectedJsonFormat {
     multiplier: number
   }[]
   mtmPrices: { [key: string]: number }
+  currencies: { [key: string]: number }
 }
 
 export const loadAndValidateConfig = () => {
   CSV_SOURCES.length = 0
   DERIVATIVES_MULTIPLIERS = []
   MTM_PRICES = {}
+  CURRENCIES = {}
 
   // Load synchronously
   const personalData = (() => {
@@ -92,4 +95,7 @@ export const loadAndValidateConfig = () => {
       }
     }
   }
+
+  // Currencies
+  CURRENCIES = typedPersonalData.currencies
 }

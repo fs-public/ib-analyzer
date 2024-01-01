@@ -1,7 +1,7 @@
 import fs from "fs"
 import readline from "readline"
 import { CODES } from "./config/config"
-import { DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/configLoader"
+import { CURRENCIES, DERIVATIVES_MULTIPLIERS, MTM_PRICES } from "./config/configLoader"
 import { env } from "./env"
 import { DisplayRetyped, ValueObject } from "./types/global"
 
@@ -172,8 +172,8 @@ export const codeAddFlag = (code: string, flag: (typeof CODES.CUSTOM)[keyof type
  * Type-safe return of symbol price from config or zero if not found.
  */
 export const getPriceBySymbol = (symbol: string): number => {
-  assert(MTM_PRICES[symbol as keyof typeof MTM_PRICES] !== undefined, `No MTM price found for symbol ${symbol}.`)
-  return MTM_PRICES[symbol as keyof typeof MTM_PRICES] || 0
+  assert(MTM_PRICES[symbol] !== undefined, `No MTM price found for symbol ${symbol}.`)
+  return MTM_PRICES[symbol] || 0
 }
 
 /**
@@ -190,4 +190,10 @@ export const getMultiplier = (assetcategory: string, symbol: string): number => 
 
   env.error("A derivative without recognized multiplier: " + symbol)
   return 1
+}
+
+export const getCurrencyBySymbol = (symbol: string): number => {
+  const cur = symbol.slice(-3)
+  assert(CURRENCIES[cur] !== undefined, `No currency price found for currency ${cur} in symbol ${symbol}.`)
+  return CURRENCIES[cur] || 1
 }

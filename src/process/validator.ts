@@ -59,8 +59,8 @@ const validateOrdersSort = (orders: Order[]) => {
       // i < j go through all possible indices
       if (orders[i].symbol === orders[j].symbol) {
         assert(
-          orders[i].datetime < orders[j].datetime,
-          `ValidateOrder error: unsorder in ${orders[i].symbol} from ${orders[i].datetime} to ${orders[j].datetime}`
+          orders[i].datetime <= orders[j].datetime,
+          `ValidateOrder error: unordered in ${orders[i].symbol} from ${orders[i].datetime} to ${orders[j].datetime}`
         )
       }
     }

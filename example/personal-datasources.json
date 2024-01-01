@@ -33,5 +33,10 @@
     "DAX 15MAR24 12800 C-EUR": 3192.8,
     "DAX 15MAR24 12800 P-EUR": 435.8,
     "XSP 15DEC23 380 P-USD": 19.72
+  },
+
+  "currencies": {
+    "USD": 22.38,
+    "EUR": 24.7
   }
 }

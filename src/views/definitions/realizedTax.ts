@@ -1,7 +1,7 @@
 import { env } from "../../env"
 import { Order } from "../../types/trades"
 import { ViewDefinition, GeneratedView } from "../../types/views"
-import { fixed } from "../../utils"
+import { fixed, getCurrencyBySymbol } from "../../utils"
 
 type View = {
   date: string
@@ -46,7 +46,7 @@ const realizedTaxOneYear = (orders: Order[]): Omit<GeneratedView<View>, "title">
       fullTable.push(getOrderView(o))
 
       totalPnl[o.currency] += o.realizedpl
-      totalTax += o.tax
+      totalTax += o.tax * getCurrencyBySymbol(o.symbol)
     }
   }
 
@@ -55,7 +55,7 @@ const realizedTaxOneYear = (orders: Order[]): Omit<GeneratedView<View>, "title">
 
   return {
     table: fullTable,
-    additionalContentAfter: `Total P&L: ${totalPnl}\nTotal tax: ${totalTax}`,
+    additionalContentAfter: `Total P&L: ${JSON.stringify(totalPnl)}\nTotal tax: ${totalTax} CZK`,
   }
 }
 

@@ -9,23 +9,16 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "filename": {
-            "type": "string"
-          },
+          "filename": { "type": "string" },
           "transformation": {
             "type": "array",
             "minItems": 16,
-            "items": {
-              "type": "string",
-              "pattern": "ok|drop|insert-zero"
-            }
+            "items": { "type": "string", "pattern": "ok|drop|insert-zero" }
           },
           "schema": {
             "type": "array",
             "minItems": 16,
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           }
         },
         "required": ["filename"]
@@ -37,21 +30,19 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "matcher": {
-            "type": "string"
-          },
-          "multiplier": {
-            "type": "number"
-          }
+          "matcher": { "type": "string" },
+          "multiplier": { "type": "number" }
         },
         "required": ["matcher", "multiplier"]
       }
     },
     "mtmPrices": {
       "type": "object",
-      "additionalProperties": {
-        "type": "number"
-      }
+      "additionalProperties": { "type": "number" }
+    },
+    "currencies": {
+      "type": "object",
+      "additionalProperties": { "type": "number" }
     }
   },
   "required": ["sources", "derivativeMultipliers", "mtmPrices"]
