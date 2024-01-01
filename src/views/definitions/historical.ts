@@ -31,7 +31,7 @@ const getOneOrder = (order: Order, fills: Fill[]) => {
     realizedpl: order.realizedpl,
     timetest: "-",
     tax: order.tax,
-    codes: order.code + `; filled-${order.quantity === order.filled ? "all" : order.filled}`,
+    codes: order.code + `|filled-${order.quantity === order.filled ? "all" : order.filled}`,
   }
 
   const fillRows: View[] = fills.map((f) => ({

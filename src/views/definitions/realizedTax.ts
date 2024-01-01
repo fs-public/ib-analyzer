@@ -29,7 +29,7 @@ const getOrderView = (order: Order): View => {
     realizedpl: order.realizedpl,
     timetest: "-",
     tax: order.tax,
-    codes: order.code + `; filled-${order.quantity === order.filled ? "all" : order.filled}`,
+    codes: order.code + `|filled-${order.quantity === order.filled ? "all" : order.filled}`,
   }
 }
 
@@ -71,7 +71,7 @@ function realizedTaxView() {
     })
   }
 
-  return results
+  return results.reverse()
 }
 
 const viewDefinition: ViewDefinition<View> = {

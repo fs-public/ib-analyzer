@@ -32,9 +32,12 @@ enum RECOGNIZED {
   OPEN = "O|Opening order",
   CLOSE = "C|Closing order",
   IB_IRRELEVANT_PARTIAL = "P|Partial fill, irrelevant code",
+  OPTION_EXPIRED = "Ep|Option expired (expired position)",
+  OPTION_EXERCISED = "Ex|Option exercised",
 }
 
 enum CUSTOM {
+  FILL_AMOUNT = 'filled-<"all"|number>|Amount of filled shares',
   TIMETEST_PASSED = "TP|Timetest has passed",
 }
 
@@ -81,7 +84,9 @@ ${helpStringIterator(Views, (view) => `${view.command}: ${view.name.toLowerCase(
 `
 
 export const HELP_CODES = `
-Used code flags:
+Orders have helpful codes, exported both by IB and custom codes computed by us. These codes are found, for example, in
+historical and realized tax views, as rows in these views display orders (transactions).
+Every transaction has codes in format <IB exported>|<custom>.
 
 Recognized codes (taken from IB export, but verified)
 ${helpStringIterator(CODES.RECOGNIZED, (code) => code.replace("|", ": "))}
