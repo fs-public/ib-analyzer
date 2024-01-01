@@ -60,10 +60,12 @@ const realizedTaxOneYear = (orders: Order[]): Omit<GeneratedView<View>, "title">
   }
 }
 
-function realizedTaxView() {
+function realizedTaxView(search?: string) {
   const results: GeneratedView<View>[] = []
 
   for (const y of env.data.sets.years) {
+    if (search && !y.toString().includes(search)) continue
+
     const orderSlice = env.data.orders.filter((o) => o.datetime.getFullYear() === y)
 
     results.push({
@@ -77,7 +79,7 @@ function realizedTaxView() {
 
 const viewDefinition: ViewDefinition<View> = {
   name: "Realized Tax",
-  command: "r",
+  command: "r [year]",
   generateView: realizedTaxView,
   description: {
     table: "one year",

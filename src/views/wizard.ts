@@ -47,9 +47,10 @@ export const applicationWizardLoop = async () => {
 
       // Views and fallback
       default:
-        const matchedView = Object.values(Views).findIndex((view) => view.command === command)
+        const [com, args] = command.split(" ")
+        const matchedView = Object.values(Views).findIndex((view) => view.command.split(" ")[0] === com)
         if (matchedView !== -1) {
-          await playView(matchedView as ViewType)
+          await playView(matchedView as ViewType, args)
           break
         } else env.log("Unrecognized command.")
     }

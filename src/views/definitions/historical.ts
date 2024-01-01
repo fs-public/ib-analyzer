@@ -53,10 +53,12 @@ const getOneOrder = (order: Order, fills: Fill[]) => {
   return [orderRow, ...fillRows]
 }
 
-export function historicalViewFn(activeSymbolsOnly?: boolean) {
+export function historicalViewFn(search?: string, activeSymbolsOnly?: boolean) {
   const results: GeneratedView<View>[] = []
 
   for (const sym of activeSymbolsOnly ? env.data.sets.activeSymbols : env.data.sets.symbols) {
+    if (search && !sym.toLowerCase().includes(search.toLowerCase())) continue
+
     const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
 
     let symbolTable: View[] = []
@@ -78,7 +80,7 @@ export function historicalViewFn(activeSymbolsOnly?: boolean) {
 
 const viewDefinition: ViewDefinition<View> = {
   name: "Historical Analysis (Verbose)",
-  command: "h",
+  command: "h [search]",
   generateView: historicalViewFn,
   description: {
     table: "one symbol",

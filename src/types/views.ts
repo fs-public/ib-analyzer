@@ -10,7 +10,7 @@ export type GeneratedView<T extends ValueObject> = {
 export interface ViewDefinition<T extends ValueObject = ValueObject> {
   name: string
   command: string
-  generateView: () => GeneratedView<T>[]
+  generateView: (args?: string) => GeneratedView<T>[]
   description: {
     table?: string
     row?: string

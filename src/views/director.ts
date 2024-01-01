@@ -2,7 +2,7 @@ import { env } from "../env"
 import { getUserENTERInput, makeObjectFixedDashed } from "../utils"
 import { Views, ViewType } from "./definitions"
 
-export const playView = async (viewType: ViewType) => {
+export const playView = async (viewType: ViewType, args?: string) => {
   const view = Views[viewType]
 
   env.log("")
@@ -12,7 +12,7 @@ export const playView = async (viewType: ViewType) => {
   if (view.description.row) env.log(`Row = ${view.description.table}.`)
   view.description.notes?.forEach((note) => env.log(`Note: ${note}`))
 
-  const results = view.generateView()
+  const results = view.generateView(args)
 
   for (let i = 0; i < results.length; i++) {
     const generatedView = results[i]
