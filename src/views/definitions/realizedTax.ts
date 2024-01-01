@@ -36,26 +36,27 @@ const getOrderView = (order: Order): View => {
 const realizedTaxOneYear = (orders: Order[]): Omit<GeneratedView<View>, "title"> => {
   const fullTable: View[] = []
 
-  const totalPnl: { [key: string]: number } = {}
-  for (const cur of Array.from(env.data.sets.currencies)) totalPnl[cur] = 0
+  const pnls: { [key: string]: number } = {}
+  for (const cur of Array.from(env.data.sets.currencies)) pnls[cur] = 0
 
+  let totalPnl = 0
   let totalTax = 0
 
   for (const o of orders) {
     if (o.action.includes("close") || o.tax !== 0) {
       fullTable.push(getOrderView(o))
 
-      totalPnl[o.currency] += o.realizedpl
+      pnls[o.currency] += o.realizedpl
+      totalPnl += o.realizedpl * getCurrencyBySymbol(o.symbol)
       totalTax += o.tax * getCurrencyBySymbol(o.symbol)
     }
   }
 
-  for (const key in totalPnl) totalPnl[key] = fixed(totalPnl[key])
-  totalTax = fixed(totalTax)
+  const prettyPnls = Object.keys(pnls).map((key) => `${fixed(pnls[key])} ${key}`)
 
   return {
     table: fullTable,
-    additionalContentAfter: `Total P&L: ${JSON.stringify(totalPnl)}\nTotal tax: ${totalTax} CZK`,
+    additionalContentAfter: `P&Ls: ${prettyPnls.join(", ")}\nTotal P&L: ${fixed(totalPnl)} CZK\nTotal tax: ${fixed(totalTax)} CZK`,
   }
 }
 
