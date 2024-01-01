@@ -1,4 +1,4 @@
-import { HELP_STRING } from "../config/config"
+import { HELP_STRING, HELP_CODES } from "../config/config"
 import { env } from "../env"
 import { performFullReload } from "../process/loader"
 import { getUserInput } from "../utils"
@@ -36,6 +36,9 @@ export const applicationWizardLoop = async () => {
         break
       case "help":
         env.log(HELP_STRING)
+        break
+      case "codes":
+        env.log(HELP_CODES)
         break
       case "q":
       case "quit":

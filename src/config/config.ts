@@ -29,13 +29,13 @@ enum TO_DROP_ORDER {
 }
 
 enum RECOGNIZED {
-  OPEN = "O",
-  CLOSE = "C",
-  IB_IRRELEVANT_PARTIAL = "P",
+  OPEN = "O|Opening order",
+  CLOSE = "C|Closing order",
+  IB_IRRELEVANT_PARTIAL = "P|Partial fill, irrelevant code",
 }
 
 enum CUSTOM {
-  TIMETEST_PASSED = "TP",
+  TIMETEST_PASSED = "TP|Timetest has passed",
 }
 
 export const CODES = {
@@ -58,8 +58,12 @@ export const getHarvestLoss = (quantity: number, value: number) => {
   return 2 * (numOrders * HARVEST_COMM + Math.abs(value) * HARVEST_SLIPPAGE)
 }
 
-export const HELP_STRING = `
-Interactive Brokers Analyzer - Interactive Wizard
+const helpStringIterator = <T>(obj: { [key: string]: T }, fn: (arg: T) => string) =>
+  Object.values(obj)
+    .map((val) => `  - ${fn(val)}`)
+    .join("\n")
+
+export const HELP_STRING = `Interactive Brokers Analyzer - Interactive Wizard
 fs-public, 2023-2024
 
 Admin Commands:
@@ -69,7 +73,19 @@ Admin Commands:
   - p: export all views to PDF
   - dataformat: print an example order and fill
   - help: show help (this message)
+  - codes: explain used code flags
   - q, quit: quit
 
 Views:
-`.concat(Object.values(Views).map(view => `  - ${view.command}: ${view.name.toLowerCase()}`).join("\n"))
+${helpStringIterator(Views, (view) => `${view.command}: ${view.name.toLowerCase()}`)}
+`
+
+export const HELP_CODES = `
+Used code flags:
+
+Recognized codes (taken from IB export, but verified)
+${helpStringIterator(CODES.RECOGNIZED, (code) => code.replace("|", ": "))}
+
+Custom codes
+${helpStringIterator(CODES.CUSTOM, (code) => code.replace("|", ": "))}
+`

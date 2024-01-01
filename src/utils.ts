@@ -142,7 +142,7 @@ export const getUserENTERInput = async (prompt = "for next page"): Promise<boole
  * Returns whether a string code contains a specific flag.
  */
 export const codeHasFlag = (code: string, flag: string) => {
-  return code.split(";").includes(flag)
+  return code.split(";").includes(flag.split("|")[0])
 }
 
 /**
@@ -163,7 +163,7 @@ export const codeHasOneFlag = (code: string, flags: string[]) => {
  * Returns a string code with additional flag
  */
 export const codeAddFlag = (code: string, flag: (typeof CODES.CUSTOM)[keyof typeof CODES.CUSTOM]) => {
-  return code + ";" + flag
+  return code + ";" + flag.split("|")[0]
 }
 
 // Config access ////////////////////////////////////////////////////////////////////////
