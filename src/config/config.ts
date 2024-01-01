@@ -1,4 +1,5 @@
 import { SchemedRecord } from "../types/trades"
+import { Views } from "../views/definitions"
 
 export const PATHS = {
   DATA_DIR: "data",
@@ -45,7 +46,9 @@ export const CODES = {
 
 // Utils
 
-// Use with caution.
+/**
+ * Use with caution.
+ */
 export const shouldDropSpecificRecord = (record: SchemedRecord): boolean => {
   return record[5] === "SYMBOL_EXEMPT_FROM_ANALYSIS"
 }
@@ -57,21 +60,16 @@ export const getHarvestLoss = (quantity: number, value: number) => {
 
 export const HELP_STRING = `
 Interactive Brokers Analyzer - Interactive Wizard
-fs-public, 2023
+fs-public, 2023-2024
 
 Admin Commands:
   - reload: reload
   - i: issues print
   - e: export all views to CSV
   - p: export all views to PDF
-  - dataformat: example order and fill print
+  - dataformat: print an example order and fill
   - help: show help (this message)
   - q, quit: quit
 
 Views:
-  - h: historical analysis (verbose)
-  - l: loss harvest
-  - o: open positions (totals)
-  - oo: open positions (detailed)
-  - r: realized tax
-  - u: upcoming timetests`
+`.concat(Object.values(Views).map(view => `  - ${view.command}: ${view.name.toLowerCase()}`).join("\n"))

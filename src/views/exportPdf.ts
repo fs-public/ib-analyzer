@@ -78,7 +78,7 @@ const exportPdf = async () => {
     tables: getTables(),
   }
 
-  const hbsTemplate = fs.readFileSync("./src/templates/pdf-template.hbs").toString()
+  const hbsTemplate = fs.readFileSync("./src/assets/pdf-template.hbs").toString()
   const renderedHtml = Handlebars.compile(hbsTemplate)(data)
 
   fs.writeFileSync(`${PATHS.OUTPUT_DIR}/rendered.html`, renderedHtml)
@@ -86,7 +86,7 @@ const exportPdf = async () => {
   const err: Error = await new Promise((resolve) =>
     pdf
       .create(renderedHtml, {
-        base: "file:///" + path.resolve("./src/templates/").replaceAll("\\", "/") + "/",
+        base: "file:///" + path.resolve("./src/assets/").replaceAll("\\", "/") + "/",
         localUrlAccess: true,
         format: "A4",
         orientation: "landscape",

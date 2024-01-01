@@ -72,7 +72,7 @@ function openPositionsTotalsView() {
 }
 
 const viewDefinition: ViewDefinition<View> = {
-  name: "Open Positions",
+  name: "Open Positions (Totals)",
   command: "o",
   generateView: openPositionsTotalsView,
   description: {

@@ -1,11 +1,11 @@
-import { ValueObject } from "../types/global"
-import { ViewDefinition } from "../types/views"
-import historicalView from "./definitions/historical"
-import lossHarvestView from "./definitions/lossHarvest"
-import openPositionsDetailedView from "./definitions/openOrders"
-import openPositionsView from "./definitions/openTotals"
-import realizedTaxView from "./definitions/realizedTax"
-import upcomingTimetestsView from "./definitions/upcomingTimetests"
+import { ValueObject } from "../../types/global"
+import { ViewDefinition } from "../../types/views"
+import historicalView from "./historical"
+import lossHarvestView from "./lossHarvest"
+import openPositionsDetailedView from "./openOrders"
+import openPositionsView from "./openTotals"
+import realizedTaxView from "./realizedTax"
+import upcomingTimetestsView from "./upcomingTimetests"
 
 export enum ViewType {
   HISTORICAL,

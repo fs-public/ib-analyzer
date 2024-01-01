@@ -77,7 +77,7 @@ function historicalView() {
 }
 
 const viewDefinition: ViewDefinition<View> = {
-  name: "Historical Analysis",
+  name: "Historical Analysis (Verbose)",
   command: "h",
   generateView: historicalView,
   description: {

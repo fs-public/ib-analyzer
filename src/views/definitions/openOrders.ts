@@ -64,7 +64,7 @@ function openPositionsOrderView() {
 }
 
 const viewDefinition: ViewDefinition<View> = {
-  name: "Open Positions - Detailed",
+  name: "Open Positions (Detailed)",
   command: "oo",
   generateView: openPositionsOrderView,
   description: {
