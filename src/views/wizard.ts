@@ -47,15 +47,11 @@ export const applicationWizardLoop = async () => {
 
       // Views and fallback
       default:
-        let viewMatched = false
-        for (const viewType in Object.keys(ViewType).filter((v) => !isNaN(Number(v)))) {
-          if (command === Views[Number(viewType) as ViewType].command) {
-            viewMatched = true
-            await playView(Number(viewType) as ViewType)
-            break
-          }
-        }
-        if (!viewMatched) env.log("Unrecognized command.")
+        const matchedView = Object.values(Views).findIndex((view) => view.command === command)
+        if (matchedView !== -1) {
+          await playView(matchedView as ViewType)
+          break
+        } else env.log("Unrecognized command.")
     }
   }
 }

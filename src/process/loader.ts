@@ -31,7 +31,8 @@ export const performFullReload = async (firstLoad = false) => {
   validatorFills(fills, orders)
 
   // Finish sets
-  const activeSymbols = new Set(orders.filter((o) => o.quantity !== o.filled).map((o) => o.symbol))
+  const lastYear = Math.max(...orders.map((o) => o.datetime.getFullYear()))
+  const activeSymbols = new Set(orders.filter((o) => o.quantity !== o.filled || o.datetime.getFullYear() === lastYear).map((o) => o.symbol))
 
   // Print out stats
   env.log("Loaded", CSV_SOURCES.length, "CSVs with total of", orders.length, "trades.\n")

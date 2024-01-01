@@ -53,10 +53,10 @@ const getOneOrder = (order: Order, fills: Fill[]) => {
   return [orderRow, ...fillRows]
 }
 
-function historicalView() {
+export function historicalViewFn(activeSymbolsOnly?: boolean) {
   const results: GeneratedView<View>[] = []
 
-  for (const sym of env.data.sets.symbols) {
+  for (const sym of activeSymbolsOnly ? env.data.sets.activeSymbols : env.data.sets.symbols) {
     const orderSlice = env.data.orders.filter((o) => o.symbol === sym)
 
     let symbolTable: View[] = []
@@ -79,7 +79,7 @@ function historicalView() {
 const viewDefinition: ViewDefinition<View> = {
   name: "Historical Analysis (Verbose)",
   command: "h",
-  generateView: historicalView,
+  generateView: historicalViewFn,
   description: {
     table: "one symbol",
     row: "orders and fills (consolidated), sorted by date",
