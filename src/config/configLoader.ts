@@ -1,9 +1,7 @@
 import Ajv from "ajv"
-import { env } from "../env"
 import { CSVSource, Transformation, ConfigMultiplier } from "../types/global"
 import { assert, readJSONFromFile } from "../utils"
 import { PATHS } from "./config"
-//import personalData from "./personal-data.json" assert { type: "json" } // - clashes with Jest and no fallback options
 
 export const NO_TRANSFORM: Transformation[] = [...Array(16)].fill("ok")
 // prettier-ignore
@@ -35,14 +33,7 @@ export const loadAndValidateConfig = () => {
   CURRENCIES = {}
 
   // Load synchronously
-  const personalData = (() => {
-    try {
-      return readJSONFromFile(PATHS.PERSONAL_DATASOURCES)
-    } catch (e) {
-      env.error(`Source config "${PATHS.PERSONAL_DATASOURCES}" not found, falling back to "${PATHS.PERSONAL_DATASOURCE_FALLBACK}".`)
-      return readJSONFromFile(PATHS.PERSONAL_DATASOURCE_FALLBACK)
-    }
-  })()
+  const personalData = readJSONFromFile(PATHS.PERSONAL_DATASOURCES)
 
   const schema = readJSONFromFile("src/assets/config-ajv-schema.json")
 

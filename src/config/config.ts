@@ -5,7 +5,6 @@ export const PATHS = {
   DATA_DIR: "data",
   OUTPUT_DIR: "output",
   PERSONAL_DATASOURCES: "data/personal-datasources.json",
-  PERSONAL_DATASOURCE_FALLBACK: "example/personal-datasources.json",
 }
 
 export const TAX_BRACKET = 0.15
