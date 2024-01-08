@@ -21,6 +21,7 @@
         "newlines-between": "never",
         "alphabetize": { "order": "asc", "caseInsensitive": true }
       }
-    ]
+    ],
+    "import/no-unresolved": "off"
   }
 }

@@ -61,7 +61,7 @@ Within Interactive Brokers, navigate to reports and export arbitrary time-ranges
 
 For correct functionality, it is crucial to export from the beginning of trading history. Otherwise, the algorithm has no indication of the purchase/entry prices and therefore cannot compute the realized profits/losses. We usually export yearly reports for past years and then YTD (year-to-date) for current year.
 
-The exported CSVs are not valid: they are concatenated from several tables, each of which is a valid CSV. The name of every table is written as the first column on every row including header. We are interested in the **"Trades"** section - all other table rows need to be manually deleted (may be automatized in future versions).
+The exported CSVs are not valid: they are concatenated from several tables, each of which is a valid CSV. The name of every table is written as the first column on every row including header. We are interested in the **"Trades"** section - all other table rows are automatically discarded.
 
 The suggested file naming convention is `[ENTITY]-[ACCOUNT]-[YEAR or DATE-RANGE]-['full'|'pruned'].['csv'|'pdf']` with 3 files each (2 for bookkeeping, 1 for the analysis). For example, this might be the structure for one year files:
 

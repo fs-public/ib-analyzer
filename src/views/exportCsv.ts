@@ -1,5 +1,4 @@
 import fs from "fs"
-// eslint-disable-next-line import/no-unresolved
 import { stringify } from "csv/sync" // see see https://github.com/import-js/eslint-plugin-import/issues/1810
 import moment from "moment"
 import { PATHS } from "../config/config"

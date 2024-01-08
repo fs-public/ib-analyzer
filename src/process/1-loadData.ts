@@ -1,5 +1,5 @@
 import fs from "fs"
-import { parse } from "csv"
+import { parse } from "csv/sync"
 import { PATHS } from "../config/config"
 import { CSV_SOURCES } from "../config/configLoader"
 import { shouldDropRecord } from "../config/helpers"
@@ -12,16 +12,18 @@ import { assert } from "../utils"
  * Loads data CSV as an array.
  */
 const filenameToRecords = async (file: string) => {
-  const records = []
-  const parser = fs.createReadStream(file).pipe(
-    parse({
-      // CSV options if any
-    })
-  )
-  for await (const record of parser) {
-    // Work with each record
-    records.push(record)
-  }
+  const contents = fs.readFileSync(file).toString()
+
+  // Filter only trades subtable
+  const filteredContents = contents
+    .split("\n")
+    .filter((line) => line.trim().startsWith("Trades,"))
+    .join("\n")
+
+  const records: string[][] = parse(filteredContents, {
+    // CSV options if any
+  })
+
   return records
 }
 
