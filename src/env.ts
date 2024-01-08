@@ -1,5 +1,4 @@
 import { Env } from "./types/global"
-import { delay } from "./utils"
 
 export const env: Env = {
   data: {
@@ -16,19 +15,9 @@ export const env: Env = {
 
   errors: [],
 
-  log: (...args) => {
-    if (process.env["LOGGING"]) {
-      console.log(...args)
-      delay()
-    }
-  },
+  log: (...args) => console.log(...args),
 
-  table: (...args) => {
-    if (process.env["LOGGING"]) {
-      console.table(...args)
-      delay()
-    }
-  },
+  table: (...args) => console.table(...args),
 
   error: (description, critical = false) => {
     if (critical) throw new Error(description)

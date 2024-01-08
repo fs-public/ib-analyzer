@@ -13,17 +13,6 @@ export const assert = (condition: boolean, message = "Assertion Failed!", critic
   }
 }
 
-export const delay = () => {
-  if (!process.env["SLOW_LOGGING"]) return
-
-  let count = 0
-  for (let i = 0; i < 100_000 * Number(process.env["SLOW_LOGGING"]); i++) {
-    count += i * i
-  }
-
-  return count
-}
-
 // Date manipulation ////////////////////////////////////////////////////////////////////////
 
 export const getDatePlus3y = (date: Date): Date => {
